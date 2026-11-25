@@ -63,16 +63,15 @@
     line-height: 1.65;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
   }
-  .wrap { max-width: 620px; margin: 0 auto; padding: 16px 16px 48px; }
-  .wrap.wide { max-width: 820px; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 16px 16px 52px; }
+  .wrap.wide { max-width: 840px; }
   .muted { color: var(--muted); }
 
   .ico { width: 19px; height: 19px; flex: none; vertical-align: middle; }
-  .ico.sm { width: 16px; height: 16px; }
+  .ico.sm { width: 15px; height: 15px; }
 
-  /* Login */
   .login { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
-  .mark { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .mark { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
   .mark .logo-badge {
     width: 54px; height: 54px; border-radius: 16px;
     background: linear-gradient(135deg, #EA580C, #F97316);
@@ -82,7 +81,7 @@
   .mark svg { width: 32px; height: auto; }
   .mark b { font-size: 30px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
   .mark b span { color: var(--brand); }
-  .login p.lead { margin: 0 0 18px; color: var(--muted); }
+  .login p.lead { margin: 0 0 16px; color: var(--muted); font-size: 14.5px; }
 
   .panel {
     background: var(--surface); border: 1px solid var(--line);
@@ -97,13 +96,13 @@
     border: 1px solid var(--line); border-radius: 12px;
     font: inherit; font-size: 15px; transition: border-color .15s;
   }
-  textarea { min-height: 110px; resize: vertical; }
+  textarea { min-height: 96px; resize: vertical; }
   input:focus, select:focus, textarea:focus { border-color: var(--brand); }
   input[dir="ltr"] { text-align: left; }
   input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible {
     outline: 3px solid var(--brand); outline-offset: 2px;
   }
-  .hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
 
   button { font: inherit; cursor: pointer; transition: all .15s; }
   .btn {
@@ -117,36 +116,36 @@
   .btn[disabled] { opacity: .6; cursor: wait; box-shadow: none; }
   .btn.ghost {
     background: var(--surface); color: var(--ink);
-    border: 1px solid var(--line); font-weight: 600; font-size: 14px;
+    border: 1px solid var(--line); font-weight: 600; font-size: 13.5px;
     min-height: 40px; width: auto; padding: 0 13px; box-shadow: none;
   }
   .btn.ghost:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
   .btn.soft {
     background: var(--brand-soft); color: var(--brand);
-    border: 1px solid var(--brand-border); font-weight: 600; font-size: 14px;
+    border: 1px solid var(--brand-border); font-weight: 600; font-size: 13.5px;
     min-height: 40px; width: auto; padding: 0 13px; box-shadow: none;
   }
-  .btn.sm { min-height: 35px; font-size: 13px; padding: 0 11px; width: auto; border-radius: 10px; }
+  .btn.sm { min-height: 35px; font-size: 12.5px; padding: 0 11px; width: auto; border-radius: 10px; }
   .btn.danger { color: var(--danger); border-color: var(--danger); background: transparent; box-shadow: none; }
   .btn.danger:hover { background: var(--bad-bg); }
-  .linkbtn { background: none; border: 0; color: var(--brand); font-weight: 600; padding: 10px 0; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+  .linkbtn { background: none; border: 0; color: var(--brand); font-weight: 600; padding: 8px 0; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
   a.btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 
-  .msg { margin: 0 0 16px; padding: 12px 14px; border-radius: 12px; font-size: 14px; border: 1px solid var(--line); background: var(--bg); display: flex; align-items: center; gap: 8px; }
+  .msg { margin: 0 0 14px; padding: 12px 14px; border-radius: 12px; font-size: 14px; border: 1px solid var(--line); background: var(--bg); display: flex; align-items: center; gap: 8px; }
   .msg.err { color: var(--danger); border-color: var(--danger); background: var(--bad-bg); }
   .msg.ok { color: var(--ok); border-color: var(--ok); background: var(--ok-bg); }
 
-  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
   .top .who { min-width: 0; }
-  .top h1 { margin: 0; font-size: 21px; line-height: 1.3; }
+  .top h1 { margin: 0; font-size: 20.5px; line-height: 1.3; }
   .top .sub { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
 
-  h2 { font-size: 16.5px; margin: 22px 0 11px; display: flex; align-items: center; gap: 8px; color: var(--ink); }
+  h2 { font-size: 16px; margin: 22px 0 10px; display: flex; align-items: center; gap: 8px; color: var(--ink); }
   h2 svg { color: var(--brand); }
   h2:first-child { margin-top: 0; }
   .grid2 { display: grid; gap: 12px; grid-template-columns: 1fr; }
   @media (min-width: 640px) { .grid2 { grid-template-columns: 1fr 1fr; } }
-  .two { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+  .two { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
 
   .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .kpi {
@@ -158,14 +157,26 @@
     color: #fff; border: 0;
   }
   .kpi.accent .kl { color: rgba(255,255,255,0.9); }
-  .kpi .kl { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-  .kpi .kv { font-size: 21px; font-weight: 700; line-height: 1.2; }
+  .kpi .kl { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .kpi .kv { font-size: 20px; font-weight: 700; line-height: 1.2; }
+
+  /* Telecom-style Meter */
+  .meter-box { margin-top: 10px; }
+  .meter-top { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 6px; font-weight: 600; }
+  .meter-track {
+    width: 100%; height: 12px; background: var(--bg); border: 1px solid var(--line);
+    border-radius: 999px; overflow: hidden;
+  }
+  .meter-fill {
+    height: 100%; background: linear-gradient(90deg, #EA580C, #F97316);
+    border-radius: 999px; transition: width .35s ease;
+  }
 
   .rows { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
   .row { padding: 13px 16px; border-bottom: 1px solid var(--line); }
   .row:last-child { border-bottom: 0; }
-  .row .name { font-weight: 700; font-size: 15.5px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
-  .row .meta { color: var(--muted); font-size: 13px; margin-top: 3px; overflow-wrap: anywhere; }
+  .row .name { font-weight: 700; font-size: 15px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .row .meta { color: var(--muted); font-size: 12.5px; margin-top: 3px; overflow-wrap: anywhere; }
   .row .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
   .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; padding: 2px 9px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
   .tag.active { color: var(--ok); background: var(--ok-bg); }
@@ -173,29 +184,29 @@
   .tag.soon { color: var(--warn); background: var(--warn-bg); }
   .tag.none { color: var(--muted); }
   .tag.cat { color: var(--brand); background: var(--brand-soft); border-color: var(--brand-border); }
-  .empty { padding: 24px 16px; color: var(--muted); text-align: center; font-size: 14px; }
+  .empty { padding: 22px 16px; color: var(--muted); text-align: center; font-size: 13.5px; }
 
   .stat { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
   .stat:last-child { border-bottom: 0; }
-  .stat span:first-child { color: var(--muted); display: inline-flex; align-items: center; gap: 7px; font-size: 14.5px; }
+  .stat span:first-child { color: var(--muted); display: inline-flex; align-items: center; gap: 7px; font-size: 14px; }
   .stat b { font-weight: 700; }
   .stat.big b { font-size: 20px; color: var(--brand); }
 
   .loading { min-height: 100vh; display: grid; place-items: center; color: var(--muted); }
 
-  /* Shell & Nav */
-  .shell { min-height: 100vh; padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .shell { min-height: 100vh; padding-bottom: calc(86px + env(safe-area-inset-bottom)); }
   .oh {
     background: var(--surface); border-bottom: 1px solid var(--line);
     position: sticky; top: 0; z-index: 9;
   }
-  .oh .in { max-width: 620px; margin: 0 auto; padding: 11px 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .oh .in { max-width: 640px; margin: 0 auto; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .oh .brand-box { display: flex; align-items: center; gap: 10px; min-width: 0; }
   .oh .mini-logo {
-    width: 36px; height: 36px; border-radius: 11px;
-    background: var(--brand); color: #fff; display: grid; place-items: center; flex: none;
+    width: 38px; height: 38px; border-radius: 11px;
+    background: var(--brand); color: #fff; display: grid; place-items: center; flex: none; overflow: hidden;
   }
-  .oh .gname { font-weight: 700; font-size: 16.5px; line-height: 1.25; }
+  .oh .mini-logo img { width: 100%; height: 100%; object-fit: cover; }
+  .oh .gname { font-weight: 700; font-size: 16px; line-height: 1.25; }
   .oh .gsub { color: var(--muted); font-size: 12px; }
   .oh .sub-pill {
     background: var(--brand-soft); color: var(--brand); border: 1px solid var(--brand-border);
@@ -204,30 +215,30 @@
 
   .tabs {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
-    display: flex; background: var(--surface); border-top: 1px solid var(--line);
+    display: flex; overflow-x: auto; background: var(--surface); border-top: 1px solid var(--line);
     padding-bottom: env(safe-area-inset-bottom);
     box-shadow: 0 -2px 12px rgba(0,0,0,0.04);
   }
   .tabs button {
-    flex: 1; background: none; border: 0; padding: 6px 2px; min-height: 60px;
-    color: var(--muted); font-size: 11px; font-weight: 600;
+    flex: 1; min-width: 64px; background: none; border: 0; padding: 6px 4px; min-height: 60px;
+    color: var(--muted); font-size: 10.5px; font-weight: 600;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-    position: relative;
+    position: relative; white-space: nowrap;
   }
-  .tabs button svg { width: 19px; height: 19px; }
+  .tabs button svg { width: 18px; height: 18px; }
   .tabs button[aria-current="page"] { color: var(--brand); }
   .tabs button[aria-current="page"]::before {
-    content: ""; position: absolute; top: 0; width: 28px; height: 3px;
+    content: ""; position: absolute; top: 0; width: 26px; height: 3px;
     background: var(--brand); border-radius: 0 0 4px 4px;
   }
 
   .seg {
     display: flex; gap: 6px; background: var(--surface); padding: 5px;
-    border-radius: 14px; border: 1px solid var(--line); margin-bottom: 16px;
+    border-radius: 14px; border: 1px solid var(--line); margin-bottom: 14px;
   }
   .seg button {
     flex: 1; border: 0; background: transparent; color: var(--muted);
-    padding: 9px 10px; border-radius: 10px; font-weight: 600; font-size: 13.5px;
+    padding: 8px 10px; border-radius: 10px; font-weight: 600; font-size: 13px;
     display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   }
   .seg button.active { background: var(--brand); color: #fff; box-shadow: 0 2px 8px rgba(234, 88, 12, 0.25); }
@@ -235,34 +246,39 @@
   .prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
   .prod-card {
     background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
-    padding: 13px; text-align: start; display: flex; flex-direction: column; justify-content: space-between;
+    padding: 12px; text-align: start; display: flex; flex-direction: column; justify-content: space-between;
     box-shadow: var(--shadow);
   }
   .prod-card:hover:not([disabled]) { border-color: var(--brand); transform: translateY(-1px); }
-  .prod-card[disabled] { opacity: 0.5; cursor: not-allowed; }
-  .prod-card .pname { font-weight: 700; font-size: 15px; margin: 6px 0 4px; }
-  .prod-card .pprice { font-weight: 700; color: var(--brand); font-size: 15.5px; }
-  .prod-card .pstock { font-size: 12px; color: var(--muted); }
+  .prod-card[disabled] { opacity: 0.55; cursor: not-allowed; }
+  .prod-thumb {
+    width: 100%; height: 92px; object-fit: cover; border-radius: 10px;
+    background: var(--bg); margin-bottom: 8px; border: 1px solid var(--line);
+  }
+  .prod-card .pname { font-weight: 700; font-size: 14.5px; margin: 4px 0; }
+  .prod-card .pprice { font-weight: 700; color: var(--brand); font-size: 15px; }
+  .prod-card .pstock { font-size: 11.5px; color: var(--muted); }
+
   .cart-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
   .cart-item:last-child { border-bottom: 0; }
   .qty-ctrl { display: inline-flex; align-items: center; gap: 8px; background: var(--bg); padding: 3px 8px; border-radius: 10px; border: 1px solid var(--line); }
   .qty-ctrl button { background: none; border: 0; color: var(--brand); font-weight: 700; width: 24px; height: 24px; display: grid; place-items: center; }
 
-  .chart-wrap { position: relative; height: 220px; width: 100%; margin-top: 8px; }
-  .chart-wrap.sm { height: 185px; }
+  .chart-wrap { position: relative; height: 215px; width: 100%; margin-top: 8px; }
+  .chart-wrap.sm { height: 180px; }
 
   .toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-  .toolbar input { flex: 1; min-width: 180px; }
+  .toolbar input { flex: 1; min-width: 170px; }
   .toolbar select { width: auto; max-width: 100%; }
   .mrow { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--line); }
   .mrow:last-child { border-bottom: 0; }
   .mmain { flex: 1; min-width: 0; text-align: start; background: none; border: 0; color: inherit; padding: 12px 16px; }
-  .mmain .name { font-weight: 700; font-size: 15.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .mmain .name { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .mmain .meta { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
   .mrow .side { padding-inline-end: 12px; display: flex; gap: 6px; align-items: center; }
   .due { color: var(--danger); font-weight: 600; }
 
-  .result { border-radius: 16px; padding: 18px; margin: 16px 0; border: 1px solid currentColor; }
+  .result { border-radius: 16px; padding: 16px; margin: 14px 0; border: 1px solid currentColor; }
   .result.ok { background: var(--ok-bg); color: var(--ok); }
   .result.bad { background: var(--bad-bg); color: var(--danger); }
   .result.warn { background: var(--warn-bg); color: var(--warn); }
@@ -272,13 +288,13 @@
 
   #reader { width: 100%; max-width: 360px; margin: 12px auto; border-radius: 14px; overflow: hidden; }
   .qrbox { text-align: center; }
-  .qrbox img { width: 210px; height: 210px; background: #fff; border-radius: 12px; padding: 8px; border: 1px solid var(--line); }
-  .bigcode { font-size: 32px; font-weight: 700; letter-spacing: 3px; direction: ltr; color: var(--brand); }
+  .qrbox img { width: 200px; height: 200px; background: #fff; border-radius: 12px; padding: 8px; border: 1px solid var(--line); }
+  .bigcode { font-size: 30px; font-weight: 700; letter-spacing: 3px; direction: ltr; color: var(--brand); }
 
   .toast {
     position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(82px + env(safe-area-inset-bottom));
     background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 12px; z-index: 50;
-    font-size: 14px; font-weight: 600; max-width: 90vw; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    font-size: 13.5px; font-weight: 600; max-width: 90vw; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.25);
   }
   .back { margin-bottom: 14px; }
 </style>
@@ -322,7 +338,6 @@ const root = document.getElementById("app");
 const DAY = 86400000;
 const PLANS_LABEL = { basic: "أساسية", pro: "متقدمة", premium: "خاصة" };
 
-/* ---------- Icons (Zero Emoji) ---------- */
 const ICONS = {
   home: `<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>`,
   users: `<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>`,
@@ -356,7 +371,10 @@ const ICONS = {
   building: `<rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/>`,
   send: `<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>`,
   download: `<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>`,
-  award: `<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>`
+  award: `<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>`,
+  mapPin: `<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>`,
+  creditCard: `<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>`,
+  image: `<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>`
 };
 
 const ico = (name, cls = "") => `<svg class="ico ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ""}</svg>`;
@@ -377,7 +395,14 @@ const endOfDay = s => { const d = parseYmd(s); d.setHours(23, 59, 59, 0); return
 const plusDays = (s, n) => { const d = parseYmd(s); d.setDate(d.getDate() + n); return ymd(d); };
 const fmtDate = d => d ? d.toLocaleDateString("ar-EG-u-nu-latn", { year: "numeric", month: "long", day: "numeric" }) : "—";
 const fmtTime = d => d ? d.toLocaleTimeString("ar-EG-u-nu-latn", { hour: "2-digit", minute: "2-digit" }) : "";
-const toDate = t => (t && typeof t.toDate === "function") ? t.toDate() : null;
+const fmtDateTime = d => d ? `${fmtDate(d)} · ${fmtTime(d)}` : "لم يسجل بعد";
+const toDate = t => {
+  if (!t) return null;
+  if (typeof t.toDate === "function") return t.toDate();
+  if (t instanceof Date) return t;
+  const d = new Date(t);
+  return isNaN(d.getTime()) ? null : d;
+};
 const money = n => (Number(n) || 0).toLocaleString("en-US") + " ج";
 const sum = (arr, k = "amount") => arr.reduce((a, x) => a + (Number(x[k]) || 0), 0);
 const num = v => { const n = parseFloat(String(v).replace(/[^\d.]/g, "")); return isNaN(n) ? 0 : n; };
@@ -422,8 +447,22 @@ const logoSvg = `
   <rect x="57" y="9" width="5" height="14" rx="1.5"/>
 </svg>`;
 
+const gymLogoHtml = (gym, cls = "mini-logo") => gym?.logoUrl
+  ? `<div class="${cls}"><img src="${esc(gym.logoUrl)}" alt="${esc(gym.name || "شعار الجيم")}" onerror="this.style.display='none'"></div>`
+  : `<div class="${cls}">${logoSvg}</div>`;
+
+const arabicDigitsToEn = s => String(s || "").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+const normPhone = p => {
+  let d = arabicDigitsToEn(p).replace(/\D/g, "");
+  if (d.startsWith("00")) d = d.slice(2);
+  if (d.startsWith("20") && d.length >= 12) d = d.slice(2);
+  if (d.startsWith("0") && d.length >= 11) d = d.slice(1);
+  return d.slice(-10);
+};
+const normName = s => arabicDigitsToEn(s).trim().toLowerCase().replace(/\s+/g, " ");
+
 function waPhone(p) {
-  let d = String(p || "").replace(/\D/g, "");
+  let d = arabicDigitsToEn(p).replace(/\D/g, "");
   if (d.startsWith("00")) d = d.slice(2);
   if (d.startsWith("0")) d = "20" + d.slice(1);
   return d;
@@ -431,19 +470,49 @@ function waPhone(p) {
 function waRawLink(phone, text) {
   return `https://wa.me/${waPhone(phone)}?text=${encodeURIComponent(text)}`;
 }
-const normPhone = p => String(p || "").replace(/\D/g, "").slice(-10);
 
 function calcMemberState(m) {
   const end = toDate(m.endDate);
-  if (!end) return { key: "none", label: "بدون اشتراك", left: null, end: null };
+  if (!end) return { key: "none", label: "بدون اشتراك", left: null, end: null, pct: 0 };
   const left = Math.ceil((end.getTime() - Date.now()) / DAY);
-  if (end.getTime() < Date.now()) return { key: "expired", label: "منتهي", left: 0, end };
-  if (left <= 7) return { key: "soon", label: "ينتهي قريبًا", left, end };
-  return { key: "active", label: "نشط", left, end };
+  const start = toDate(m.startDate) || new Date(end.getTime() - (Number(m.planDays) || 30) * DAY);
+  const totalSpan = Math.max(DAY, end.getTime() - start.getTime());
+  const remSpan = Math.max(0, end.getTime() - Date.now());
+  const pct = end.getTime() < Date.now() ? 0 : Math.min(100, Math.max(2, Math.round((remSpan / totalSpan) * 100)));
+  if (end.getTime() < Date.now()) return { key: "expired", label: "منتهي", left: 0, end, pct: 0 };
+  if (left <= 7) return { key: "soon", label: "ينتهي قريبًا", left, end, pct };
+  return { key: "active", label: "نشط", left, end, pct };
 }
 const fmtLeftText = st => st.end
   ? (st.key === "expired" ? `انتهى ${fmtDate(st.end)}` : (st.left <= 1 ? "ينتهي اليوم" : `متبقي ${st.left} يوم`))
   : "لم يشترك بعد";
+
+function sessionsText(m) {
+  const left = Number(m.sessionsLeft);
+  if (isNaN(left)) return "غير محدد";
+  const total = Number(m.sessionsTotal) || left;
+  return `${left} من ${total} تمرينة`;
+}
+
+function haversineMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const toRad = x => x * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function getCurrentGps() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) return reject(new Error("المتصفح لا يدعم تحديد الموقع GPS."));
+    navigator.geolocation.getCurrentPosition(
+      pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude, acc: Math.round(pos.coords.accuracy || 0) }),
+      () => reject(new Error("تعذر الحصول على موقع GPS. اسمح بصلاحية الموقع من المتصفح.")),
+      { enableHighAccuracy: true, timeout: 12000 }
+    );
+  });
+}
 
 function exportRevenueExcel(rows, filename) {
   const headers = ["التاريخ", "النوع", "العضو / المصدر", "البيان / الملاحظات", "المبلغ (جنيه)"];
@@ -462,16 +531,114 @@ function exportRevenueExcel(rows, filename) {
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
 }
 
-/* ---------- Login (Staff + Member Portal) ---------- */
-let loginMode = "staff"; // "staff" | "member"
+/* ---------- Two-Sided PDF ID Card ---------- */
+async function downloadMemberIdPdf(gym, member, gymId) {
+  const { jsPDF } = await import("https://esm.sh/jspdf@2.5.1");
+  const mod = await import("https://esm.sh/qrcode@1.5.4");
+  const QR = mod.default || mod;
+  const st = calcMemberState(member);
+  const subText = fmtLeftText(st);
+
+  const wMm = 85.6, hMm = 54, scale = 4;
+  const makeFace = fn => {
+    const c = document.createElement("canvas");
+    c.width = Math.round(wMm * scale); c.height = Math.round(hMm * scale);
+    const ctx = c.getContext("2d");
+    ctx.scale(scale, scale);
+    fn(ctx, wMm, hMm);
+    return c.toDataURL("image/png", 1.0);
+  };
+
+  const frontImg = makeFace((ctx, w, h) => {
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#EA580C";
+    ctx.fillRect(0, 0, w, 13);
+    ctx.fillStyle = "#FFF7ED";
+    ctx.beginPath();
+    ctx.arc(14, 38, 17, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.direction = "rtl";
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "bold 4.3px 'IBM Plex Sans Arabic', sans-serif";
+    ctx.fillText(gym?.name || "GymPro", w - 5, 8.2);
+
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#FFEDD5";
+    ctx.font = "bold 3.3px sans-serif";
+    ctx.fillText(`#${member.code || ""}`, 5, 8);
+
+    ctx.direction = "rtl";
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#0F172A";
+    ctx.font = "bold 5.8px 'IBM Plex Sans Arabic', sans-serif";
+    ctx.fillText(member.name || "عضو", w - 5, 22.5);
+
+    ctx.fillStyle = "#EA580C";
+    ctx.font = "bold 3.9px 'IBM Plex Sans Arabic', sans-serif";
+    ctx.fillText(`الباقة: ${member.planName || "—"} · متبقي ${sessionsText(member)}`, w - 5, 30.5);
+
+    ctx.fillStyle = "#475569";
+    ctx.font = "3.8px 'IBM Plex Sans Arabic', sans-serif";
+    ctx.fillText(`الاشتراك: ${subText}`, w - 5, 37.5);
+
+    if (member.phone) {
+      ctx.fillStyle = "#64748B";
+      ctx.font = "3.5px sans-serif";
+      ctx.fillText(`الموبايل: ${member.phone}`, w - 5, 44.5);
+    }
+    ctx.fillStyle = "#F97316";
+    ctx.fillRect(0, h - 2.5, w, 2.5);
+  });
+
+  const payload = `GYMPRO|${gymId}|${member.code || member.id}|${member.password || ""}`;
+  const qrUrl = await QR.toDataURL(payload, { margin: 1, width: 320, color: { dark: "#0F172A", light: "#FFFFFF" } });
+  const qrEl = await new Promise((res, rej) => {
+    const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = qrUrl;
+  });
+
+  const backImg = makeFace((ctx, w, h) => {
+    ctx.fillStyle = "#FFF7ED";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(3.5, 3.5, w - 7, h - 7);
+
+    const sz = 23;
+    ctx.drawImage(qrEl, (w - sz) / 2, 5.5, sz, sz);
+
+    ctx.direction = "rtl";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#64748B";
+    ctx.font = "bold 3.4px 'IBM Plex Sans Arabic', sans-serif";
+    ctx.fillText("كلمة المرور الخاصة بالدخول", w / 2, 33.5);
+
+    ctx.fillStyle = "#EA580C";
+    ctx.font = "bold 5.4px sans-serif";
+    ctx.fillText(String(member.password || "—"), w / 2, 41);
+
+    ctx.fillStyle = "#94A3B8";
+    ctx.font = "2.9px 'IBM Plex Sans Arabic', sans-serif";
+    ctx.fillText("امسح QR لتسجيل الدخول أو استخدم الكود وكلمة المرور", w / 2, 47.5);
+  });
+
+  const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: [wMm, hMm] });
+  pdf.addImage(frontImg, "PNG", 0, 0, wMm, hMm);
+  pdf.addPage([wMm, hMm], "landscape");
+  pdf.addImage(backImg, "PNG", 0, 0, wMm, hMm);
+
+  const safeName = String(member.name || "member").replace(/[^\w\u0600-\u06FF-]+/g, "_");
+  pdf.save(`ID_${safeName}_${member.code || "card"}.pdf`);
+}
+
+/* ---------- Login (Staff + Fixed Member Login) ---------- */
+let loginMode = "staff";
 
 function viewLogin(message = "", okMessage = "") {
   root.innerHTML = `
@@ -482,7 +649,7 @@ function viewLogin(message = "", okMessage = "") {
     </div>
 
     <div class="seg" style="margin-bottom:14px">
-      <button type="button" class="${loginMode === "staff" ? "active" : ""}" id="modeStaff">${ico("building", "sm")} الإدارة والمحاسب</button>
+      <button type="button" class="${loginMode === "staff" ? "active" : ""}" id="modeStaff">${ico("building", "sm")} الإدارة / المحاسب / الاستقبال</button>
       <button type="button" class="${loginMode === "member" ? "active" : ""}" id="modeMember">${ico("user", "sm")} دخول عضو</button>
     </div>
 
@@ -490,7 +657,7 @@ function viewLogin(message = "", okMessage = "") {
     ${okMessage ? `<p class="msg ok" role="status">${ico("checkCircle", "sm")} ${esc(okMessage)}</p>` : ""}
 
     ${loginMode === "staff" ? `
-      <p class="lead">دخول المدير، المحاسب، أو إدارة النظام.</p>
+      <p class="lead">دخول المدير، المحاسب، موظف الاستقبال، أو المسؤول.</p>
       <form class="panel" id="loginForm" novalidate>
         <div class="field">
           <label for="email">الإيميل</label>
@@ -504,16 +671,11 @@ function viewLogin(message = "", okMessage = "") {
         <button class="linkbtn" type="button" id="resetBtn">نسيت كلمة المرور؟</button>
       </form>
     ` : `
-      <p class="lead">ادخل برقم هاتفك أو اسمك الكامل وكلمة المرور لعرض عضويتك والعروض.</p>
+      <p class="lead">ادخل بالاسم أو رقم الموبايل وكلمة المرور لعرض عضويتك وسجل الدخول والستور والدفع.</p>
       <form class="panel" id="memberLoginForm" novalidate>
         <div class="field">
-          <label for="mGymCode">كود الجيم (اختياري إذا كان جيمًا واحدًا)</label>
-          <input id="mGymCode" dir="ltr" placeholder="مثال: gympro-86c9a أو اتركه فارغًا">
-          <div class="hint">إذا لم تكتب كود الجيم، سيبحث النظام تلقائيًا في الجيمات المسجلة.</div>
-        </div>
-        <div class="field">
-          <label for="mId">رقم الهاتف أو الاسم</label>
-          <input id="mId" autocomplete="username" required placeholder="010xxxxxxxx أو الاسم">
+          <label for="mId">الاسم أو رقم الموبايل</label>
+          <input id="mId" autocomplete="username" required placeholder="مثال: أحمد محمود أو 01012345678">
         </div>
         <div class="field">
           <label for="mPass">كلمة المرور</label>
@@ -557,39 +719,43 @@ function viewLogin(message = "", okMessage = "") {
   } else {
     $("#memberLoginForm").addEventListener("submit", async ev => {
       ev.preventDefault();
-      const gymIdInput = $("#mGymCode").value.trim();
       const idVal = $("#mId").value.trim();
-      const passVal = $("#mPass").value;
-      if (!idVal || !passVal) return viewLogin("اكتب رقم الهاتف أو الاسم وكلمة المرور.");
+      const passVal = $("#mPass").value.trim();
+      if (!idVal || !passVal) return viewLogin("اكتب الاسم أو رقم الموبايل وكلمة المرور.");
 
       const btn = $("#mLoginBtn");
-      btn.disabled = true; btn.textContent = "جاري التحقق…";
+      btn.disabled = true; btn.textContent = "جاري البحث…";
       try {
-        const gymIds = gymIdInput ? [gymIdInput] : (await getDocs(collection(db, "gyms"))).docs.map(d => d.id);
-        const inputDigits = normPhone(idVal);
-        const inputName = idVal.toLowerCase();
+        const gymsSnap = await getDocs(collection(db, "gyms"));
+        const inputPhone = normPhone(idVal);
+        const inputName = normName(idVal);
 
-        for (const gid of gymIds) {
-          const gSnap = await getDoc(doc(db, "gyms", gid));
-          if (!gSnap.exists()) continue;
-          const gym = gSnap.data();
+        for (const gDoc of gymsSnap.docs) {
+          const gid = gDoc.id;
+          const gym = gDoc.data();
           const mSnap = await getDocs(collection(db, "gyms", gid, "members"));
           const matched = mSnap.docs.map(d => ({ id: d.id, ...d.data() })).find(m => {
-            const byPhone = inputDigits.length >= 7 && normPhone(m.phone) === inputDigits;
-            const byName = (m.name || "").trim().toLowerCase() === inputName;
-            return (byPhone || byName) && String(m.password || "") === passVal && passVal.length > 0;
+            const mPhone = normPhone(m.phone);
+            const mName = normName(m.name);
+            const matchByPhone = inputPhone.length >= 8 && mPhone === inputPhone;
+            const matchByName = inputName.length >= 2 && mName === inputName;
+            const passOk = String(m.password ?? "").trim() === passVal;
+            return (matchByPhone || matchByName) && passOk;
           });
+
           if (matched) {
-            const [plansSnap, prodsSnap] = await Promise.all([
-              getDocs(collection(db, "gyms", gid, "plans")),
+            const [attSnap, paySnap, prodsSnap] = await Promise.all([
+              getDocs(query(collection(db, "gyms", gid, "attendance"), where("memberId", "==", matched.id))),
+              getDocs(query(collection(db, "gyms", gid, "payments"), where("memberId", "==", matched.id))),
               getDocs(collection(db, "gyms", gid, "products"))
             ]);
-            const plans = plansSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const logs = attSnap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
+            const paidTotal = sum(paySnap.docs.map(d => d.data()));
             const products = prodsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-            return renderMemberPortal(gym, matched, plans, products);
+            return renderMemberPortal(gid, gym, matched, logs, paidTotal, products);
           }
         }
-        viewLogin("بيانات الدخول غير صحيحة أو لم يتم تعيين كلمة مرور للعضو بعد.");
+        viewLogin("الاسم أو رقم الموبايل أو كلمة المرور غير صحيحة.");
       } catch (e) {
         viewLogin(errText(e));
       }
@@ -597,77 +763,141 @@ function viewLogin(message = "", okMessage = "") {
   }
 }
 
-/* ---------- Member Self-Service Portal ---------- */
-async function renderMemberPortal(gym, member, plans, products) {
+/* ---------- Member Portal (Meter + Paid + Logs + Store + Pay Links) ---------- */
+let memberPortalTab = "card";
+
+async function renderMemberPortal(gymId, gym, member, logs, paidTotal, products) {
   const st = calcMemberState(member);
-  let qrImgHtml = `<p class="muted">كود العضوية: <b>${esc(member.code)}</b></p>`;
+  let qrImgHtml = `<div class="bigcode">${esc(member.code)}</div>`;
   try {
     const mod = await import("https://esm.sh/qrcode@1.5.4");
     const QR = mod.default || mod;
-    const url = await QR.toDataURL(String(member.code), { margin: 1, width: 320 });
+    const payload = `GYMPRO|${gymId}|${member.code || member.id}|${member.password || ""}`;
+    const url = await QR.toDataURL(payload, { margin: 1, width: 320 });
     qrImgHtml = `<img src="${url}" alt="كود QR للعضو ${esc(member.name)}">`;
   } catch {}
+
+  const instapay = gym.instapay || "";
+  const vodafone = gym.vodafoneCash || "";
+  const orange = gym.orangeCash || "";
 
   root.innerHTML = `
   <div class="shell">
     <header class="oh"><div class="in">
       <div class="brand-box">
-        <div class="mini-logo">${logoSvg}</div>
+        ${gymLogoHtml(gym)}
         <div>
           <div class="gname">${esc(gym.name || "الجيم")}</div>
-          <div class="gsub">بوابة العضو</div>
+          <div class="gsub">${esc(member.name)} · كود ${esc(member.code)}</div>
         </div>
       </div>
       <button class="btn ghost sm" id="mOutBtn">${ico("logout", "sm")} خروج</button>
     </div></header>
 
     <main class="wrap">
-      <div class="top" style="margin-bottom:14px">
-        <div class="who">
-          <h1>أهلًا، ${esc(member.name)}</h1>
-          <div class="sub">كود العضوية: ${esc(member.code)}${member.phone ? " · " + esc(member.phone) : ""}</div>
-        </div>
-        <span class="tag ${st.key}">${st.label}</span>
+      <div class="seg">
+        <button type="button" class="${memberPortalTab === "card" ? "active" : ""}" data-mpt="card">${ico("user", "sm")} العضوية</button>
+        <button type="button" class="${memberPortalTab === "store" ? "active" : ""}" data-mpt="store">${ico("store", "sm")} الستور</button>
+        <button type="button" class="${memberPortalTab === "pay" ? "active" : ""}" data-mpt="pay">${ico("creditCard", "sm")} الدفع</button>
       </div>
 
-      <div class="panel">
-        <div class="stat"><span>الباقة الحالية</span><b>${esc(member.planName || "—")}</b></div>
-        <div class="stat"><span>حالة الاشتراك</span><b>${esc(fmtLeftText(st))}</b></div>
-        <div class="stat"><span>المبلغ المتبقي</span><b class="${Number(member.balance) > 0 ? "due" : ""}">${money(member.balance)}</b></div>
-      </div>
-
-      <div class="panel qrbox" style="margin-top:14px">
-        <div style="font-weight:700;margin-bottom:8px">بطاقة الدخول السريع</div>
-        ${qrImgHtml}
-        <div class="bigcode" style="margin-top:8px">${esc(member.code)}</div>
-      </div>
-
-      <h2>${ico("award")} العضويات والباقات المعروضة</h2>
-      <div class="rows">
-        ${plans.length ? plans.map(p => `
-          <div class="row">
-            <div class="name">${esc(p.name)} <span class="tag cat">${money(p.price)}</span></div>
-            <div class="meta">المدة: ${p.days} يوم</div>
-          </div>
-        `).join("") : `<div class="empty">لا توجد باقات معروضة حاليًا.</div>`}
-      </div>
-
-      <h2>${ico("store")} منتجات وعروض الجيم والكافتيريا</h2>
-      <div class="rows">
-        ${products.length ? products.map(pr => `
-          <div class="row">
-            <div class="name">
-              ${esc(pr.name)}
-              <span class="tag cat">${ico(pr.category === "cafe" ? "coffee" : "dumbbell", "sm")} ${pr.category === "cafe" ? "الكافتيريا" : "منتجات الجيم"}</span>
+      ${memberPortalTab === "card" ? `
+        <div class="panel">
+          <div class="top" style="margin-bottom:10px">
+            <div class="who">
+              <h1 style="font-size:18px">${esc(member.name)}</h1>
+              <div class="sub">الباقة: ${esc(member.planName || "—")}</div>
             </div>
-            <div class="meta">السعر: <b>${money(pr.price)}</b> · ${(Number(pr.stock) || 0) > 0 ? `متوفر (${pr.stock})` : "غير متوفر حاليًا"}</div>
+            <span class="tag ${st.key}">${st.label}</span>
           </div>
-        `).join("") : `<div class="empty">لا توجد منتجات أو عروض معروضة حاليًا.</div>`}
-      </div>
+
+          <div class="meter-box">
+            <div class="meter-top">
+              <span>المتبقي في مدة الاشتراك</span>
+              <span>${st.pct}% (${esc(fmtLeftText(st))})</span>
+            </div>
+            <div class="meter-track"><div class="meter-fill" style="width:${st.pct}%"></div></div>
+          </div>
+
+          <div class="stat" style="margin-top:12px"><span>التمارين المتبقية</span><b>${esc(sessionsText(member))}</b></div>
+          <div class="stat"><span>إجمالي المدفوع</span><b>${money(paidTotal)}</b></div>
+          <div class="stat"><span>المتبقي عليه</span><b class="${Number(member.balance) > 0 ? "due" : ""}">${money(member.balance)}</b></div>
+          <div class="stat"><span>تاريخ الانتهاء</span><b>${st.end ? fmtDate(st.end) : "—"}</b></div>
+        </div>
+
+        <div class="panel qrbox" style="margin-top:14px">
+          <div style="font-weight:700;margin-bottom:8px">كود الدخول السريع</div>
+          ${qrImgHtml}
+          <div class="bigcode" style="margin-top:8px">${esc(member.code)}</div>
+        </div>
+
+        <h2>${ico("clock")} سجل دخول الجيم (${logs.length})</h2>
+        <div class="rows">
+          ${logs.length ? logs.slice(0, 30).map(l => `
+            <div class="row">
+              <div class="name">تم تسجيل الدخول</div>
+              <div class="meta">${esc(fmtDateTime(toDate(l.ts)) || l.date || "")}</div>
+            </div>
+          `).join("") : `<div class="empty">لا يوجد سجل دخول بعد.</div>`}
+        </div>
+      ` : ""}
+
+      ${memberPortalTab === "store" ? `
+        <h2>${ico("store")} منتجات وعروض الجيم والكافتيريا</h2>
+        ${products.length ? `
+          <div class="prod-grid">
+            ${products.map(p => `
+              <div class="prod-card">
+                <div>
+                  ${p.imgUrl ? `<img class="prod-thumb" src="${esc(p.imgUrl)}" alt="${esc(p.name)}" onerror="this.style.display='none'">` : ""}
+                  <span class="tag cat">${ico(p.category === "cafe" ? "coffee" : "dumbbell", "sm")} ${p.category === "cafe" ? "الكافتيريا" : "منتجات الجيم"}</span>
+                  <div class="pname">${esc(p.name)}</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+                  <span class="pprice">${money(p.price)}</span>
+                  <span class="pstock">${(Number(p.stock) || 0) > 0 ? `متوفر (${p.stock})` : "غير متوفر"}</span>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        ` : `<div class="panel empty">لا توجد منتجات متاحة في الستور حاليًا.</div>`}
+      ` : ""}
+
+      ${memberPortalTab === "pay" ? `
+        <h2>${ico("creditCard")} طرق الدفع المتاحة</h2>
+        <div class="panel">
+          <div class="stat"><span>المستحق عليك حاليًا</span><b class="${Number(member.balance) > 0 ? "due" : ""}">${money(member.balance)}</b></div>
+
+          <div class="field" style="margin-top:14px">
+            <label>إنستا باي (InstaPay)</label>
+            ${instapay ? `<div class="meta" style="margin-bottom:8px">البيانات: <b>${esc(instapay)}</b></div>
+            <a class="btn" target="_blank" rel="noopener" href="${esc(instapay.startsWith("http") ? instapay : `https://ipn.eg/${instapay}`)}">${ico("creditCard")} فتح إنستا باي</a>`
+            : `<p class="hint">لم يتم إضافة رابط إنستا باي للجيم بعد.</p>`}
+          </div>
+
+          <div class="field" style="margin-top:14px">
+            <label>فودافون كاش (Vodafone Cash)</label>
+            ${vodafone ? `<div class="meta" style="margin-bottom:8px">الرقم / الرابط: <b>${esc(vodafone)}</b></div>
+            <a class="btn soft" target="_blank" rel="noopener" href="${esc(vodafone.startsWith("http") ? vodafone : `https://wa.me/${waPhone(vodafone)}`)}">${ico("phone")} تواصل / دفع فودافون كاش</a>`
+            : `<p class="hint">لم يتم إضافة رقم/رابط فودافون كاش للجيم بعد.</p>`}
+          </div>
+
+          <div class="field" style="margin-top:14px">
+            <label>أورانج كاش (Orange Cash)</label>
+            ${orange ? `<div class="meta" style="margin-bottom:8px">الرقم / الرابط: <b>${esc(orange)}</b></div>
+            <a class="btn ghost" target="_blank" rel="noopener" href="${esc(orange.startsWith("http") ? orange : `https://wa.me/${waPhone(orange)}`)}">${ico("phone")} تواصل / دفع أورانج كاش</a>`
+            : `<p class="hint">لم يتم إضافة رقم/رابط أورانج كاش للجيم بعد.</p>`}
+          </div>
+        </div>
+      ` : ""}
     </main>
   </div>`;
 
   $("#mOutBtn").addEventListener("click", () => { loginMode = "member"; viewLogin(); });
+  $$("[data-mpt]").forEach(b => b.addEventListener("click", () => {
+    memberPortalTab = b.dataset.mpt;
+    renderMemberPortal(gymId, gym, member, logs, paidTotal, products);
+  }));
 }
 
 function viewBlocked(title, text, retry = false) {
@@ -686,7 +916,7 @@ function viewBlocked(title, text, retry = false) {
 }
 
 /* =====================================================================
-   OWNER & ACCOUNTANT APP
+   GYM APP (Owner / Accountant / Reception)
    ===================================================================== */
 const S = {
   tab: "home", sub: null, filter: "all", q: "",
@@ -697,13 +927,16 @@ let G = null;
 let MEMBERS = [];
 let PLANS = [];
 let PRODUCTS = [];
+let CAPTAINS = [];
 let RT = 0;
 let scanner = null;
 let charts = [];
 
 const col = name => collection(db, "gyms", G.gymId, name);
 const ref = (name, id) => doc(db, "gyms", G.gymId, name, id);
-const isAccountant = () => G?.profile?.role === "accountant";
+const role = () => G?.profile?.role || "owner";
+const isAccountant = () => role() === "accountant";
+const isReception = () => role() === "reception";
 
 function destroyCharts() {
   charts.forEach(c => { try { c.destroy(); } catch {} });
@@ -723,6 +956,10 @@ async function loadProducts() {
   const snap = await getDocs(col("products"));
   PRODUCTS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   PRODUCTS.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
+}
+async function loadCaptains() {
+  const snap = await getDocs(col("captains"));
+  CAPTAINS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
 function reminderText(m) {
@@ -752,27 +989,38 @@ function nav(tab, sub = null) {
 function renderOwner() {
   RT++;
   const tok = RT;
-  const tabs = isAccountant()
-    ? [["money", "المالية", "chart"], ["settings", "الحساب", "settings"]]
-    : [
-        ["home", "الرئيسية", "home"],
-        ["members", "الأعضاء", "users"],
-        ["checkin", "الحضور", "qr"],
-        ["store", "الستور", "store"],
-        ["broadcast", "التغذية", "send"],
-        ["money", "المالية", "chart"],
-        ["settings", "الإعدادات", "settings"]
-      ];
+  const hideMoney = Boolean(G.gym.hideMoneyForStaff) && !isAccountant() && role() !== "owner";
+  const hideSettings = Boolean(G.gym.hideSettingsForStaff) && role() !== "owner";
+
+  let tabs = [];
+  if (isAccountant()) {
+    tabs = [["money", "المالية", "chart"], ["settings", "الحساب", "settings"]];
+  } else {
+    tabs = [
+      ["home", "الرئيسية", "home"],
+      ["members", "الأعضاء", "users"],
+      ["checkin", "الحضور", "qr"],
+      ["captains", "الكباتن", "mapPin"],
+      ["store", "الستور", "store"],
+      ["broadcast", "التغذية", "send"]
+    ];
+    if (!hideMoney) tabs.push(["money", "المالية", "chart"]);
+    if (!hideSettings) tabs.push(["settings", "الإعدادات", "settings"]);
+  }
+
+  if (!tabs.some(t => t[0] === S.tab)) S.tab = tabs[0][0];
 
   const end = toDate(G.gym.subscriptionEnd);
+  const roleLabel = isAccountant() ? "محاسب" : (isReception() ? "استقبال" : "مدير الجيم");
+
   root.innerHTML = `
   <div class="shell">
     <header class="oh"><div class="in">
       <div class="brand-box">
-        <div class="mini-logo">${logoSvg}</div>
+        ${gymLogoHtml(G.gym)}
         <div>
           <div class="gname">${esc(G.gym.name || "الجيم")}</div>
-          <div class="gsub">${esc(G.profile.name || "")} ${isAccountant() ? "· محاسب" : ""}</div>
+          <div class="gsub">${esc(G.profile.name || "")} · ${roleLabel}</div>
         </div>
       </div>
       ${end ? `<div class="sub-pill">حتى ${fmtDate(end)}</div>` : ""}
@@ -784,28 +1032,27 @@ function renderOwner() {
   </div>`;
   $$(".tabs button").forEach(b => b.addEventListener("click", () => nav(b.dataset.t, null)));
   const main = $("#main");
-  if (isAccountant() && S.tab !== "money" && S.tab !== "settings") S.tab = "money";
   if (S.sub) return SUBS[S.sub.type](main, tok);
   return SCREENS[S.tab](main, tok);
 }
 
-/* ---------- Shared pieces ---------- */
+/* ---------- Member Row ---------- */
 function memberRowHtml(m, opts = {}) {
   const st = calcMemberState(m);
   const due = Number(m.balance) > 0 ? `<span class="due"> · عليه ${money(m.balance)}</span>` : "";
+  const lastIn = toDate(m.lastCheckinAt);
   const wa = (opts.wa && m.phone)
     ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
   return `
   <div class="mrow" data-id="${esc(m.id)}">
     <button class="mmain" data-open="${esc(m.id)}">
       <div class="name">${esc(m.name)} <span class="tag ${st.key}">${st.label}</span></div>
-      <div class="meta">كود ${esc(m.code)} · ${esc(fmtFmtLeft(st))}${due}</div>
+      <div class="meta">كود ${esc(m.code)} · باقي ${esc(sessionsText(m))} · ${esc(fmtLeftText(st))}${due}</div>
+      <div class="meta">آخر دخول: ${esc(fmtDateTime(lastIn))}</div>
     </button>
     <div class="side">${wa}</div>
   </div>`;
 }
-const fmtFmtLeft = st => fmtLeftText(st);
-
 function wireOpen(root_) {
   $$("[data-open]", root_).forEach(b => b.addEventListener("click", () => nav(null, { type: "member", id: b.dataset.open })));
 }
@@ -860,20 +1107,20 @@ async function screenHome(main, tok) {
 
   <h2>${ico("chart")} هذا الشهر</h2>
   <div class="panel">
-    <div class="stat"><span>${ico("trendingUp", "sm")} الإيرادات (اشتراكات + ستور)</span><b>${money(monthRev)}</b></div>
+    <div class="stat"><span>${ico("trendingUp", "sm")} الإيرادات</span><b>${money(monthRev)}</b></div>
     <div class="stat"><span>${ico("trendingDown", "sm")} المصروفات</span><b>${money(monthExp)}</b></div>
     <div class="stat big"><span>${ico("wallet", "sm")} الصافي</span><b>${money(monthRev - monthExp)}</b></div>
   </div>
 
   <h2>${ico("clock")} ينتهي اشتراكهم خلال 7 أيام</h2>
-  <div class="rows" id="soonList">${soon.length ? soon.slice(0, 10).map(m => memberRowHtml(m, { wa: true })).join("") : `<div class="empty">لا يوجد أحد قريب الانتهاء.</div>`}</div>
+  <div class="rows">${soon.length ? soon.slice(0, 10).map(m => memberRowHtml(m, { wa: true })).join("") : `<div class="empty">لا يوجد أحد قريب الانتهاء.</div>`}</div>
 
   <h2>${ico("alert")} مبالغ متبقية على الأعضاء</h2>
-  <div class="rows" id="owingList">${owing.length ? owing.slice(0, 10).map(m => memberRowHtml(m, { wa: true })).join("") : `<div class="empty">لا توجد مبالغ متبقية.</div>`}</div>`;
+  <div class="rows">${owing.length ? owing.slice(0, 10).map(m => memberRowHtml(m, { wa: true })).join("") : `<div class="empty">لا توجد مبالغ متبقية.</div>`}</div>`;
   wireOpen(main);
 }
 
-/* ---------- Members list ---------- */
+/* ---------- Members ---------- */
 function screenMembers(main) {
   main.innerHTML = `
   <div class="toolbar">
@@ -891,11 +1138,12 @@ function screenMembers(main) {
   $("#flt").value = S.filter;
 
   const draw = () => {
-    const q = S.q.trim().toLowerCase();
-    const digits = q.replace(/\D/g, "");
+    const q = normName(S.q);
+    const digits = normPhone(S.q);
     let list = MEMBERS.filter(m => {
       if (!q) return true;
-      return (m.name || "").toLowerCase().includes(q) || (digits && (String(m.code) === digits || normPhone(m.phone).includes(digits.slice(-10)) || String(m.phone || "").includes(digits)));
+      return normName(m.name).includes(q)
+        || (digits && (String(m.code) === digits || normPhone(m.phone).includes(digits)));
     });
     list = list.filter(m => {
       const st = calcMemberState(m);
@@ -924,7 +1172,7 @@ function planFieldsHtml(defaultStart) {
   return `
   <div class="field">
     <label for="pf-plan">الباقة</label>
-    <select id="pf-plan">${PLANS.map(p => `<option value="${esc(p.id)}">${esc(p.name)} — ${p.days} يوم — ${money(p.price)}</option>`).join("")}</select>
+    <select id="pf-plan">${PLANS.map(p => `<option value="${esc(p.id)}">${esc(p.name)} — ${p.days} يوم — ${p.sessions || 30} تمرينة — ${money(p.price)}</option>`).join("")}</select>
   </div>
   <div class="field">
     <label for="pf-start">تاريخ بداية الاشتراك</label>
@@ -940,11 +1188,15 @@ function planFieldsHtml(defaultStart) {
       <input id="pf-paid" type="number" inputmode="decimal" min="0" dir="ltr">
     </div>
   </div>
+  <div class="field">
+    <label for="pf-sess">عدد التمارين في الباقة</label>
+    <input id="pf-sess" type="number" inputmode="numeric" min="1" dir="ltr" value="30">
+  </div>
   <p class="hint" id="pf-rem"></p>`;
 }
 function wirePlanFields(box) {
   const sel = $("#pf-plan", box); if (!sel) return;
-  const price = $("#pf-price", box), paid = $("#pf-paid", box), rem = $("#pf-rem", box);
+  const price = $("#pf-price", box), paid = $("#pf-paid", box), sess = $("#pf-sess", box), rem = $("#pf-rem", box);
   const upd = () => {
     const r = num(price.value) - num(paid.value);
     rem.textContent = r > 0 ? `المتبقي على العضو: ${money(r)}` : (r < 0 ? "المدفوع أكبر من السعر." : "مدفوع بالكامل.");
@@ -953,6 +1205,7 @@ function wirePlanFields(box) {
     const p = PLANS.find(x => x.id === sel.value);
     price.value = p ? p.price : 0;
     paid.value = p ? p.price : 0;
+    if (sess && p) sess.value = p.sessions || 30;
     upd();
   };
   sel.addEventListener("change", fill);
@@ -965,14 +1218,14 @@ function readPlanFields(box) {
   const start = $("#pf-start", box)?.value;
   const price = num($("#pf-price", box)?.value);
   const paid = num($("#pf-paid", box)?.value);
+  const sessions = Math.max(1, Math.round(num($("#pf-sess", box)?.value) || plan?.sessions || 30));
   if (!plan) throw new Error("اختر باقة.");
   if (!start) throw new Error("اختر تاريخ البداية.");
   if (paid > price) throw new Error("المدفوع أكبر من السعر.");
   const endStr = plusDays(start, Number(plan.days) || 0);
-  return { plan, start, price, paid, end: endOfDay(endStr) };
+  return { plan, start, price, paid, sessions, startTs: Timestamp.fromDate(parseYmd(start)), end: endOfDay(endStr) };
 }
 
-/* ---------- New member (includes member portal password) ---------- */
 function subNewMember(main) {
   main.innerHTML = `
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
@@ -983,8 +1236,7 @@ function subNewMember(main) {
     <div class="field"><label for="mphone">رقم الموبايل</label><input id="mphone" type="tel" dir="ltr" inputmode="tel" autocomplete="off"></div>
     <div class="field">
       <label for="mpass">كلمة مرور دخول العضو</label>
-      <input id="mpass" type="text" dir="ltr" autocomplete="off" placeholder="مثال: 123456">
-      <div class="hint">يستخدمها العضو للدخول إلى حسابه من شاشة «دخول عضو».</div>
+      <input id="mpass" type="text" dir="ltr" autocomplete="off" placeholder="مثال: 1234">
     </div>
     ${planFieldsHtml(todayStr())}
     <button class="btn" type="submit" id="msave" ${PLANS.length ? "" : "disabled"}>${ico("check")} حفظ العضو</button>
@@ -1018,14 +1270,16 @@ function subNewMember(main) {
         code = String(next);
         tx.set(counterRef, { member: next }, { merge: true });
         tx.set(memberRef, {
-          name, phone, password, code, planId: f.plan.id, planName: f.plan.name,
-          endDate: Timestamp.fromDate(f.end), balance: f.price - f.paid,
-          createdAt: serverTimestamp()
+          name, phone, password, code,
+          planId: f.plan.id, planName: f.plan.name, planDays: Number(f.plan.days) || 30,
+          startDate: f.startTs, endDate: Timestamp.fromDate(f.end),
+          sessionsTotal: f.sessions, sessionsLeft: f.sessions,
+          balance: f.price - f.paid, createdAt: serverTimestamp()
         });
         tx.set(subRef, {
           memberId: memberRef.id, memberName: name, planId: f.plan.id, planName: f.plan.name,
           start: f.start, end: ymd(f.end), price: f.price, paid: f.paid, remaining: f.price - f.paid,
-          createdAt: serverTimestamp(), by: G.uid
+          sessions: f.sessions, createdAt: serverTimestamp(), by: G.uid
         });
         if (f.paid > 0) {
           tx.set(payRef, {
@@ -1035,8 +1289,10 @@ function subNewMember(main) {
         }
       });
       MEMBERS.push({
-        id: memberRef.id, name, phone, password, code, planId: f.plan.id, planName: f.plan.name,
-        endDate: Timestamp.fromDate(f.end), balance: f.price - f.paid
+        id: memberRef.id, name, phone, password, code,
+        planId: f.plan.id, planName: f.plan.name, planDays: Number(f.plan.days) || 30,
+        startDate: f.startTs, endDate: Timestamp.fromDate(f.end),
+        sessionsTotal: f.sessions, sessionsLeft: f.sessions, balance: f.price - f.paid
       });
       toast(`تم حفظ ${name} — كود ${code}`);
       nav("members", { type: "member", id: memberRef.id });
@@ -1047,7 +1303,6 @@ function subNewMember(main) {
   });
 }
 
-/* ---------- Member detail ---------- */
 async function subMember(main, tok) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
@@ -1061,6 +1316,8 @@ async function subMember(main, tok) {
   <div class="panel">
     <div class="stat"><span>الباقة</span><b>${esc(m.planName || "—")}</b></div>
     <div class="stat"><span>الاشتراك</span><b>${esc(fmtLeftText(st))}</b></div>
+    <div class="stat"><span>التمارين المتبقية</span><b>${esc(sessionsText(m))}</b></div>
+    <div class="stat"><span>آخر دخول</span><b>${esc(fmtDateTime(toDate(m.lastCheckinAt)))}</b></div>
     <div class="stat"><span>المبلغ المتبقي</span><b class="${Number(m.balance) > 0 ? "due" : ""}">${money(m.balance)}</b></div>
     <div class="stat"><span>كلمة مرور العضو</span><b>${esc(m.password || "غير محددة")}</b></div>
   </div>
@@ -1070,7 +1327,7 @@ async function subMember(main, tok) {
       <button class="btn sm" id="renew">${ico("refresh", "sm")} تجديد الاشتراك</button>
       ${Number(m.balance) > 0 ? `<button class="btn soft sm" id="payBtn">${ico("wallet", "sm")} تسجيل دفعة</button>` : ""}
       ${m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : ""}
-      <button class="btn ghost sm" id="cardBtn">${ico("qr", "sm")} كارت العضو</button>
+      <button class="btn ghost sm" id="cardBtn">${ico("qr", "sm")} كارت PDF</button>
       <button class="btn ghost sm" id="editBtn">${ico("edit", "sm")} تعديل</button>
     </div>
   </div>
@@ -1111,10 +1368,7 @@ async function subMember(main, tok) {
         m.balance = Number(m.balance) - amount;
         toast("تم تسجيل الدفعة");
         nav(null, { type: "member", id: m.id });
-      } catch (e) {
-        btn.disabled = false;
-        $("#fmsg").innerHTML = `<p class="msg err">${esc(errText(e))}</p>`;
-      }
+      } catch (e) { btn.disabled = false; $("#fmsg").innerHTML = `<p class="msg err">${esc(errText(e))}</p>`; }
     });
   });
 
@@ -1141,7 +1395,6 @@ async function subMember(main, tok) {
   }
 }
 
-/* ---------- Renew ---------- */
 function subRenew(main) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
@@ -1169,11 +1422,13 @@ function subRenew(main) {
       batch.set(doc(col("subscriptions")), {
         memberId: m.id, memberName: m.name, planId: f.plan.id, planName: f.plan.name,
         start: f.start, end: ymd(f.end), price: f.price, paid: f.paid, remaining: f.price - f.paid,
-        createdAt: serverTimestamp(), by: G.uid
+        sessions: f.sessions, createdAt: serverTimestamp(), by: G.uid
       });
       batch.update(ref("members", m.id), {
-        planId: f.plan.id, planName: f.plan.name,
-        endDate: Timestamp.fromDate(f.end), balance: increment(f.price - f.paid)
+        planId: f.plan.id, planName: f.plan.name, planDays: Number(f.plan.days) || 30,
+        startDate: f.startTs, endDate: Timestamp.fromDate(f.end),
+        sessionsTotal: f.sessions, sessionsLeft: f.sessions,
+        balance: increment(f.price - f.paid)
       });
       if (f.paid > 0) {
         batch.set(doc(col("payments")), {
@@ -1182,8 +1437,9 @@ function subRenew(main) {
         });
       }
       await batch.commit();
-      m.planId = f.plan.id; m.planName = f.plan.name;
-      m.endDate = Timestamp.fromDate(f.end);
+      m.planId = f.plan.id; m.planName = f.plan.name; m.planDays = Number(f.plan.days) || 30;
+      m.startDate = f.startTs; m.endDate = Timestamp.fromDate(f.end);
+      m.sessionsTotal = f.sessions; m.sessionsLeft = f.sessions;
       m.balance = Number(m.balance || 0) + (f.price - f.paid);
       toast("تم تجديد الاشتراك");
       nav(null, { type: "member", id: m.id });
@@ -1194,7 +1450,6 @@ function subRenew(main) {
   });
 }
 
-/* ---------- Edit member ---------- */
 function subEdit(main) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
@@ -1205,24 +1460,25 @@ function subEdit(main) {
     <div class="field"><label for="ename">الاسم</label><input id="ename" value="${esc(m.name)}"></div>
     <div class="field"><label for="ephone">رقم الموبايل</label><input id="ephone" type="tel" dir="ltr" inputmode="tel" value="${esc(m.phone || "")}"></div>
     <div class="field"><label for="epass">كلمة مرور دخول العضو</label><input id="epass" type="text" dir="ltr" value="${esc(m.password || "")}"></div>
+    <div class="field"><label for="esess">التمارين المتبقية</label><input id="esess" type="number" inputmode="numeric" min="0" dir="ltr" value="${esc(m.sessionsLeft ?? 30)}"></div>
     <button class="btn" type="submit" id="esave">${ico("check")} حفظ التعديل</button>
   </form>`;
   $("#back").addEventListener("click", () => nav(null, { type: "member", id: m.id }));
   $("#eform").addEventListener("submit", async ev => {
     ev.preventDefault();
     const name = $("#ename").value.trim(), phone = $("#ephone").value.trim(), password = $("#epass").value.trim();
+    const sessionsLeft = Math.max(0, Math.round(num($("#esess").value)));
     if (!name) return toast("اكتب الاسم.");
     const btn = $("#esave"); btn.disabled = true;
     try {
-      await updateDoc(ref("members", m.id), { name, phone, password });
-      m.name = name; m.phone = phone; m.password = password;
+      await updateDoc(ref("members", m.id), { name, phone, password, sessionsLeft });
+      m.name = name; m.phone = phone; m.password = password; m.sessionsLeft = sessionsLeft;
       toast("تم الحفظ");
       nav(null, { type: "member", id: m.id });
     } catch (e) { btn.disabled = false; toast(errText(e)); }
   });
 }
 
-/* ---------- Member card (QR) ---------- */
 async function subCard(main) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
@@ -1230,16 +1486,27 @@ async function subCard(main) {
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
   <div class="panel qrbox">
     <h2 style="margin:0 0 4px;justify-content:center">${esc(m.name)}</h2>
-    <div class="muted">${esc(G.gym.name || "")}</div>
+    <div class="muted">${esc(G.gym.name || "")} · باقي ${esc(sessionsText(m))}</div>
     <div id="qr" style="margin:14px 0"><p class="muted">جاري إنشاء الكود…</p></div>
     <div class="bigcode">${esc(m.code)}</div>
-    <p class="hint">اعرض الكود أو اكتبه في شاشة الحضور.</p>
+    <p class="hint">كلمة المرور: <b>${esc(m.password || "—")}</b></p>
+    <div class="acts" style="justify-content:center;margin-top:12px">
+      <button class="btn sm" type="button" id="pdfBtn">${ico("download", "sm")} تحميل كارت PDF</button>
+      ${m.phone ? `<a class="btn soft sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, `أهلًا ${m.name}، بطاقة عضويتك في ${G.gym.name || "الجيم"} جاهزة. كود الدخول: ${m.code} وكلمة المرور: ${m.password || "—"}`))}"><${"span"} class="inline-ico">${ico("send", "sm")} إرسال واتساب</${"span"}></a>` : ""}
+    </div>
   </div>`;
   $("#back").addEventListener("click", () => nav(null, { type: "member", id: m.id }));
+  $("#pdfBtn").addEventListener("click", async () => {
+    try {
+      await downloadMemberIdPdf(G.gym, m, G.gymId);
+      toast("تم إنشاء ملف كارت العضو PDF");
+    } catch (e) { toast(errText(e)); }
+  });
   try {
     const mod = await import("https://esm.sh/qrcode@1.5.4");
     const QR = mod.default || mod;
-    const url = await QR.toDataURL(String(m.code), { margin: 1, width: 440 });
+    const payload = `GYMPRO|${G.gymId}|${m.code || m.id}|${m.password || ""}`;
+    const url = await QR.toDataURL(payload, { margin: 1, width: 440 });
     const box = $("#qr");
     if (box) box.innerHTML = `<img src="${url}" alt="كود QR للعضو ${esc(m.name)}">`;
   } catch {
@@ -1248,22 +1515,29 @@ async function subCard(main) {
   }
 }
 
-/* ---------- Check-in ---------- */
-function findMember(raw) {
-  const d = String(raw || "").trim().replace(/\D/g, "");
+/* ---------- Check-in (Camera QR + PDF Payload + Sessions Left + Date/Time) ---------- */
+function findMemberFromScan(raw) {
+  const txt = String(raw || "").trim();
+  if (!txt) return null;
+  if (txt.startsWith("GYMPRO|")) {
+    const parts = txt.split("|");
+    const codePart = parts[2] || "";
+    return MEMBERS.find(m => String(m.code) === codePart || m.id === codePart) || null;
+  }
+  const d = arabicDigitsToEn(txt).replace(/\D/g, "");
   if (!d) return null;
   if (d.length <= 6) return MEMBERS.find(m => String(m.code) === d) || null;
-  const n = d.slice(-10);
+  const n = normPhone(d);
   return MEMBERS.find(m => normPhone(m.phone) === n) || null;
 }
 
 function screenCheckin(main, tok) {
   main.innerHTML = `
-  <h2>${ico("qr")} تسجيل الحضور</h2>
+  <h2>${ico("qr")} تسجيل الحضور (كاميرا / كود)</h2>
   <form class="panel" id="cform" novalidate>
     <div class="field">
-      <label for="ccode">كود العضو أو رقم الموبايل</label>
-      <input id="ccode" inputmode="numeric" dir="ltr" autocomplete="off" autofocus>
+      <label for="ccode">كود العضو أو رقم الموبايل أو نص الكود</label>
+      <input id="ccode" dir="ltr" autocomplete="off" autofocus placeholder="مثال: 1001 أو 010xxxxxxxx">
     </div>
     <div class="two">
       <button class="btn" type="submit">${ico("check")} تسجيل</button>
@@ -1295,7 +1569,7 @@ async function startScan() {
     scanner = s;
     await s.start(
       { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 220, height: 220 } },
+      { fps: 10, qrbox: { width: 230, height: 230 } },
       text => { stopScanner(); doCheckin(text); },
       () => {}
     );
@@ -1308,9 +1582,9 @@ async function startScan() {
 async function doCheckin(raw) {
   const box = $("#result");
   if (!box) return;
-  const m = findMember(raw);
+  const m = findMemberFromScan(raw);
   if (!m) {
-    box.innerHTML = `<div class="result bad"><div class="rt">${ico("xCircle", "sm")} غير موجود</div><div>لا يوجد عضو بهذا الكود أو الرقم.</div></div>`;
+    box.innerHTML = `<div class="result bad"><div class="rt">${ico("xCircle", "sm")} غير موجود</div><div>لا يوجد عضو مطابق لهذا الكود أو الرقم.</div></div>`;
     return;
   }
   const st = calcMemberState(m);
@@ -1329,16 +1603,30 @@ async function doCheckin(raw) {
     if (exists.exists()) {
       const at = toDate(exists.data().ts);
       box.innerHTML = `<div class="result warn"><div class="rt">${ico("alert", "sm")} سُجّل حضوره اليوم بالفعل${at ? " الساعة " + fmtTime(at) : ""}</div>
-        <div class="rn">${esc(m.name)}</div></div>`;
+        <div class="rn">${esc(m.name)}</div>
+        <div>باقي تمرينة: <b>${esc(sessionsText(m))}</b> · ${esc(fmtLeftText(st))}</div></div>`;
       return;
     }
+
+    const nowTs = serverTimestamp();
+    const curSess = Number(m.sessionsLeft);
+    const nextSess = isNaN(curSess) ? null : Math.max(0, curSess - 1);
+
     await setDoc(aRef, {
       memberId: m.id, memberName: m.name, code: m.code, date: todayStr(),
-      ts: serverTimestamp(), by: G.uid
+      ts: nowTs, by: G.uid
     });
+    const upd = { lastCheckinAt: nowTs };
+    if (nextSess !== null) upd.sessionsLeft = nextSess;
+    await updateDoc(ref("members", m.id), upd);
+
+    if (nextSess !== null) m.sessionsLeft = nextSess;
+    m.lastCheckinAt = { toDate: () => new Date() };
+
     const dueLine = Number(m.balance) > 0 ? `<div class="due">عليه مبلغ متبقي ${money(m.balance)}</div>` : "";
-    box.innerHTML = `<div class="result ok"><div class="rt">${ico("checkCircle", "sm")} تم تسجيل الحضور</div>
-      <div class="rn">${esc(m.name)}</div><div>${esc(fmtLeftText(st))}</div>${dueLine}
+    box.innerHTML = `<div class="result ok"><div class="rt">${ico("checkCircle", "sm")} تم تسجيل الحضور (${fmtDateTime(new Date())})</div>
+      <div class="rn">${esc(m.name)}</div>
+      <div>باقي تمرينة: <b>${esc(sessionsText(m))}</b> · ${esc(fmtLeftText(st))}</div>${dueLine}
       ${st.key === "soon" ? `<div class="acts">${waBtn}</div>` : ""}</div>`;
     loadToday(RT);
   } catch (e) {
@@ -1354,14 +1642,147 @@ async function loadToday(tok) {
     if (tok !== RT) return;
     const rows = snap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
     list.innerHTML = rows.length
-      ? rows.map(r => `<div class="row"><div class="name">${esc(r.memberName)}</div><div class="meta">كود ${esc(r.code)} · ${fmtTime(toDate(r.ts))}</div></div>`).join("")
+      ? rows.map(r => `<div class="row"><div class="name">${esc(r.memberName)}</div><div class="meta">كود ${esc(r.code)} · ${esc(fmtDateTime(toDate(r.ts)))}</div></div>`).join("")
       : `<div class="empty">لم يسجل أحد حضوره اليوم.</div>`;
   } catch (e) {
     if (tok === RT) list.innerHTML = `<div class="empty">${esc(errText(e))}</div>`;
   }
 }
 
-/* ---------- Store & Cafeteria ---------- */
+/* ---------- Captains GPS Attendance ---------- */
+function screenCaptains(main) {
+  const gymLat = Number(G.gym.lat);
+  const gymLng = Number(G.gym.lng);
+  const maxRadius = Number(G.gym.gpsRadius) || 250;
+  const hasGymLoc = !isNaN(gymLat) && !isNaN(gymLng) && G.gym.lat !== undefined && G.gym.lng !== undefined && G.gym.lat !== "";
+
+  main.innerHTML = `
+  <h2>${ico("mapPin")} حضور وانصراف الكباتن (GPS)</h2>
+  <div class="panel" style="margin-bottom:14px">
+    <div style="font-weight:700;font-size:14px">إعداد موقع الجيم الجغرافي</div>
+    <div class="hint">يُستخدم للتحقق من وجود الكابتن داخل نطاق الجيم عند تسجيل الحضور أو الانصراف.</div>
+    <div class="two" style="margin-top:10px">
+      <div class="field"><label for="gLat">خط العرض (Latitude)</label><input id="gLat" dir="ltr" value="${esc(G.gym.lat ?? "")}" placeholder="30.0444"></div>
+      <div class="field"><label for="gLng">خط الطول (Longitude)</label><input id="gLng" dir="ltr" value="${esc(G.gym.lng ?? "")}" placeholder="31.2357"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label for="gRad">النطاق المسموح (متر)</label><input id="gRad" type="number" dir="ltr" value="${esc(maxRadius)}"></div>
+      <div class="field" style="display:flex;align-items:flex-end"><button class="btn soft" type="button" id="useCurLocBtn">${ico("mapPin", "sm")} موقعي الحالي</button></div>
+    </div>
+    <button class="btn" type="button" id="saveLocBtn">${ico("check")} حفظ موقع الجيم</button>
+  </div>
+
+  ${!isReception() ? `
+  <h2>${ico("plus")} إضافة كابتن</h2>
+  <form class="panel" id="capForm" novalidate>
+    <div class="two">
+      <div class="field"><label for="cName">اسم الكابتن</label><input id="cName" placeholder="مثال: كابتن كريم"></div>
+      <div class="field"><label for="cRole">التخصص</label><input id="cRole" placeholder="حديد / لياقة / تغذية"></div>
+    </div>
+    <button class="btn" type="submit" id="capSave">${ico("check")} إضافة الكابتن</button>
+  </form>` : ""}
+
+  <h2>${ico("users")} سجل الكباتن اليوم (${todayStr()})</h2>
+  <div class="rows">
+    ${CAPTAINS.length ? CAPTAINS.map(c => {
+      const isTodayIn = c.lastDate === todayStr() && c.status === "in";
+      const isTodayOut = c.lastDate === todayStr() && c.status === "out";
+      return `
+      <div class="row" data-cid="${esc(c.id)}">
+        <div class="name">
+          ${esc(c.name)}
+          <span class="tag ${isTodayIn ? "active" : (isTodayOut ? "soon" : "none")}">${isTodayIn ? "حاضر الآن" : (isTodayOut ? "انصرف اليوم" : "لم يسجل اليوم")}</span>
+        </div>
+        <div class="meta">${esc(c.role || "كابتن")} · آخر تحديث: ${esc(fmtDateTime(toDate(c.lastAt)))}</div>
+        <div class="acts">
+          <button class="btn sm" data-gps="in">${ico("mapPin", "sm")} بصمة حضور GPS</button>
+          <button class="btn ghost sm" data-gps="out">${ico("logout", "sm")} بصمة انصراف GPS</button>
+          ${!isReception() ? `<button class="btn danger sm" data-delc="${esc(c.id)}">${ico("trash", "sm")} حذف</button>` : ""}
+        </div>
+      </div>`;
+    }).join("") : `<div class="empty">لا يوجد كباتن مضافون بعد.</div>`}
+  </div>`;
+
+  $("#useCurLocBtn").addEventListener("click", async () => {
+    try {
+      const loc = await getCurrentGps();
+      $("#gLat").value = loc.lat.toFixed(6);
+      $("#gLng").value = loc.lng.toFixed(6);
+      toast(`تم التقاط الإحداثيات (دقة ${loc.acc}م)`);
+    } catch (e) { toast(e.message); }
+  });
+
+  $("#saveLocBtn").addEventListener("click", async () => {
+    const lat = num($("#gLat").value);
+    const lng = num($("#gLng").value);
+    const gpsRadius = Math.max(20, Math.round(num($("#gRad").value) || 250));
+    if (!lat || !lng) return toast("أدخل خط العرض وخط الطول أولًا.");
+    try {
+      await updateDoc(doc(db, "gyms", G.gymId), { lat, lng, gpsRadius });
+      G.gym.lat = lat; G.gym.lng = lng; G.gym.gpsRadius = gpsRadius;
+      toast("تم حفظ موقع الجيم");
+      screenCaptains(main);
+    } catch (e) { toast(errText(e)); }
+  });
+
+  const capForm = $("#capForm", main);
+  if (capForm) {
+    capForm.addEventListener("submit", async ev => {
+      ev.preventDefault();
+      const name = $("#cName").value.trim(), roleTxt = $("#cRole").value.trim();
+      if (!name) return toast("اكتب اسم الكابتن.");
+      try {
+        const dRef = await addDoc(col("captains"), { name, role: roleTxt || "كابتن", createdAt: serverTimestamp() });
+        CAPTAINS.push({ id: dRef.id, name, role: roleTxt || "كابتن" });
+        toast("تمت إضافة الكابتن");
+        screenCaptains(main);
+      } catch (e) { toast(errText(e)); }
+    });
+  }
+
+  $$("[data-gps]", main).forEach(b => b.addEventListener("click", async () => {
+    const cid = b.closest(".row").dataset.cid;
+    const cap = CAPTAINS.find(x => x.id === cid);
+    const type = b.dataset.gps;
+    b.disabled = true;
+    try {
+      const loc = await getCurrentGps();
+      let dist = null;
+      if (hasGymLoc) {
+        dist = Math.round(haversineMeters(loc.lat, loc.lng, gymLat, gymLng));
+        if (dist > maxRadius) {
+          b.disabled = false;
+          return toast(`أنت خارج نطاق الجيم (${dist} متر من أصل ${maxRadius} متر).`);
+        }
+      }
+      const now = new Date();
+      await addDoc(col("captain_attendance"), {
+        captainId: cid, captainName: cap?.name || "", type, date: todayStr(),
+        lat: loc.lat, lng: loc.lng, distanceMeters: dist, ts: serverTimestamp(), by: G.uid
+      });
+      await updateDoc(ref("captains", cid), {
+        status: type, lastDate: todayStr(), lastAt: serverTimestamp(), lastDist: dist
+      });
+      if (cap) { cap.status = type; cap.lastDate = todayStr(); cap.lastAt = { toDate: () => now }; }
+      toast(type === "in" ? `تم تسجيل حضور ${cap.name} (GPS)` : `تم تسجيل انصراف ${cap.name} (GPS)`);
+      screenCaptains(main);
+    } catch (e) {
+      b.disabled = false;
+      toast(e.message || errText(e));
+    }
+  }));
+
+  $$("[data-delc]", main).forEach(b => b.addEventListener("click", async () => {
+    if (!confirm("حذف هذا الكابتن؟")) return;
+    try {
+      await deleteDoc(ref("captains", b.dataset.delc));
+      CAPTAINS = CAPTAINS.filter(x => x.id !== b.dataset.delc);
+      screenCaptains(main);
+    } catch (e) { toast(errText(e)); }
+  }));
+}
+
+/* ---------- Store & Cafeteria (with Image URL) ---------- */
 function screenStore(main) {
   const CATS = { gym: "منتجات الجيم", cafe: "الكافتيريا" };
   main.innerHTML = `
@@ -1372,9 +1793,7 @@ function screenStore(main) {
   <div id="storeBody"></div>`;
 
   $$(".seg button", main).forEach(b => b.addEventListener("click", () => {
-    S.storeTab = b.dataset.st;
-    S.editProd = null;
-    screenStore(main);
+    S.storeTab = b.dataset.st; S.editProd = null; screenStore(main);
   }));
 
   const body = $("#storeBody", main);
@@ -1400,6 +1819,7 @@ function screenStore(main) {
         return `
         <button class="prod-card" data-addc="${esc(p.id)}" ${out ? "disabled" : ""}>
           <div>
+            ${p.imgUrl ? `<img class="prod-thumb" src="${esc(p.imgUrl)}" alt="${esc(p.name)}" onerror="this.style.display='none'">` : ""}
             <span class="tag cat">${ico(catIcon, "sm")} ${esc(CATS[p.category] || "منتج")}</span>
             <div class="pname">${esc(p.name)}</div>
           </div>
@@ -1409,7 +1829,7 @@ function screenStore(main) {
           </div>
         </button>`;
       }).join("")}
-    </div>` : `<div class="panel empty" style="margin-bottom:16px">لا توجد منتجات في هذا القسم. أضف منتجات من تبويب «إدارة المنتجات».</div>`}
+    </div>` : `<div class="panel empty" style="margin-bottom:16px">لا توجد منتجات في هذا القسم.</div>`}
 
     <h2>${ico("cart")} سلة المشتريات</h2>
     <div class="panel">
@@ -1421,9 +1841,9 @@ function screenStore(main) {
               <div class="muted" style="font-size:13px">${money(item.price)} × ${item.qty} = <b>${money(item.price * item.qty)}</b></div>
             </div>
             <div class="qty-ctrl">
-              <button type="button" data-dec="${esc(item.id)}" aria-label="إنقاص">${ico("minus", "sm")}</button>
+              <button type="button" data-dec="${esc(item.id)}">${ico("minus", "sm")}</button>
               <b>${item.qty}</b>
-              <button type="button" data-inc="${esc(item.id)}" aria-label="زيادة">${ico("plus", "sm")}</button>
+              <button type="button" data-inc="${esc(item.id)}">${ico("plus", "sm")}</button>
             </div>
           </div>
         `).join("")}
@@ -1461,29 +1881,19 @@ function screenStore(main) {
       }
       screenStore(main);
     }));
-
     $$("[data-inc]", body).forEach(b => b.addEventListener("click", () => {
       const p = PRODUCTS.find(x => x.id === b.dataset.inc);
       const item = S.cart.find(c => c.id === b.dataset.inc);
       if (item && p && item.qty < Number(p.stock)) { item.qty++; screenStore(main); }
       else toast("وصلت للحد الأقصى المتاح بالمخزون.");
     }));
-
     $$("[data-dec]", body).forEach(b => b.addEventListener("click", () => {
       const idx = S.cart.findIndex(c => c.id === b.dataset.dec);
-      if (idx > -1) {
-        S.cart[idx].qty--;
-        if (S.cart[idx].qty <= 0) S.cart.splice(idx, 1);
-        screenStore(main);
-      }
+      if (idx > -1) { S.cart[idx].qty--; if (S.cart[idx].qty <= 0) S.cart.splice(idx, 1); screenStore(main); }
     }));
 
     const modeSel = $("#payMode", body);
-    if (modeSel) {
-      modeSel.addEventListener("change", () => {
-        $("#creditMemberBox").style.display = modeSel.value === "credit" ? "block" : "none";
-      });
-    }
+    if (modeSel) modeSel.addEventListener("change", () => { $("#creditMemberBox").style.display = modeSel.value === "credit" ? "block" : "none"; });
 
     const chkBtn = $("#checkoutBtn", body);
     if (chkBtn) chkBtn.addEventListener("click", async () => {
@@ -1491,19 +1901,14 @@ function screenStore(main) {
       const memberId = mode === "credit" ? $("#creditMember").value : "";
       const member = memberId ? MEMBERS.find(m => m.id === memberId) : null;
       if (mode === "credit" && !member) return toast("اختر العضو لإضافة المبلغ على حسابه.");
-
       chkBtn.disabled = true; chkBtn.textContent = "جاري التسجيل…";
       const summary = S.cart.map(c => `${c.name} ×${c.qty}`).join("، ");
       try {
         const batch = writeBatch(db);
-        for (const item of S.cart) {
-          batch.update(ref("products", item.id), { stock: increment(-item.qty) });
-        }
+        for (const item of S.cart) batch.update(ref("products", item.id), { stock: increment(-item.qty) });
         batch.set(doc(col("store_sales")), {
-          items: S.cart, total, mode,
-          memberId: member ? member.id : null,
-          memberName: member ? member.name : "عميل نقدي",
-          date: todayStr(), ts: serverTimestamp(), by: G.uid
+          items: S.cart, total, mode, memberId: member ? member.id : null,
+          memberName: member ? member.name : "عميل نقدي", date: todayStr(), ts: serverTimestamp(), by: G.uid
         });
         if (mode === "cash") {
           batch.set(doc(col("payments")), {
@@ -1514,20 +1919,15 @@ function screenStore(main) {
           batch.update(ref("members", member.id), { balance: increment(total) });
         }
         await batch.commit();
-
         for (const item of S.cart) {
           const p = PRODUCTS.find(x => x.id === item.id);
           if (p) p.stock = Math.max(0, (Number(p.stock) || 0) - item.qty);
         }
         if (member) member.balance = Number(member.balance || 0) + total;
-
         S.cart = [];
         toast(mode === "cash" ? `تم بيع بقيمة ${money(total)}` : `تمت إضافة ${money(total)} على حساب ${member.name}`);
         screenStore(main);
-      } catch (e) {
-        chkBtn.disabled = false; chkBtn.innerHTML = `${ico("check")} إتمام عملية البيع`;
-        toast(errText(e));
-      }
+      } catch (e) { chkBtn.disabled = false; chkBtn.innerHTML = `${ico("check")} إتمام عملية البيع`; toast(errText(e)); }
     });
     return;
   }
@@ -1536,26 +1936,20 @@ function screenStore(main) {
   body.innerHTML = `
   <h2>${ico(editing ? "edit" : "plus")} ${editing ? "تعديل منتج" : "إضافة منتج جديد"}</h2>
   <form class="panel" id="prodForm" novalidate>
-    <div class="field">
-      <label for="prName">اسم المنتج</label>
-      <input id="prName" placeholder="مثال: مياه معدنية، بروتين بار، سكوب واي، قفازات" value="${esc(editing?.name || "")}">
-    </div>
-    <div class="field">
-      <label for="prCat">القسم</label>
+    <div class="field"><label for="prName">اسم المنتج</label><input id="prName" value="${esc(editing?.name || "")}" placeholder="مثال: بروتين واي، مياه، مشروب طاقة"></div>
+    <div class="field"><label for="prCat">القسم</label>
       <select id="prCat">
         <option value="cafe" ${editing?.category === "cafe" ? "selected" : ""}>الكافتيريا والمشروبات</option>
         <option value="gym" ${editing?.category === "gym" ? "selected" : ""}>منتجات ومكملات الجيم</option>
       </select>
     </div>
+    <div class="field">
+      <label for="prImg">${ico("image", "sm")} رابط صورة المنتج (اختياري)</label>
+      <input id="prImg" dir="ltr" value="${esc(editing?.imgUrl || "")}" placeholder="https://...">
+    </div>
     <div class="two">
-      <div class="field">
-        <label for="prPrice">سعر البيع</label>
-        <input id="prPrice" type="number" inputmode="decimal" min="0" dir="ltr" value="${esc(editing?.price ?? "")}">
-      </div>
-      <div class="field">
-        <label for="prStock">الكمية بالمخزون</label>
-        <input id="prStock" type="number" inputmode="numeric" min="0" dir="ltr" value="${esc(editing?.stock ?? 10)}">
-      </div>
+      <div class="field"><label for="prPrice">سعر البيع</label><input id="prPrice" type="number" inputmode="decimal" min="0" dir="ltr" value="${esc(editing?.price ?? "")}"></div>
+      <div class="field"><label for="prStock">الكمية بالمخزون</label><input id="prStock" type="number" inputmode="numeric" min="0" dir="ltr" value="${esc(editing?.stock ?? 10)}"></div>
     </div>
     <button class="btn" type="submit" id="prSave">${ico("check")} ${editing ? "حفظ التعديل" : "إضافة المنتج"}</button>
     ${editing ? `<button class="linkbtn" type="button" id="prCancel">إلغاء التعديل</button>` : ""}
@@ -1563,172 +1957,92 @@ function screenStore(main) {
 
   <h2>${ico("package")} قائمة المنتجات (${PRODUCTS.length})</h2>
   <div class="rows">
-    ${PRODUCTS.length ? PRODUCTS.map(p => {
-      const catIcon = p.category === "cafe" ? "coffee" : "dumbbell";
-      return `
+    ${PRODUCTS.length ? PRODUCTS.map(p => `
       <div class="row">
-        <div class="name">
-          ${esc(p.name)}
-          <span class="tag cat">${ico(catIcon, "sm")} ${esc(CATS[p.category] || "منتج")}</span>
-        </div>
-        <div class="meta">السعر: <b>${money(p.price)}</b> · المتاح بالمخزون: <b>${p.stock ?? 0}</b></div>
+        <div class="name">${esc(p.name)} <span class="tag cat">${esc(CATS[p.category] || "منتج")}</span></div>
+        <div class="meta">السعر: <b>${money(p.price)}</b> · المتاح: <b>${p.stock ?? 0}</b></div>
         <div class="acts">
           <button class="btn ghost sm" data-editpr="${esc(p.id)}">${ico("edit", "sm")} تعديل</button>
           <button class="btn danger sm" data-delpr="${esc(p.id)}">${ico("trash", "sm")} حذف</button>
         </div>
-      </div>`;
-    }).join("") : `<div class="empty">لا توجد منتجات مضافة بعد.</div>`}
+      </div>`).join("") : `<div class="empty">لا توجد منتجات مضافة بعد.</div>`}
   </div>`;
 
   const prCancel = $("#prCancel", body);
   if (prCancel) prCancel.addEventListener("click", () => { S.editProd = null; screenStore(main); });
-
-  $$("[data-editpr]", body).forEach(b => b.addEventListener("click", () => {
-    S.editProd = b.dataset.editpr;
-    screenStore(main);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }));
-
+  $$("[data-editpr]", body).forEach(b => b.addEventListener("click", () => { S.editProd = b.dataset.editpr; screenStore(main); window.scrollTo(0, 0); }));
   $$("[data-delpr]", body).forEach(b => b.addEventListener("click", async () => {
     if (!confirm("حذف هذا المنتج نهائيًا؟")) return;
-    try {
-      await deleteDoc(ref("products", b.dataset.delpr));
-      await loadProducts();
-      toast("تم حذف المنتج");
-      screenStore(main);
-    } catch (e) { toast(errText(e)); }
+    try { await deleteDoc(ref("products", b.dataset.delpr)); await loadProducts(); toast("تم حذف المنتج"); screenStore(main); }
+    catch (e) { toast(errText(e)); }
   }));
 
   $("#prodForm", body).addEventListener("submit", async ev => {
     ev.preventDefault();
-    const name = $("#prName").value.trim();
-    const category = $("#prCat").value;
-    const price = num($("#prPrice").value);
-    const stock = Math.max(0, Math.round(num($("#prStock").value)));
+    const name = $("#prName").value.trim(), category = $("#prCat").value, imgUrl = $("#prImg").value.trim();
+    const price = num($("#prPrice").value), stock = Math.max(0, Math.round(num($("#prStock").value)));
     if (!name || price <= 0) return toast("اكتب اسم المنتج وسعرًا صحيحًا.");
-
     const btn = $("#prSave"); btn.disabled = true;
     try {
-      if (editing) {
-        await updateDoc(ref("products", editing.id), { name, category, price, stock });
-      } else {
-        await addDoc(col("products"), { name, category, price, stock, createdAt: serverTimestamp() });
-      }
-      S.editProd = null;
-      await loadProducts();
-      toast("تم حفظ المنتج");
-      screenStore(main);
-    } catch (e) {
-      btn.disabled = false;
-      toast(errText(e));
-    }
+      if (editing) await updateDoc(ref("products", editing.id), { name, category, imgUrl, price, stock });
+      else await addDoc(col("products"), { name, category, imgUrl, price, stock, createdAt: serverTimestamp() });
+      S.editProd = null; await loadProducts(); toast("تم حفظ المنتج"); screenStore(main);
+    } catch (e) { btn.disabled = false; toast(errText(e)); }
   });
 }
 
-/* ---------- Nutrition & Guidance WhatsApp Broadcast ---------- */
+/* ---------- Nutrition Broadcast ---------- */
 const NUTRITION_TEMPLATES = [
-  {
-    title: "إرشادات التغذية والترطيب اليومية",
-    text: "أهلًا كابتن، تذكير بنظام التغذية اليومي: احرص على شرب 2.5 - 3 لتر ماء، وتناول مصدر بروتين واضح في كل وجبة، والالتزام بالنوم الكافي لدعم الاستشفاء العضلي."
-  },
-  {
-    title: "تنبيه قبل وبعد التمرين",
-    text: "أهلًا كابتن، للحصول على أفضل أداء في التمرين: تناول وجبة خفيفة غنية بالكربوهيدرات قبل التمرين بـ 60-90 دقيقة، ووجبة بروتين بعد التمرين خلال ساعتين."
-  }
+  { title: "إرشادات التغذية والترطيب اليومية", text: "أهلًا كابتن، تذكير بنظام التغذية اليومي: احرص على شرب 2.5 - 3 لتر ماء، وتناول مصدر بروتين واضح في كل وجبة، والالتزام بالنوم الكافي." },
+  { title: "تنبيه قبل وبعد التمرين", text: "أهلًا كابتن، تناول وجبة خفيفة غنية بالكربوهيدرات قبل التمرين بـ 60-90 دقيقة، ووجبة بروتين بعد التمرين خلال ساعتين." }
 ];
 
 function screenBroadcast(main) {
-  const targets = MEMBERS.filter(m => {
-    if (!m.phone || !waPhone(m.phone)) return false;
-    if (S.broadcastTarget === "active") {
-      const k = calcMemberState(m).key;
-      return k === "active" || k === "soon";
-    }
-    return true;
-  }).sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
-
+  const targets = MEMBERS.filter(m => m.phone && waPhone(m.phone) && (S.broadcastTarget === "all" || ["active", "soon"].includes(calcMemberState(m).key)))
+    .sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
   if (S.broadcastIdx >= targets.length) S.broadcastIdx = 0;
-  const currentTarget = targets[S.broadcastIdx] || null;
+  const cur = targets[S.broadcastIdx] || null;
 
   main.innerHTML = `
   <h2>${ico("send")} إرشادات وتغذية واتساب للأعضاء</h2>
   <div class="panel">
-    <div class="field">
-      <label for="tplSel">قالب جاهز (اختياري)</label>
-      <select id="tplSel">
-        <option value="">-- اختر قالبًا جاهزًا أو اكتب رسالتك --</option>
-        ${NUTRITION_TEMPLATES.map((t, i) => `<option value="${i}">${esc(t.title)}</option>`).join("")}
-      </select>
+    <div class="field"><label for="tplSel">قالب جاهز</label>
+      <select id="tplSel"><option value="">-- اختر قالبًا --</option>${NUTRITION_TEMPLATES.map((t, i) => `<option value="${i}">${esc(t.title)}</option>`).join("")}</select>
     </div>
-
-    <div class="field">
-      <label for="bMsg">نص الرسالة (إرشادات / نظام تغذية)</label>
-      <textarea id="bMsg" placeholder="اكتب نظام التغذية أو الإرشادات التي تريد إرسالها للأعضاء...">${esc(S.broadcastMsg)}</textarea>
-    </div>
-
-    <div class="field">
-      <label for="bTarget">الفئة المستهدفة (ذات أرقام واتساب صالحة)</label>
+    <div class="field"><label for="bMsg">نص الرسالة</label><textarea id="bMsg" placeholder="اكتب الإرشادات أو نظام التغذية...">${esc(S.broadcastMsg)}</textarea></div>
+    <div class="field"><label for="bTarget">الفئة المستهدفة</label>
       <select id="bTarget">
-        <option value="all" ${S.broadcastTarget === "all" ? "selected" : ""}>كل الأعضاء (${MEMBERS.filter(m=>waPhone(m.phone)).length})</option>
-        <option value="active" ${S.broadcastTarget === "active" ? "selected" : ""}>المشتركون النشطون فقط</option>
+        <option value="all" ${S.broadcastTarget === "all" ? "selected" : ""}>كل الأعضاء</option>
+        <option value="active" ${S.broadcastTarget === "active" ? "selected" : ""}>النشطون فقط</option>
       </select>
     </div>
-
-    ${currentTarget ? `
-      <div class="panel" style="background:var(--brand-soft);border-color:var(--brand-border);margin-bottom:12px">
-        <div style="font-size:13px;color:var(--brand);font-weight:700">الإرسال المتتابع (${S.broadcastIdx + 1} من ${targets.length})</div>
-        <div style="font-weight:700;font-size:16px;margin:4px 0">${esc(currentTarget.name)} · ${esc(currentTarget.phone)}</div>
-        <div class="acts" style="margin-top:8px">
-          <a class="btn sm" id="sendCurWa" target="_blank" rel="noopener" href="${esc(waRawLink(currentTarget.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("send", "sm")} إرسال عبر واتساب</a>
-          <button class="btn ghost sm" type="button" id="nextWaBtn">التالي في القائمة</button>
-        </div>
+    ${cur ? `<div class="panel" style="background:var(--brand-soft);border-color:var(--brand-border)">
+      <div style="font-size:12.5px;color:var(--brand);font-weight:700">الإرسال المتتابع (${S.broadcastIdx + 1} من ${targets.length})</div>
+      <div style="font-weight:700;font-size:15.5px;margin:4px 0">${esc(cur.name)} · ${esc(cur.phone)}</div>
+      <div class="acts" style="margin-top:8px">
+        <a class="btn sm" target="_blank" rel="noopener" href="${esc(waRawLink(cur.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("send", "sm")} إرسال واتساب</a>
+        <button class="btn ghost sm" type="button" id="nextWaBtn">التالي</button>
       </div>
-    ` : `<p class="hint">لا يوجد أعضاء بأرقام هاتف صالحة في هذه الفئة.</p>`}
+    </div>` : `<p class="hint">لا يوجد أعضاء بأرقام صالحة.</p>`}
   </div>
 
   <h2>${ico("users")} قائمة الإرسال (${targets.length})</h2>
-  <div class="rows">
-    ${targets.length ? targets.map((m, idx) => `
-      <div class="row">
-        <div class="name">${idx + 1}. ${esc(m.name)}</div>
-        <div class="meta">${esc(m.phone)} · ${esc(calcMemberState(m).label)}</div>
-        <div class="acts">
-          <a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("phone", "sm")} إرسال</a>
-        </div>
-      </div>
-    `).join("") : `<div class="empty">لا يوجد أعضاء متاحون للإرسال.</div>`}
-  </div>`;
+  <div class="rows">${targets.length ? targets.map((m, i) => `
+    <div class="row"><div class="name">${i + 1}. ${esc(m.name)}</div><div class="meta">${esc(m.phone)}</div>
+    <div class="acts"><a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("phone", "sm")} إرسال</a></div></div>`).join("") : `<div class="empty">لا يوجد أعضاء.</div>`}</div>`;
 
-  $("#tplSel").addEventListener("change", e => {
-    const t = NUTRITION_TEMPLATES[Number(e.target.value)];
-    if (t) {
-      S.broadcastMsg = t.text;
-      screenBroadcast(main);
-    }
-  });
+  $("#tplSel").addEventListener("change", e => { const t = NUTRITION_TEMPLATES[Number(e.target.value)]; if (t) { S.broadcastMsg = t.text; screenBroadcast(main); } });
   $("#bMsg").addEventListener("input", e => {
     S.broadcastMsg = e.target.value;
-    const msgText = S.broadcastMsg || NUTRITION_TEMPLATES[0].text;
-    $$("a[href*='wa.me']", main).forEach(a => {
-      const m = targets.find(x => a.href.includes(waPhone(x.phone)));
-      if (m) a.href = waRawLink(m.phone, msgText);
-    });
+    const txt = S.broadcastMsg || NUTRITION_TEMPLATES[0].text;
+    $$("a[href*='wa.me']", main).forEach(a => { const m = targets.find(x => a.href.includes(waPhone(x.phone))); if (m) a.href = waRawLink(m.phone, txt); });
   });
-  $("#bTarget").addEventListener("change", e => {
-    S.broadcastTarget = e.target.value;
-    S.broadcastIdx = 0;
-    screenBroadcast(main);
-  });
+  $("#bTarget").addEventListener("change", e => { S.broadcastTarget = e.target.value; S.broadcastIdx = 0; screenBroadcast(main); });
   const nextBtn = $("#nextWaBtn", main);
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
-      S.broadcastIdx = (S.broadcastIdx + 1) % targets.length;
-      screenBroadcast(main);
-    });
-  }
+  if (nextBtn) nextBtn.addEventListener("click", () => { S.broadcastIdx = (S.broadcastIdx + 1) % targets.length; screenBroadcast(main); });
 }
 
-/* ---------- Money + Charts + Excel Export ---------- */
+/* ---------- Money + Charts + Excel ---------- */
 async function screenMoney(main, tok) {
   main.innerHTML = `<p class="muted">جاري التحميل…</p>`;
   let pay, exp;
@@ -1737,12 +2051,9 @@ async function screenMoney(main, tok) {
       getDocs(query(col("payments"), where("date", ">=", monthStart()), where("date", "<=", monthEnd()))),
       getDocs(query(col("expenses"), where("date", ">=", monthStart()), where("date", "<=", monthEnd())))
     ]);
-  } catch (e) {
-    if (tok !== RT) return;
-    main.innerHTML = `<p class="msg err">${ico("alert", "sm")} ${esc(errText(e))}</p>`;
-    return;
-  }
+  } catch (e) { if (tok !== RT) return; main.innerHTML = `<p class="msg err">${esc(errText(e))}</p>`; return; }
   if (tok !== RT) return;
+
   const byNewest = (a, b) => String(b.date).localeCompare(String(a.date)) || ((toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
   const payments = pay.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
   const expenses = exp.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
@@ -1756,11 +2067,11 @@ async function screenMoney(main, tok) {
     <button class="btn soft sm" type="button" id="exportExcelBtn">${ico("download", "sm")} تصدير Excel</button>
   </div>
   <div class="panel">
-    <div class="stat"><span>${ico("trendingUp", "sm")} إجمالي الإيرادات</span><b>${money(rev)}</b></div>
-    <div class="stat"><span>${ico("users", "sm")} إيراد الاشتراكات</span><b>${money(subRev)}</b></div>
-    <div class="stat"><span>${ico("store", "sm")} إيراد الستور والكافتيريا</span><b>${money(storeRev)}</b></div>
-    <div class="stat"><span>${ico("trendingDown", "sm")} المصروفات</span><b>${money(ex)}</b></div>
-    <div class="stat big"><span>${ico("wallet", "sm")} الصافي</span><b>${money(rev - ex)}</b></div>
+    <div class="stat"><span>إجمالي الإيرادات</span><b>${money(rev)}</b></div>
+    <div class="stat"><span>إيراد الاشتراكات</span><b>${money(subRev)}</b></div>
+    <div class="stat"><span>إيراد الستور والكافتيريا</span><b>${money(storeRev)}</b></div>
+    <div class="stat"><span>المصروفات</span><b>${money(ex)}</b></div>
+    <div class="stat big"><span>الصافي</span><b>${money(rev - ex)}</b></div>
   </div>
 
   <h2>${ico("chart")} التحليل المالي للشهر</h2>
@@ -1775,7 +2086,7 @@ async function screenMoney(main, tok) {
 
   <h2>${ico("plus")} إضافة مصروف</h2>
   <form class="panel" id="xform" novalidate>
-    <div class="field"><label for="xt">البند</label><input id="xt" autocomplete="off" placeholder="مثال: كهرباء، رواتب، صيانة، بضاعة كافتيريا"></div>
+    <div class="field"><label for="xt">البند</label><input id="xt" placeholder="مثال: كهرباء، رواتب، صيانة"></div>
     <div class="two">
       <div class="field"><label for="xa">المبلغ</label><input id="xa" type="number" inputmode="decimal" min="0" dir="ltr"></div>
       <div class="field"><label for="xd">التاريخ</label><input id="xd" type="date" dir="ltr" value="${todayStr()}"></div>
@@ -1785,21 +2096,14 @@ async function screenMoney(main, tok) {
 
   <h2>${ico("trendingDown")} مصروفات الشهر</h2>
   <div class="rows">${expenses.length ? expenses.slice(0, 40).map(x => `
-    <div class="row"><div class="name">${esc(x.title)} — ${money(x.amount)}</div>
-    <div class="meta">${esc(x.date)}</div>
-    <div class="acts"><button class="btn danger sm" data-delx="${esc(x.id)}">${ico("trash", "sm")} حذف</button></div></div>`).join("")
-    : `<div class="empty">لا توجد مصروفات هذا الشهر.</div>`}</div>
+    <div class="row"><div class="name">${esc(x.title)} — ${money(x.amount)}</div><div class="meta">${esc(x.date)}</div>
+    <div class="acts"><button class="btn danger sm" data-delx="${esc(x.id)}">${ico("trash", "sm")} حذف</button></div></div>`).join("") : `<div class="empty">لا توجد مصروفات هذا الشهر.</div>`}</div>
 
   <h2>${ico("trendingUp")} إيرادات الشهر</h2>
   <div class="rows">${payments.length ? payments.slice(0, 40).map(p => `
-    <div class="row"><div class="name">${esc(p.memberName || "")} — ${money(p.amount)}</div>
-    <div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("")
-    : `<div class="empty">لا توجد إيرادات هذا الشهر.</div>`}</div>`;
+    <div class="row"><div class="name">${esc(p.memberName || "")} — ${money(p.amount)}</div><div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("") : `<div class="empty">لا توجد إيرادات هذا الشهر.</div>`}</div>`;
 
-  $("#exportExcelBtn").addEventListener("click", () => {
-    exportRevenueExcel(payments, `revenues_${monthStart()}.csv`);
-    toast("تم تحميل شيت الإيرادات");
-  });
+  $("#exportExcelBtn").addEventListener("click", () => { exportRevenueExcel(payments, `revenues_${monthStart()}.csv`); toast("تم تحميل شيت الإيرادات"); });
 
   if (typeof Chart !== "undefined") {
     destroyCharts();
@@ -1817,45 +2121,26 @@ async function screenMoney(main, tok) {
     const textColor = isDark ? "#94A3B8" : "#64748B";
 
     const ctx1 = $("#revExpChart")?.getContext("2d");
-    if (ctx1) {
-      charts.push(new Chart(ctx1, {
-        type: "bar",
-        data: {
-          labels,
-          datasets: [
-            { label: "الإيرادات", data: revSeries, backgroundColor: "#EA580C", borderRadius: 4 },
-            { label: "المصروفات", data: expSeries, backgroundColor: "#94A3B8", borderRadius: 4 }
-          ]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } },
-          scales: {
-            x: { grid: { display: false }, ticks: { color: textColor, maxTicksLimit: 10 } },
-            y: { grid: { color: gridColor }, ticks: { color: textColor } }
-          }
-        }
-      }));
-    }
+    if (ctx1) charts.push(new Chart(ctx1, {
+      type: "bar",
+      data: { labels, datasets: [
+        { label: "الإيرادات", data: revSeries, backgroundColor: "#EA580C", borderRadius: 4 },
+        { label: "المصروفات", data: expSeries, backgroundColor: "#94A3B8", borderRadius: 4 }
+      ] },
+      options: { responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } },
+        scales: { x: { grid: { display: false }, ticks: { color: textColor, maxTicksLimit: 10 } }, y: { grid: { color: gridColor }, ticks: { color: textColor } } }
+      }
+    }));
 
     const ctx2 = $("#sourceChart")?.getContext("2d");
-    if (ctx2) {
-      charts.push(new Chart(ctx2, {
-        type: "doughnut",
-        data: {
-          labels: ["اشتراكات الجيم", "الستور والكافتيريا"],
-          datasets: [{
-            data: [subRev || 0, storeRev || 0],
-            backgroundColor: ["#EA580C", "#FDBA74"],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false, cutout: "65%",
-          plugins: { legend: { position: "bottom", labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } }
-        }
-      }));
-    }
+    if (ctx2) charts.push(new Chart(ctx2, {
+      type: "doughnut",
+      data: { labels: ["اشتراكات الجيم", "الستور والكافتيريا"], datasets: [{ data: [subRev || 0, storeRev || 0], backgroundColor: ["#EA580C", "#FDBA74"], borderWidth: 0 }] },
+      options: { responsive: true, maintainAspectRatio: false, cutout: "65%",
+        plugins: { legend: { position: "bottom", labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } }
+      }
+    }));
   }
 
   $("#xform").addEventListener("submit", async ev => {
@@ -1863,84 +2148,115 @@ async function screenMoney(main, tok) {
     const title = $("#xt").value.trim(), amount = num($("#xa").value), date = $("#xd").value;
     if (!title || amount <= 0 || !date) return toast("أكمل البند والمبلغ والتاريخ.");
     const btn = $("#xsave"); btn.disabled = true;
-    try {
-      await addDoc(col("expenses"), { title, amount, date, ts: serverTimestamp(), by: G.uid });
-      toast("تم حفظ المصروف");
-      renderOwner();
-    } catch (e) { btn.disabled = false; toast(errText(e)); }
+    try { await addDoc(col("expenses"), { title, amount, date, ts: serverTimestamp(), by: G.uid }); toast("تم حفظ المصروف"); renderOwner(); }
+    catch (e) { btn.disabled = false; toast(errText(e)); }
   });
   $$("[data-delx]", main).forEach(b => b.addEventListener("click", async () => {
     if (!confirm("حذف هذا المصروف؟")) return;
-    try { await deleteDoc(ref("expenses", b.dataset.delx)); renderOwner(); }
-    catch (e) { toast(errText(e)); }
+    try { await deleteDoc(ref("expenses", b.dataset.delx)); renderOwner(); } catch (e) { toast(errText(e)); }
   }));
 }
 
-/* ---------- Settings ---------- */
+/* ---------- Settings (Gym Logo + Payment Links + Reception Page Hide + Plans) ---------- */
 function screenSettings(main) {
   const editing = S.editPlan ? PLANS.find(p => p.id === S.editPlan) : null;
   main.innerHTML = `
-  ${!isAccountant() ? `
-    <h2>${ico("package")} باقات الاشتراك</h2>
-    <div class="rows">${PLANS.length ? PLANS.map(p => `
-      <div class="row"><div class="name">${esc(p.name)}</div>
-      <div class="meta">${p.days} يوم · ${money(p.price)}</div>
-      <div class="acts">
-        <button class="btn ghost sm" data-editp="${esc(p.id)}">${ico("edit", "sm")} تعديل</button>
-        <button class="btn danger sm" data-delp="${esc(p.id)}">${ico("trash", "sm")} حذف</button>
-      </div></div>`).join("") : `<div class="empty">لا توجد باقات. أضف أول باقة من النموذج بالأسفل.</div>`}</div>
+  <h2>${ico("creditCard")} هوية الجيم وروابط الدفع وصلاحيات الاستقبال</h2>
+  <form class="panel" id="gymCfgForm" novalidate>
+    <div class="field"><label for="cfgLogo">${ico("image", "sm")} رابط شعار الجيم (Logo URL)</label><input id="cfgLogo" dir="ltr" value="${esc(G.gym.logoUrl || "")}" placeholder="https://..."></div>
+    <div class="field"><label for="cfgInsta">رابط / حساب إنستا باي (InstaPay)</label><input id="cfgInsta" dir="ltr" value="${esc(G.gym.instapay || "")}" placeholder="https://ipn.eg/... أو username@instapay"></div>
+    <div class="two">
+      <div class="field"><label for="cfgVoda">فودافون كاش</label><input id="cfgVoda" dir="ltr" value="${esc(G.gym.vodafoneCash || "")}" placeholder="010xxxxxxxx"></div>
+      <div class="field"><label for="cfgOrange">أورانج كاش</label><input id="cfgOrange" dir="ltr" value="${esc(G.gym.orangeCash || "")}" placeholder="012xxxxxxxx"></div>
+    </div>
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="cfgHideMoney" style="width:auto;min-height:auto" ${G.gym.hideMoneyForStaff ? "checked" : ""}>
+        <span>إخفاء صفحة المالية والإيرادات عن حساب الاستقبال</span>
+      </label>
+    </div>
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="cfgHideSettings" style="width:auto;min-height:auto" ${G.gym.hideSettingsForStaff ? "checked" : ""}>
+        <span>إخفاء صفحة الإعدادات عن حساب الاستقبال</span>
+      </label>
+    </div>
+    <button class="btn" type="submit" id="saveCfgBtn">${ico("check")} حفظ إعدادات الجيم</button>
+  </form>
 
-    <h2>${ico(editing ? "edit" : "plus")} ${editing ? "تعديل باقة" : "إضافة باقة"}</h2>
-    <form class="panel" id="pform" novalidate>
-      <div class="field"><label for="pn">اسم الباقة</label><input id="pn" autocomplete="off" placeholder="مثال: شهري" value="${esc(editing?.name || "")}"></div>
-      <div class="two">
-        <div class="field"><label for="pd">المدة بالأيام</label><input id="pd" type="number" inputmode="numeric" min="1" dir="ltr" value="${esc(editing?.days ?? 30)}"></div>
-        <div class="field"><label for="pp">السعر</label><input id="pp" type="number" inputmode="decimal" min="0" dir="ltr" value="${esc(editing?.price ?? "")}"></div>
-      </div>
-      <button class="btn" type="submit" id="psave">${ico("check")} ${editing ? "حفظ التعديل" : "إضافة الباقة"}</button>
-      ${editing ? `<button class="linkbtn" type="button" id="pcancel">إلغاء التعديل</button>` : ""}
-    </form>
-  ` : ""}
+  <h2>${ico("package")} باقات الاشتراك</h2>
+  <div class="rows">${PLANS.length ? PLANS.map(p => `
+    <div class="row"><div class="name">${esc(p.name)}</div>
+    <div class="meta">${p.days} يوم · ${p.sessions || 30} تمرينة · ${money(p.price)}</div>
+    <div class="acts">
+      <button class="btn ghost sm" data-editp="${esc(p.id)}">${ico("edit", "sm")} تعديل</button>
+      <button class="btn danger sm" data-delp="${esc(p.id)}">${ico("trash", "sm")} حذف</button>
+    </div></div>`).join("") : `<div class="empty">لا توجد باقات.</div>`}</div>
+
+  <h2>${ico(editing ? "edit" : "plus")} ${editing ? "تعديل باقة" : "إضافة باقة"}</h2>
+  <form class="panel" id="pform" novalidate>
+    <div class="field"><label for="pn">اسم الباقة</label><input id="pn" value="${esc(editing?.name || "")}" placeholder="مثال: شهري"></div>
+    <div class="two">
+      <div class="field"><label for="pd">المدة بالأيام</label><input id="pd" type="number" inputmode="numeric" min="1" dir="ltr" value="${esc(editing?.days ?? 30)}"></div>
+      <div class="field"><label for="pp">السعر</label><input id="pp" type="number" inputmode="decimal" min="0" dir="ltr" value="${esc(editing?.price ?? "")}"></div>
+    </div>
+    <div class="field"><label for="psess">عدد التمارين</label><input id="psess" type="number" inputmode="numeric" min="1" dir="ltr" value="${esc(editing?.sessions ?? 30)}"></div>
+    <button class="btn" type="submit" id="psave">${ico("check")} ${editing ? "حفظ التعديل" : "إضافة الباقة"}</button>
+    ${editing ? `<button class="linkbtn" type="button" id="pcancel">إلغاء التعديل</button>` : ""}
+  </form>
 
   <h2>${ico("building")} الحساب</h2>
   <div class="panel">
     <div class="stat"><span>الجيم</span><b>${esc(G.gym.name || "")}</b></div>
-    <div class="stat"><span>الاسم</span><b>${esc(G.profile.name || "")}</b></div>
-    <div class="stat"><span>الصلاحية</span><b>${isAccountant() ? "محاسب" : "مدير الجيم"}</b></div>
+    <div class="stat"><span>المستخدم</span><b>${esc(G.profile.name || "")}</b></div>
     <div style="padding-top:12px"><button class="btn ghost" id="outBtn">${ico("logout", "sm")} تسجيل الخروج</button></div>
   </div>`;
 
   $("#outBtn").addEventListener("click", () => { stopScanner(); destroyCharts(); signOut(auth); });
 
-  if (!isAccountant()) {
-    $$("[data-editp]", main).forEach(b => b.addEventListener("click", () => { S.editPlan = b.dataset.editp; renderOwner(); window.scrollTo(0, document.body.scrollHeight); }));
-    $$("[data-delp]", main).forEach(b => b.addEventListener("click", async () => {
-      if (!confirm("حذف هذه الباقة؟ الأعضاء الحاليون لن يتأثروا.")) return;
-      try { await deleteDoc(ref("plans", b.dataset.delp)); await loadPlans(); renderOwner(); }
-      catch (e) { toast(errText(e)); }
-    }));
-    const cancel = $("#pcancel");
-    if (cancel) cancel.addEventListener("click", () => { S.editPlan = null; renderOwner(); });
-    $("#pform").addEventListener("submit", async ev => {
-      ev.preventDefault();
-      const name = $("#pn").value.trim(), days = Math.round(num($("#pd").value)), price = num($("#pp").value);
-      if (!name || days < 1) return toast("اكتب اسم الباقة ومدتها بالأيام.");
-      const btn = $("#psave"); btn.disabled = true;
-      try {
-        if (editing) await updateDoc(ref("plans", editing.id), { name, days, price });
-        else await addDoc(col("plans"), { name, days, price, createdAt: serverTimestamp() });
-        S.editPlan = null;
-        await loadPlans();
-        toast("تم الحفظ");
-        renderOwner();
-      } catch (e) { btn.disabled = false; toast(errText(e)); }
-    });
-  }
+  $("#gymCfgForm").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const logoUrl = $("#cfgLogo").value.trim();
+    const instapay = $("#cfgInsta").value.trim();
+    const vodafoneCash = $("#cfgVoda").value.trim();
+    const orangeCash = $("#cfgOrange").value.trim();
+    const hideMoneyForStaff = $("#cfgHideMoney").checked;
+    const hideSettingsForStaff = $("#cfgHideSettings").checked;
+    try {
+      await updateDoc(doc(db, "gyms", G.gymId), {
+        logoUrl, instapay, vodafoneCash, orangeCash, hideMoneyForStaff, hideSettingsForStaff
+      });
+      Object.assign(G.gym, { logoUrl, instapay, vodafoneCash, orangeCash, hideMoneyForStaff, hideSettingsForStaff });
+      toast("تم حفظ إعدادات الجيم");
+      renderOwner();
+    } catch (e) { toast(errText(e)); }
+  });
+
+  $$("[data-editp]", main).forEach(b => b.addEventListener("click", () => { S.editPlan = b.dataset.editp; renderOwner(); window.scrollTo(0, document.body.scrollHeight); }));
+  $$("[data-delp]", main).forEach(b => b.addEventListener("click", async () => {
+    if (!confirm("حذف هذه الباقة؟")) return;
+    try { await deleteDoc(ref("plans", b.dataset.delp)); await loadPlans(); renderOwner(); } catch (e) { toast(errText(e)); }
+  }));
+  const cancel = $("#pcancel");
+  if (cancel) cancel.addEventListener("click", () => { S.editPlan = null; renderOwner(); });
+  $("#pform").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const name = $("#pn").value.trim(), days = Math.round(num($("#pd").value)), price = num($("#pp").value);
+    const sessions = Math.max(1, Math.round(num($("#psess").value) || 30));
+    if (!name || days < 1) return toast("اكتب اسم الباقة ومدتها بالأيام.");
+    const btn = $("#psave"); btn.disabled = true;
+    try {
+      if (editing) await updateDoc(ref("plans", editing.id), { name, days, price, sessions });
+      else await addDoc(col("plans"), { name, days, price, sessions, createdAt: serverTimestamp() });
+      S.editPlan = null; await loadPlans(); toast("تم الحفظ"); renderOwner();
+    } catch (e) { btn.disabled = false; toast(errText(e)); }
+  });
 }
 
 const SCREENS = {
   home: screenHome, members: screenMembers, checkin: screenCheckin,
-  store: screenStore, broadcast: screenBroadcast, money: screenMoney, settings: screenSettings
+  captains: screenCaptains, store: screenStore, broadcast: screenBroadcast,
+  money: screenMoney, settings: screenSettings
 };
 const SUBS = { member: subMember, newMember: subNewMember, renew: subRenew, edit: subEdit, card: subCard };
 
@@ -1951,7 +2267,7 @@ async function startOwner(uid, profile, gym, gymId) {
   S.storeTab = "pos"; S.storeCat = "all"; S.cart = []; S.editProd = null;
   root.innerHTML = `<div class="loading">جاري تحميل بيانات الجيم…</div>`;
   try {
-    await withTimeout(Promise.all([loadMembers(), loadPlans(), loadProducts()]), 20000);
+    await withTimeout(Promise.all([loadMembers(), loadPlans(), loadProducts(), loadCaptains()]), 20000);
   } catch (e) {
     return viewBlocked("تعذر تحميل بيانات الجيم", errText(e), true);
   }
@@ -1959,7 +2275,7 @@ async function startOwner(uid, profile, gym, gymId) {
 }
 
 /* =====================================================================
-   SUPER ADMIN (Email validation + Active Status + Accountant creation)
+   SUPER ADMIN (Shows Gyms + Gym Logo + Staff Account Creation)
    ===================================================================== */
 function viewAdmin(profile) {
   root.innerHTML = `
@@ -1981,12 +2297,14 @@ function viewAdmin(profile) {
         <div class="field">
           <label for="oEmail">إيميل المدير</label>
           <input id="oEmail" type="email" dir="ltr" inputmode="email" required autocomplete="off" placeholder="manager@gym.com">
-          <div class="hint">يجب أن يكون إيميلًا صحيحًا لتفعيل حساب الدخول.</div>
         </div>
         <div class="field">
           <label for="oPass">كلمة مرور المدير</label>
           <input id="oPass" type="text" dir="ltr" required autocomplete="off">
-          <div class="hint">6 أحرف أو أرقام على الأقل.</div>
+        </div>
+        <div class="field">
+          <label for="gLogo">${ico("image", "sm")} شعار الجيم (رابط صورة)</label>
+          <input id="gLogo" dir="ltr" placeholder="https://...">
         </div>
         <div class="field">
           <label for="gPlan">الباقة</label>
@@ -2000,7 +2318,7 @@ function viewAdmin(profile) {
       <button class="btn" type="submit" id="gymBtn">${ico("check")} إنشاء الجيم</button>
     </form>
 
-    <h2>${ico("building")} الجيمات وحالة المديرين</h2>
+    <h2>${ico("building")} الجيمات المضافة</h2>
     <div id="gymList"><div class="rows"><div class="empty">جاري التحميل…</div></div></div>
   </div>`;
 
@@ -2020,21 +2338,20 @@ async function onCreateGym(ev) {
   const oName = $("#oName").value.trim();
   const oEmail = $("#oEmail").value.trim().toLowerCase();
   const oPass = $("#oPass").value;
+  const logoUrl = $("#gLogo").value.trim();
   const plan = $("#gPlan").value;
   const months = Math.max(1, Math.min(36, parseInt($("#gMonths").value, 10) || 1));
 
   if (!gName || !oName || !oEmail || !oPass) return setFormMsg("أكمل كل الخانات.");
-  if (!isValidEmail(oEmail)) return setFormMsg("اكتب إيميلًا صحيحًا للمدير (مثال: name@domain.com).");
+  if (!isValidEmail(oEmail)) return setFormMsg("اكتب إيميلًا صحيحًا للمدير.");
   if (oPass.length < 6) return setFormMsg("كلمة المرور لازم تكون 6 أحرف أو أرقام على الأقل.");
 
-  const btn = $("#gymBtn");
-  btn.disabled = true; btn.textContent = "جاري الإنشاء…";
+  const btn = $("#gymBtn"); btn.disabled = true; btn.textContent = "جاري الإنشاء…";
   setFormMsg("");
 
-  let uid = null;
   try {
     const cred = await createUserWithEmailAndPassword(auth2, oEmail, oPass);
-    uid = cred.user.uid;
+    const uid = cred.user.uid;
     await signOut(auth2);
 
     const gymRef = doc(collection(db, "gyms"));
@@ -2043,7 +2360,7 @@ async function onCreateGym(ev) {
       createdAt: serverTimestamp()
     });
     await setDoc(gymRef, {
-      name: gName, plan, status: "active",
+      name: gName, logoUrl, plan, status: "active",
       ownerUid: uid, ownerName: oName, ownerEmail: oEmail,
       subscriptionEnd: Timestamp.fromDate(new Date(Date.now() + months * 30 * DAY)),
       createdAt: serverTimestamp()
@@ -2051,12 +2368,10 @@ async function onCreateGym(ev) {
 
     $("#gymForm").reset();
     $("#gMonths").value = 1;
-    setFormMsg(`تم إنشاء «${gName}» وتفعيل حساب المدير (${oEmail}).`, "ok");
+    setFormMsg(`تم إنشاء «${gName}» بنجاح.`, "ok");
     loadGyms();
   } catch (e) {
-    let t = errText(e);
-    if (uid) t += " تم إنشاء حساب المدير لكن لم يكتمل ربطه بالجيم.";
-    setFormMsg(t);
+    setFormMsg(errText(e));
   } finally {
     btn.disabled = false; btn.innerHTML = `${ico("check")} إنشاء الجيم`;
   }
@@ -2093,7 +2408,8 @@ async function loadGyms() {
       return `
       <div class="row" data-id="${esc(g.id)}" data-uid="${esc(g.ownerUid || "")}">
         <div class="name">
-          ${esc(g.name || g.id)}
+          ${gymLogoHtml(g, "mini-logo")}
+          <span>${esc(g.name || g.id)}</span>
           <span class="tag ${status}">${label}</span>
           <span class="tag ${mgrActive ? "active" : "suspended"}">${mgrActive ? "المدير نشط" : "المدير موقوف"}</span>
         </div>
@@ -2102,7 +2418,7 @@ async function loadGyms() {
         <div class="acts">
           <button class="btn ghost sm" data-act="extend">${ico("refresh", "sm")} تمديد 30 يوم</button>
           <button class="btn ghost sm" data-act="toggleGym">${g.status === "suspended" ? "تفعيل الجيم" : "إيقاف الجيم"}</button>
-          ${g.ownerUid ? `<button class="btn soft sm" data-act="toggleMgr">${mgrActive ? "إيقاف حساب المدير" : "تنشيط حساب المدير"}</button>` : ""}
+          ${g.ownerUid ? `<button class="btn soft sm" data-act="toggleMgr">${mgrActive ? "إيقاف المدير" : "تنشيط المدير"}</button>` : ""}
         </div>
       </div>`;
     }).join("")}</div>`;
@@ -2110,8 +2426,7 @@ async function loadGyms() {
     $$("button[data-act]", box).forEach(b => {
       b.addEventListener("click", async () => {
         const row = b.closest(".row");
-        const id = row.dataset.id;
-        const uid = row.dataset.uid;
+        const id = row.dataset.id, uid = row.dataset.uid;
         const g = gyms.find(x => x.id === id);
         b.disabled = true;
         try {
@@ -2119,19 +2434,14 @@ async function loadGyms() {
             await updateDoc(doc(db, "gyms", id), { status: g.status === "suspended" ? "active" : "suspended" });
           } else if (b.dataset.act === "toggleMgr" && uid) {
             const curMgr = usersMap.get(uid);
-            const nextActive = curMgr ? curMgr.active === false : false;
-            await updateDoc(doc(db, "users", uid), { active: nextActive });
+            await updateDoc(doc(db, "users", uid), { active: curMgr ? curMgr.active === false : false });
           } else {
             const cur = toDate(g.subscriptionEnd);
             const base = cur && cur.getTime() > Date.now() ? cur.getTime() : Date.now();
             await updateDoc(doc(db, "gyms", id), { subscriptionEnd: Timestamp.fromDate(new Date(base + 30 * DAY)) });
           }
           loadGyms();
-        } catch (e) {
-          b.disabled = false;
-          setFormMsg(errText(e));
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+        } catch (e) { b.disabled = false; setFormMsg(errText(e)); }
       });
     });
   } catch (e) {
@@ -2139,7 +2449,7 @@ async function loadGyms() {
   }
 }
 
-/* ---------- Session routing ---------- */
+/* ---------- Session Routing ---------- */
 onAuthStateChanged(auth, async user => {
   stopScanner();
   destroyCharts();
@@ -2151,27 +2461,17 @@ onAuthStateChanged(auth, async user => {
   root.innerHTML = `<div class="loading">جاري التحميل…</div>`;
   try {
     const uSnap = await withTimeout(getDoc(doc(db, "users", user.uid)));
-    if (!uSnap.exists()) {
-      return viewBlocked("الحساب غير مربوط", "هذا الحساب غير مربوط بأي جيم. تواصل مع إدارة GymPro.");
-    }
+    if (!uSnap.exists()) return viewBlocked("الحساب غير مربوط", "هذا الحساب غير مربوط بأي جيم.");
     const profile = uSnap.data();
-    if (profile.active !== true) {
-      return viewBlocked("الحساب موقوف", "تم إيقاف هذا الحساب. تواصل مع إدارة GymPro.");
-    }
+    if (profile.active !== true) return viewBlocked("الحساب موقوف", "تم إيقاف هذا الحساب.");
     if (profile.role === "superadmin") return viewAdmin(profile);
 
     const gSnap = await withTimeout(getDoc(doc(db, "gyms", profile.gymId)));
-    if (!gSnap.exists()) {
-      return viewBlocked("الجيم غير موجود", "لم نجد بيانات الجيم المرتبط بحسابك.");
-    }
+    if (!gSnap.exists()) return viewBlocked("الجيم غير موجود", "لم نجد بيانات الجيم المرتبط بحسابك.");
     const gym = gSnap.data();
     const end = toDate(gym.subscriptionEnd);
-    if (gym.status === "suspended") {
-      return viewBlocked("الجيم موقوف", "تم إيقاف اشتراك هذا الجيم. تواصل مع إدارة GymPro.");
-    }
-    if (end && end.getTime() < Date.now()) {
-      return viewBlocked("انتهى اشتراك الجيم", "انتهى اشتراك الجيم في GymPro. جدّد الاشتراك للاستمرار.");
-    }
+    if (gym.status === "suspended") return viewBlocked("الجيم موقوف", "تم إيقاف اشتراك هذا الجيم.");
+    if (end && end.getTime() < Date.now()) return viewBlocked("انتهى اشتراك الجيم", "انتهى اشتراك الجيم. جدّد الاشتراك للاستمرار.");
     await startOwner(user.uid, profile, gym, profile.gymId);
   } catch (e) {
     viewBlocked("تعذر تحميل الحساب", errText(e), true);
