@@ -7,7 +7,8 @@
 <title>GymPro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
 <style>
   :root {
     color-scheme: light dark;
@@ -186,7 +187,13 @@
 </style>
 </head>
 <body>
-<div id="app"><div class="loading">جاري التحميل…</div></div>
+<div id="app"><div class="loading" data-boot>جاري التحميل…</div></div>
+<script>
+setTimeout(function () {
+  var b = document.querySelector("[data-boot]");
+  if (b) b.innerHTML = "تعذر تحميل النظام. تأكد من الإنترنت ثم <button onclick=\"location.reload()\" style=\"font:inherit;padding:8px 14px;border-radius:8px;border:1px solid currentColor;background:none;color:inherit;margin-inline-start:8px\">أعد التحميل</button>";
+}, 15000);
+</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -195,7 +202,7 @@ import {
   createUserWithEmailAndPassword, sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc, collection, getDocs,
+  initializeFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc, collection, getDocs,
   query, where, runTransaction, writeBatch, increment, serverTimestamp, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -210,7 +217,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
 // نسخة ثانوية لإنشاء حساب مدير الجيم بدون تسجيل خروج السوبر أدمن
 const app2 = initializeApp(firebaseConfig, "secondary");
 const auth2 = getAuth(app2);
@@ -240,6 +247,10 @@ const money = n => (Number(n) || 0).toLocaleString("en-US") + " ج";
 const sum = (arr, k = "amount") => arr.reduce((a, x) => a + (Number(x[k]) || 0), 0);
 const num = v => { const n = parseFloat(String(v).replace(/[^\d.]/g, "")); return isNaN(n) ? 0 : n; };
 
+const withTimeout = (p, ms = 15000) => Promise.race([
+  p, new Promise((_, rej) => setTimeout(() => rej({ code: "timeout" }), ms))
+]);
+
 function errText(e) {
   const code = e?.code || "";
   const map = {
@@ -253,7 +264,8 @@ function errText(e) {
     "auth/weak-password": "كلمة المرور ضعيفة. استخدم 6 أحرف أو أرقام على الأقل.",
     "auth/unauthorized-domain": "هذا الرابط غير مضاف في Firebase. أضفه من Authentication ← Settings ← Authorized domains.",
     "permission-denied": "ليس لديك صلاحية لهذه العملية. راجع قواعد الأمان.",
-    "unavailable": "تعذر الاتصال بقاعدة البيانات. حاول مرة أخرى."
+    "unavailable": "تعذر الاتصال بقاعدة البيانات. حاول مرة أخرى.",
+    "timeout": "الاتصال بطيء أو منقطع. تأكد من الإنترنت ثم أعد المحاولة."
   };
   return map[code] || `تعذر إتمام العملية (${code || e?.message || "خطأ غير معروف"}).`;
 }
@@ -324,17 +336,19 @@ function viewLogin(message = "") {
   });
 }
 
-function viewBlocked(title, text) {
+function viewBlocked(title, text, retry = false) {
   root.innerHTML = `
   <div class="wrap login">
     <div class="mark">${logoSvg}<b>GymPro</b></div>
     <div class="panel">
       <h1 style="margin:0 0 8px;font-size:20px">${esc(title)}</h1>
       <p style="margin:0 0 20px;color:var(--muted)">${esc(text)}</p>
+      ${retry ? `<button class="btn" id="retryBtn" style="margin-bottom:10px">إعادة المحاولة</button>` : ""}
       <button class="btn ghost" id="outBtn">تسجيل الخروج</button>
     </div>
   </div>`;
   $("#outBtn").addEventListener("click", () => signOut(auth));
+  const rb = $("#retryBtn"); if (rb) rb.addEventListener("click", () => location.reload());
 }
 
 /* =====================================================================
@@ -1109,9 +1123,9 @@ async function startOwner(uid, profile, gym, gymId) {
   S.tab = "home"; S.sub = null; S.filter = "all"; S.q = ""; S.editPlan = null;
   root.innerHTML = `<div class="loading">جاري تحميل بيانات الجيم…</div>`;
   try {
-    await Promise.all([loadMembers(), loadPlans()]);
+    await withTimeout(Promise.all([loadMembers(), loadPlans()]), 20000);
   } catch (e) {
-    return viewBlocked("تعذر تحميل بيانات الجيم", errText(e));
+    return viewBlocked("تعذر تحميل بيانات الجيم", errText(e), true);
   }
   renderOwner();
 }
@@ -1278,7 +1292,7 @@ onAuthStateChanged(auth, async user => {
   if (!user) { G = null; return viewLogin(); }
   root.innerHTML = `<div class="loading">جاري التحميل…</div>`;
   try {
-    const uSnap = await getDoc(doc(db, "users", user.uid));
+    const uSnap = await withTimeout(getDoc(doc(db, "users", user.uid)));
     if (!uSnap.exists()) {
       return viewBlocked("الحساب غير مربوط", "هذا الحساب غير مربوط بأي جيم. تواصل مع إدارة GymPro.");
     }
@@ -1288,7 +1302,7 @@ onAuthStateChanged(auth, async user => {
     }
     if (profile.role === "superadmin") return viewAdmin(profile);
 
-    const gSnap = await getDoc(doc(db, "gyms", profile.gymId));
+    const gSnap = await withTimeout(getDoc(doc(db, "gyms", profile.gymId)));
     if (!gSnap.exists()) {
       return viewBlocked("الجيم غير موجود", "لم نجد بيانات الجيم المرتبط بحسابك.");
     }
@@ -1302,7 +1316,7 @@ onAuthStateChanged(auth, async user => {
     }
     await startOwner(user.uid, profile, gym, profile.gymId);
   } catch (e) {
-    viewBlocked("تعذر تحميل الحساب", errText(e));
+    viewBlocked("تعذر تحميل الحساب", errText(e), true);
   }
 });
 </script>
