@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
-<!-- مكتبة الرسوم البيانية Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <style>
   :root {
@@ -64,29 +63,26 @@
     line-height: 1.65;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
   }
-  .wrap { max-width: 600px; margin: 0 auto; padding: 16px 16px 44px; }
-  .wrap.wide { max-width: 780px; }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 16px 16px 48px; }
+  .wrap.wide { max-width: 820px; }
   .muted { color: var(--muted); }
 
-  /* Icons */
   .ico { width: 19px; height: 19px; flex: none; vertical-align: middle; }
   .ico.sm { width: 16px; height: 16px; }
-  .ico.lg { width: 22px; height: 22px; }
-  .inline-ico { display: inline-flex; align-items: center; gap: 7px; }
 
   /* Login */
   .login { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
-  .mark { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .mark { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
   .mark .logo-badge {
-    width: 56px; height: 56px; border-radius: 16px;
+    width: 54px; height: 54px; border-radius: 16px;
     background: linear-gradient(135deg, #EA580C, #F97316);
     color: #fff; display: grid; place-items: center;
     box-shadow: 0 8px 20px rgba(234, 88, 12, 0.28);
   }
-  .mark svg { width: 34px; height: auto; }
-  .mark b { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+  .mark svg { width: 32px; height: auto; }
+  .mark b { font-size: 30px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
   .mark b span { color: var(--brand); }
-  .login p.lead { margin: 0 0 22px; color: var(--muted); }
+  .login p.lead { margin: 0 0 18px; color: var(--muted); }
 
   .panel {
     background: var(--surface); border: 1px solid var(--line);
@@ -101,9 +97,10 @@
     border: 1px solid var(--line); border-radius: 12px;
     font: inherit; font-size: 15px; transition: border-color .15s;
   }
-  input:focus, select:focus { border-color: var(--brand); }
+  textarea { min-height: 110px; resize: vertical; }
+  input:focus, select:focus, textarea:focus { border-color: var(--brand); }
   input[dir="ltr"] { text-align: left; }
-  input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible {
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible {
     outline: 3px solid var(--brand); outline-offset: 2px;
   }
   .hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
@@ -112,7 +109,7 @@
   .btn {
     width: 100%; min-height: 48px; border: 0; border-radius: 12px;
     background: var(--brand); color: var(--brand-ink);
-    font-weight: 700; font-size: 16px;
+    font-weight: 700; font-size: 15px;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2);
   }
@@ -121,18 +118,18 @@
   .btn.ghost {
     background: var(--surface); color: var(--ink);
     border: 1px solid var(--line); font-weight: 600; font-size: 14px;
-    min-height: 42px; width: auto; padding: 0 14px; box-shadow: none;
+    min-height: 40px; width: auto; padding: 0 13px; box-shadow: none;
   }
   .btn.ghost:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
   .btn.soft {
     background: var(--brand-soft); color: var(--brand);
     border: 1px solid var(--brand-border); font-weight: 600; font-size: 14px;
-    min-height: 42px; width: auto; padding: 0 14px; box-shadow: none;
+    min-height: 40px; width: auto; padding: 0 13px; box-shadow: none;
   }
-  .btn.sm { min-height: 36px; font-size: 13px; padding: 0 12px; width: auto; border-radius: 10px; }
+  .btn.sm { min-height: 35px; font-size: 13px; padding: 0 11px; width: auto; border-radius: 10px; }
   .btn.danger { color: var(--danger); border-color: var(--danger); background: transparent; box-shadow: none; }
   .btn.danger:hover { background: var(--bad-bg); }
-  .linkbtn { background: none; border: 0; color: var(--brand); font-weight: 600; padding: 10px 0; font-size: 15px; display: inline-flex; align-items: center; gap: 6px; }
+  .linkbtn { background: none; border: 0; color: var(--brand); font-weight: 600; padding: 10px 0; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
   a.btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 
   .msg { margin: 0 0 16px; padding: 12px 14px; border-radius: 12px; font-size: 14px; border: 1px solid var(--line); background: var(--bg); display: flex; align-items: center; gap: 8px; }
@@ -141,17 +138,16 @@
 
   .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
   .top .who { min-width: 0; }
-  .top h1 { margin: 0; font-size: 22px; line-height: 1.3; }
-  .top .sub { color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
+  .top h1 { margin: 0; font-size: 21px; line-height: 1.3; }
+  .top .sub { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
 
-  h2 { font-size: 17px; margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; color: var(--ink); }
+  h2 { font-size: 16.5px; margin: 22px 0 11px; display: flex; align-items: center; gap: 8px; color: var(--ink); }
   h2 svg { color: var(--brand); }
   h2:first-child { margin-top: 0; }
   .grid2 { display: grid; gap: 12px; grid-template-columns: 1fr; }
   @media (min-width: 640px) { .grid2 { grid-template-columns: 1fr 1fr; } }
   .two { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
 
-  /* KPI Cards */
   .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .kpi {
     background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
@@ -161,49 +157,49 @@
     background: linear-gradient(135deg, #EA580C, #F97316);
     color: #fff; border: 0;
   }
-  .kpi.accent .kl { color: rgba(255,255,255,0.88); }
+  .kpi.accent .kl { color: rgba(255,255,255,0.9); }
   .kpi .kl { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-  .kpi .kv { font-size: 22px; font-weight: 700; line-height: 1.2; }
+  .kpi .kv { font-size: 21px; font-weight: 700; line-height: 1.2; }
 
   .rows { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
-  .row { padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .row { padding: 13px 16px; border-bottom: 1px solid var(--line); }
   .row:last-child { border-bottom: 0; }
-  .row .name { font-weight: 700; font-size: 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .row .name { font-weight: 700; font-size: 15.5px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
   .row .meta { color: var(--muted); font-size: 13px; margin-top: 3px; overflow-wrap: anywhere; }
-  .row .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-  .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+  .row .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; padding: 2px 9px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
   .tag.active { color: var(--ok); background: var(--ok-bg); }
   .tag.suspended, .tag.expired { color: var(--danger); background: var(--bad-bg); }
   .tag.soon { color: var(--warn); background: var(--warn-bg); }
   .tag.none { color: var(--muted); }
   .tag.cat { color: var(--brand); background: var(--brand-soft); border-color: var(--brand-border); }
-  .empty { padding: 26px 16px; color: var(--muted); text-align: center; font-size: 14px; }
+  .empty { padding: 24px 16px; color: var(--muted); text-align: center; font-size: 14px; }
 
-  .stat { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .stat { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
   .stat:last-child { border-bottom: 0; }
-  .stat span:first-child { color: var(--muted); display: inline-flex; align-items: center; gap: 7px; }
+  .stat span:first-child { color: var(--muted); display: inline-flex; align-items: center; gap: 7px; font-size: 14.5px; }
   .stat b { font-weight: 700; }
-  .stat.big b { font-size: 21px; color: var(--brand); }
+  .stat.big b { font-size: 20px; color: var(--brand); }
 
   .loading { min-height: 100vh; display: grid; place-items: center; color: var(--muted); }
 
-  /* Owner shell */
-  .shell { min-height: 100vh; padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
+  /* Shell & Nav */
+  .shell { min-height: 100vh; padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
   .oh {
     background: var(--surface); border-bottom: 1px solid var(--line);
     position: sticky; top: 0; z-index: 9;
   }
-  .oh .in { max-width: 600px; margin: 0 auto; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-  .oh .brand-box { display: flex; align-items: center; gap: 10px; }
+  .oh .in { max-width: 620px; margin: 0 auto; padding: 11px 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .oh .brand-box { display: flex; align-items: center; gap: 10px; min-width: 0; }
   .oh .mini-logo {
-    width: 38px; height: 38px; border-radius: 11px;
+    width: 36px; height: 36px; border-radius: 11px;
     background: var(--brand); color: #fff; display: grid; place-items: center; flex: none;
   }
-  .oh .gname { font-weight: 700; font-size: 17px; line-height: 1.25; }
+  .oh .gname { font-weight: 700; font-size: 16.5px; line-height: 1.25; }
   .oh .gsub { color: var(--muted); font-size: 12px; }
   .oh .sub-pill {
     background: var(--brand-soft); color: var(--brand); border: 1px solid var(--brand-border);
-    padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap;
+    padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; white-space: nowrap;
   }
 
   .tabs {
@@ -213,63 +209,56 @@
     box-shadow: 0 -2px 12px rgba(0,0,0,0.04);
   }
   .tabs button {
-    flex: 1; background: none; border: 0; padding: 7px 2px; min-height: 62px;
-    color: var(--muted); font-size: 11.5px; font-weight: 600;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    flex: 1; background: none; border: 0; padding: 6px 2px; min-height: 60px;
+    color: var(--muted); font-size: 11px; font-weight: 600;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
     position: relative;
   }
-  .tabs button svg { width: 20px; height: 20px; transition: transform .15s; }
+  .tabs button svg { width: 19px; height: 19px; }
   .tabs button[aria-current="page"] { color: var(--brand); }
-  .tabs button[aria-current="page"] svg { transform: translateY(-1px); }
   .tabs button[aria-current="page"]::before {
-    content: ""; position: absolute; top: 0; width: 32px; height: 3px;
+    content: ""; position: absolute; top: 0; width: 28px; height: 3px;
     background: var(--brand); border-radius: 0 0 4px 4px;
   }
 
-  /* Sub-tabs (Store / Money filters) */
   .seg {
     display: flex; gap: 6px; background: var(--surface); padding: 5px;
     border-radius: 14px; border: 1px solid var(--line); margin-bottom: 16px;
   }
   .seg button {
     flex: 1; border: 0; background: transparent; color: var(--muted);
-    padding: 9px 10px; border-radius: 10px; font-weight: 600; font-size: 14px;
+    padding: 9px 10px; border-radius: 10px; font-weight: 600; font-size: 13.5px;
     display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   }
   .seg button.active { background: var(--brand); color: #fff; box-shadow: 0 2px 8px rgba(234, 88, 12, 0.25); }
 
-  /* Store Grid */
   .prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
   .prod-card {
     background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
     padding: 13px; text-align: start; display: flex; flex-direction: column; justify-content: space-between;
-    box-shadow: var(--shadow); position: relative;
+    box-shadow: var(--shadow);
   }
   .prod-card:hover:not([disabled]) { border-color: var(--brand); transform: translateY(-1px); }
   .prod-card[disabled] { opacity: 0.5; cursor: not-allowed; }
   .prod-card .pname { font-weight: 700; font-size: 15px; margin: 6px 0 4px; }
-  .prod-card .pprice { font-weight: 700; color: var(--brand); font-size: 16px; }
+  .prod-card .pprice { font-weight: 700; color: var(--brand); font-size: 15.5px; }
   .prod-card .pstock { font-size: 12px; color: var(--muted); }
   .cart-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
   .cart-item:last-child { border-bottom: 0; }
   .qty-ctrl { display: inline-flex; align-items: center; gap: 8px; background: var(--bg); padding: 3px 8px; border-radius: 10px; border: 1px solid var(--line); }
   .qty-ctrl button { background: none; border: 0; color: var(--brand); font-weight: 700; width: 24px; height: 24px; display: grid; place-items: center; }
 
-  /* Chart Box */
   .chart-wrap { position: relative; height: 220px; width: 100%; margin-top: 8px; }
   .chart-wrap.sm { height: 185px; }
 
-  .toolbar { display: flex; gap: 8px; margin-bottom: 12px; }
-  .toolbar input { flex: 1; }
-  .toolbar select { width: auto; max-width: 45%; }
+  .toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .toolbar input { flex: 1; min-width: 180px; }
+  .toolbar select { width: auto; max-width: 100%; }
   .mrow { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--line); }
   .mrow:last-child { border-bottom: 0; }
-  .mmain {
-    flex: 1; min-width: 0; text-align: start; background: none; border: 0; color: inherit;
-    padding: 13px 16px;
-  }
-  .mmain .name { font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-  .mmain .meta { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .mmain { flex: 1; min-width: 0; text-align: start; background: none; border: 0; color: inherit; padding: 12px 16px; }
+  .mmain .name { font-weight: 700; font-size: 15.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .mmain .meta { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
   .mrow .side { padding-inline-end: 12px; display: flex; gap: 6px; align-items: center; }
   .due { color: var(--danger); font-weight: 600; }
 
@@ -277,14 +266,14 @@
   .result.ok { background: var(--ok-bg); color: var(--ok); }
   .result.bad { background: var(--bad-bg); color: var(--danger); }
   .result.warn { background: var(--warn-bg); color: var(--warn); }
-  .result .rn { font-size: 21px; font-weight: 700; color: var(--ink); margin: 4px 0; }
+  .result .rn { font-size: 20px; font-weight: 700; color: var(--ink); margin: 4px 0; }
   .result .rt { font-weight: 700; display: flex; align-items: center; gap: 6px; }
   .result .acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
 
   #reader { width: 100%; max-width: 360px; margin: 12px auto; border-radius: 14px; overflow: hidden; }
   .qrbox { text-align: center; }
-  .qrbox img { width: 220px; height: 220px; background: #fff; border-radius: 12px; padding: 8px; border: 1px solid var(--line); }
-  .bigcode { font-size: 34px; font-weight: 700; letter-spacing: 3px; direction: ltr; color: var(--brand); }
+  .qrbox img { width: 210px; height: 210px; background: #fff; border-radius: 12px; padding: 8px; border: 1px solid var(--line); }
+  .bigcode { font-size: 32px; font-weight: 700; letter-spacing: 3px; direction: ltr; color: var(--brand); }
 
   .toast {
     position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(82px + env(safe-area-inset-bottom));
@@ -333,10 +322,11 @@ const root = document.getElementById("app");
 const DAY = 86400000;
 const PLANS_LABEL = { basic: "أساسية", pro: "متقدمة", premium: "خاصة" };
 
-/* ---------- SVG Icon Library (Lucide Style - Zero Emoji) ---------- */
+/* ---------- Icons (Zero Emoji) ---------- */
 const ICONS = {
   home: `<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>`,
   users: `<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>`,
+  user: `<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>`,
   userPlus: `<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>`,
   qr: `<rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/>`,
   store: `<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>`,
@@ -363,7 +353,10 @@ const ICONS = {
   trendingUp: `<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>`,
   trendingDown: `<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>`,
   clock: `<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`,
-  building: `<rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/>`
+  building: `<rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/>`,
+  send: `<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>`,
+  download: `<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>`,
+  award: `<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>`
 };
 
 const ico = (name, cls = "") => `<svg class="ico ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ""}</svg>`;
@@ -388,6 +381,7 @@ const toDate = t => (t && typeof t.toDate === "function") ? t.toDate() : null;
 const money = n => (Number(n) || 0).toLocaleString("en-US") + " ج";
 const sum = (arr, k = "amount") => arr.reduce((a, x) => a + (Number(x[k]) || 0), 0);
 const num = v => { const n = parseFloat(String(v).replace(/[^\d.]/g, "")); return isNaN(n) ? 0 : n; };
+const isValidEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(e || "").trim());
 
 const withTimeout = (p, ms = 15000) => Promise.race([
   p, new Promise((_, rej) => setTimeout(() => rej({ code: "timeout" }), ms))
@@ -428,57 +422,252 @@ const logoSvg = `
   <rect x="57" y="9" width="5" height="14" rx="1.5"/>
 </svg>`;
 
-/* ---------- Login / blocked ---------- */
-function viewLogin(message = "") {
+function waPhone(p) {
+  let d = String(p || "").replace(/\D/g, "");
+  if (d.startsWith("00")) d = d.slice(2);
+  if (d.startsWith("0")) d = "20" + d.slice(1);
+  return d;
+}
+function waRawLink(phone, text) {
+  return `https://wa.me/${waPhone(phone)}?text=${encodeURIComponent(text)}`;
+}
+const normPhone = p => String(p || "").replace(/\D/g, "").slice(-10);
+
+function calcMemberState(m) {
+  const end = toDate(m.endDate);
+  if (!end) return { key: "none", label: "بدون اشتراك", left: null, end: null };
+  const left = Math.ceil((end.getTime() - Date.now()) / DAY);
+  if (end.getTime() < Date.now()) return { key: "expired", label: "منتهي", left: 0, end };
+  if (left <= 7) return { key: "soon", label: "ينتهي قريبًا", left, end };
+  return { key: "active", label: "نشط", left, end };
+}
+const fmtLeftText = st => st.end
+  ? (st.key === "expired" ? `انتهى ${fmtDate(st.end)}` : (st.left <= 1 ? "ينتهي اليوم" : `متبقي ${st.left} يوم`))
+  : "لم يشترك بعد";
+
+function exportRevenueExcel(rows, filename) {
+  const headers = ["التاريخ", "النوع", "العضو / المصدر", "البيان / الملاحظات", "المبلغ (جنيه)"];
+  const lines = [headers.join(",")];
+  let total = 0;
+  for (const r of rows) {
+    const amt = Number(r.amount) || 0;
+    total += amt;
+    const typeLabel = r.type === "store" ? "ستور وكافتيريا" : (r.type === "balance" ? "سداد متبقي" : "اشتراك");
+    const cells = [r.date || "", typeLabel, r.memberName || "", r.note || "", amt]
+      .map(v => `"${String(v ?? "").replace(/"/g, '""')}"`);
+    lines.push(cells.join(","));
+  }
+  lines.push(`"","","","الإجمالي","${total}"`);
+  const csv = "\uFEFF" + lines.join("\r\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/* ---------- Login (Staff + Member Portal) ---------- */
+let loginMode = "staff"; // "staff" | "member"
+
+function viewLogin(message = "", okMessage = "") {
   root.innerHTML = `
   <div class="wrap login">
     <div class="mark">
       <div class="logo-badge">${logoSvg}</div>
       <b>Gym<span>Pro</span></b>
     </div>
-    <p class="lead">سجّل الدخول لإدارة الجيم والستور والمالية.</p>
+
+    <div class="seg" style="margin-bottom:14px">
+      <button type="button" class="${loginMode === "staff" ? "active" : ""}" id="modeStaff">${ico("building", "sm")} الإدارة والمحاسب</button>
+      <button type="button" class="${loginMode === "member" ? "active" : ""}" id="modeMember">${ico("user", "sm")} دخول عضو</button>
+    </div>
+
     ${message ? `<p class="msg err" role="alert">${ico("alert", "sm")} ${esc(message)}</p>` : ""}
-    <form class="panel" id="loginForm" novalidate>
-      <div class="field">
-        <label for="email">الإيميل</label>
-        <input id="email" type="email" dir="ltr" autocomplete="username" inputmode="email" required>
-      </div>
-      <div class="field">
-        <label for="pass">كلمة المرور</label>
-        <input id="pass" type="password" dir="ltr" autocomplete="current-password" required>
-      </div>
-      <button class="btn" type="submit" id="loginBtn">${ico("logout")} دخول</button>
-      <button class="linkbtn" type="button" id="resetBtn">نسيت كلمة المرور؟</button>
-    </form>
+    ${okMessage ? `<p class="msg ok" role="status">${ico("checkCircle", "sm")} ${esc(okMessage)}</p>` : ""}
+
+    ${loginMode === "staff" ? `
+      <p class="lead">دخول المدير، المحاسب، أو إدارة النظام.</p>
+      <form class="panel" id="loginForm" novalidate>
+        <div class="field">
+          <label for="email">الإيميل</label>
+          <input id="email" type="email" dir="ltr" autocomplete="username" inputmode="email" required>
+        </div>
+        <div class="field">
+          <label for="pass">كلمة المرور</label>
+          <input id="pass" type="password" dir="ltr" autocomplete="current-password" required>
+        </div>
+        <button class="btn" type="submit" id="loginBtn">${ico("logout")} دخول</button>
+        <button class="linkbtn" type="button" id="resetBtn">نسيت كلمة المرور؟</button>
+      </form>
+    ` : `
+      <p class="lead">ادخل برقم هاتفك أو اسمك الكامل وكلمة المرور لعرض عضويتك والعروض.</p>
+      <form class="panel" id="memberLoginForm" novalidate>
+        <div class="field">
+          <label for="mGymCode">كود الجيم (اختياري إذا كان جيمًا واحدًا)</label>
+          <input id="mGymCode" dir="ltr" placeholder="مثال: gympro-86c9a أو اتركه فارغًا">
+          <div class="hint">إذا لم تكتب كود الجيم، سيبحث النظام تلقائيًا في الجيمات المسجلة.</div>
+        </div>
+        <div class="field">
+          <label for="mId">رقم الهاتف أو الاسم</label>
+          <input id="mId" autocomplete="username" required placeholder="010xxxxxxxx أو الاسم">
+        </div>
+        <div class="field">
+          <label for="mPass">كلمة المرور</label>
+          <input id="mPass" type="password" dir="ltr" autocomplete="current-password" required>
+        </div>
+        <button class="btn" type="submit" id="mLoginBtn">${ico("user")} دخول العضو</button>
+      </form>
+    `}
   </div>`;
 
-  $("#loginForm").addEventListener("submit", async ev => {
-    ev.preventDefault();
-    const email = $("#email").value.trim();
-    const pass = $("#pass").value;
-    if (!email || !pass) return viewLogin("اكتب الإيميل وكلمة المرور.");
-    const btn = $("#loginBtn");
-    btn.disabled = true; btn.textContent = "جاري الدخول…";
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-    } catch (e) {
-      viewLogin(errText(e));
-      $("#email").value = email;
-    }
-  });
+  $("#modeStaff").addEventListener("click", () => { loginMode = "staff"; viewLogin(); });
+  $("#modeMember").addEventListener("click", () => { loginMode = "member"; viewLogin(); });
 
-  $("#resetBtn").addEventListener("click", async () => {
-    const email = $("#email").value.trim();
-    if (!email) return viewLogin("اكتب إيميلك أولًا ثم اضغط «نسيت كلمة المرور».");
-    try {
-      await sendPasswordResetEmail(auth, email);
-      viewLogin("");
-      $(".lead").insertAdjacentHTML("afterend",
-        `<p class="msg ok" role="status">${ico("checkCircle", "sm")} أرسلنا رابط إعادة تعيين كلمة المرور إلى ${esc(email)}.</p>`);
-    } catch (e) {
-      viewLogin(errText(e));
-    }
-  });
+  if (loginMode === "staff") {
+    $("#loginForm").addEventListener("submit", async ev => {
+      ev.preventDefault();
+      const email = $("#email").value.trim().toLowerCase();
+      const pass = $("#pass").value;
+      if (!email || !pass) return viewLogin("اكتب الإيميل وكلمة المرور.");
+      if (!isValidEmail(email)) return viewLogin("صيغة الإيميل غير صحيحة.");
+      const btn = $("#loginBtn");
+      btn.disabled = true; btn.textContent = "جاري الدخول…";
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+      } catch (e) {
+        viewLogin(errText(e));
+        if ($("#email")) $("#email").value = email;
+      }
+    });
+
+    $("#resetBtn").addEventListener("click", async () => {
+      const email = $("#email").value.trim().toLowerCase();
+      if (!email || !isValidEmail(email)) return viewLogin("اكتب إيميلًا صحيحًا أولًا ثم اضغط «نسيت كلمة المرور».");
+      try {
+        await sendPasswordResetEmail(auth, email);
+        viewLogin("", `أرسلنا رابط إعادة تعيين كلمة المرور إلى ${email}.`);
+      } catch (e) {
+        viewLogin(errText(e));
+      }
+    });
+  } else {
+    $("#memberLoginForm").addEventListener("submit", async ev => {
+      ev.preventDefault();
+      const gymIdInput = $("#mGymCode").value.trim();
+      const idVal = $("#mId").value.trim();
+      const passVal = $("#mPass").value;
+      if (!idVal || !passVal) return viewLogin("اكتب رقم الهاتف أو الاسم وكلمة المرور.");
+
+      const btn = $("#mLoginBtn");
+      btn.disabled = true; btn.textContent = "جاري التحقق…";
+      try {
+        const gymIds = gymIdInput ? [gymIdInput] : (await getDocs(collection(db, "gyms"))).docs.map(d => d.id);
+        const inputDigits = normPhone(idVal);
+        const inputName = idVal.toLowerCase();
+
+        for (const gid of gymIds) {
+          const gSnap = await getDoc(doc(db, "gyms", gid));
+          if (!gSnap.exists()) continue;
+          const gym = gSnap.data();
+          const mSnap = await getDocs(collection(db, "gyms", gid, "members"));
+          const matched = mSnap.docs.map(d => ({ id: d.id, ...d.data() })).find(m => {
+            const byPhone = inputDigits.length >= 7 && normPhone(m.phone) === inputDigits;
+            const byName = (m.name || "").trim().toLowerCase() === inputName;
+            return (byPhone || byName) && String(m.password || "") === passVal && passVal.length > 0;
+          });
+          if (matched) {
+            const [plansSnap, prodsSnap] = await Promise.all([
+              getDocs(collection(db, "gyms", gid, "plans")),
+              getDocs(collection(db, "gyms", gid, "products"))
+            ]);
+            const plans = plansSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const products = prodsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+            return renderMemberPortal(gym, matched, plans, products);
+          }
+        }
+        viewLogin("بيانات الدخول غير صحيحة أو لم يتم تعيين كلمة مرور للعضو بعد.");
+      } catch (e) {
+        viewLogin(errText(e));
+      }
+    });
+  }
+}
+
+/* ---------- Member Self-Service Portal ---------- */
+async function renderMemberPortal(gym, member, plans, products) {
+  const st = calcMemberState(member);
+  let qrImgHtml = `<p class="muted">كود العضوية: <b>${esc(member.code)}</b></p>`;
+  try {
+    const mod = await import("https://esm.sh/qrcode@1.5.4");
+    const QR = mod.default || mod;
+    const url = await QR.toDataURL(String(member.code), { margin: 1, width: 320 });
+    qrImgHtml = `<img src="${url}" alt="كود QR للعضو ${esc(member.name)}">`;
+  } catch {}
+
+  root.innerHTML = `
+  <div class="shell">
+    <header class="oh"><div class="in">
+      <div class="brand-box">
+        <div class="mini-logo">${logoSvg}</div>
+        <div>
+          <div class="gname">${esc(gym.name || "الجيم")}</div>
+          <div class="gsub">بوابة العضو</div>
+        </div>
+      </div>
+      <button class="btn ghost sm" id="mOutBtn">${ico("logout", "sm")} خروج</button>
+    </div></header>
+
+    <main class="wrap">
+      <div class="top" style="margin-bottom:14px">
+        <div class="who">
+          <h1>أهلًا، ${esc(member.name)}</h1>
+          <div class="sub">كود العضوية: ${esc(member.code)}${member.phone ? " · " + esc(member.phone) : ""}</div>
+        </div>
+        <span class="tag ${st.key}">${st.label}</span>
+      </div>
+
+      <div class="panel">
+        <div class="stat"><span>الباقة الحالية</span><b>${esc(member.planName || "—")}</b></div>
+        <div class="stat"><span>حالة الاشتراك</span><b>${esc(fmtLeftText(st))}</b></div>
+        <div class="stat"><span>المبلغ المتبقي</span><b class="${Number(member.balance) > 0 ? "due" : ""}">${money(member.balance)}</b></div>
+      </div>
+
+      <div class="panel qrbox" style="margin-top:14px">
+        <div style="font-weight:700;margin-bottom:8px">بطاقة الدخول السريع</div>
+        ${qrImgHtml}
+        <div class="bigcode" style="margin-top:8px">${esc(member.code)}</div>
+      </div>
+
+      <h2>${ico("award")} العضويات والباقات المعروضة</h2>
+      <div class="rows">
+        ${plans.length ? plans.map(p => `
+          <div class="row">
+            <div class="name">${esc(p.name)} <span class="tag cat">${money(p.price)}</span></div>
+            <div class="meta">المدة: ${p.days} يوم</div>
+          </div>
+        `).join("") : `<div class="empty">لا توجد باقات معروضة حاليًا.</div>`}
+      </div>
+
+      <h2>${ico("store")} منتجات وعروض الجيم والكافتيريا</h2>
+      <div class="rows">
+        ${products.length ? products.map(pr => `
+          <div class="row">
+            <div class="name">
+              ${esc(pr.name)}
+              <span class="tag cat">${ico(pr.category === "cafe" ? "coffee" : "dumbbell", "sm")} ${pr.category === "cafe" ? "الكافتيريا" : "منتجات الجيم"}</span>
+            </div>
+            <div class="meta">السعر: <b>${money(pr.price)}</b> · ${(Number(pr.stock) || 0) > 0 ? `متوفر (${pr.stock})` : "غير متوفر حاليًا"}</div>
+          </div>
+        `).join("") : `<div class="empty">لا توجد منتجات أو عروض معروضة حاليًا.</div>`}
+      </div>
+    </main>
+  </div>`;
+
+  $("#mOutBtn").addEventListener("click", () => { loginMode = "member"; viewLogin(); });
 }
 
 function viewBlocked(title, text, retry = false) {
@@ -497,10 +686,14 @@ function viewBlocked(title, text, retry = false) {
 }
 
 /* =====================================================================
-   OWNER APP
+   OWNER & ACCOUNTANT APP
    ===================================================================== */
-const S = { tab: "home", sub: null, filter: "all", q: "", storeTab: "pos", storeCat: "all", cart: [] };
-let G = null;           // { uid, profile, gymId, gym }
+const S = {
+  tab: "home", sub: null, filter: "all", q: "",
+  storeTab: "pos", storeCat: "all", cart: [], editProd: null,
+  broadcastTarget: "all", broadcastMsg: "", broadcastIdx: 0
+};
+let G = null;
 let MEMBERS = [];
 let PLANS = [];
 let PRODUCTS = [];
@@ -510,6 +703,7 @@ let charts = [];
 
 const col = name => collection(db, "gyms", G.gymId, name);
 const ref = (name, id) => doc(db, "gyms", G.gymId, name, id);
+const isAccountant = () => G?.profile?.role === "accountant";
 
 function destroyCharts() {
   charts.forEach(c => { try { c.destroy(); } catch {} });
@@ -531,42 +725,12 @@ async function loadProducts() {
   PRODUCTS.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
 }
 
-function memberState(m) {
-  const end = toDate(m.endDate);
-  if (!end) return { key: "none", label: "بدون اشتراك", left: null, end: null };
-  const left = Math.ceil((end.getTime() - Date.now()) / DAY);
-  if (end.getTime() < Date.now()) return { key: "expired", label: "منتهي", left: 0, end };
-  if (left <= 7) return { key: "soon", label: "ينتهي قريبًا", left, end };
-  return { key: "active", label: "نشط", left, end };
-}
-const leftText = st => st.end
-  ? (st.key === "expired" ? `انتهى ${fmtDate(st.end)}` : (st.left <= 1 ? "ينتهي اليوم" : `متبقي ${st.left} يوم`))
-  : "لم يشترك بعد";
-
-function waPhone(p) {
-  let d = String(p || "").replace(/\D/g, "");
-  if (d.startsWith("00")) d = d.slice(2);
-  if (d.startsWith("0")) d = "20" + d.slice(1);
-  return d;
-}
-function waLink(m, text) {
-  return `https://wa.me/${waPhone(m.phone)}?text=${encodeURIComponent(text)}`;
-}
 function reminderText(m) {
-  const st = memberState(m);
+  const st = calcMemberState(m);
   const gname = G.gym.name || "الجيم";
   if (st.key === "expired") return `أهلًا ${m.name}، انتهى اشتراكك في ${gname} بتاريخ ${fmtDate(st.end)}. نتشرف بتجديدك.`;
   if (st.end) return `أهلًا ${m.name}، اشتراكك في ${gname} ينتهي بتاريخ ${fmtDate(st.end)}. نتشرف بتجديدك.`;
   return `أهلًا ${m.name}، معك ${gname}.`;
-}
-const normPhone = p => String(p || "").replace(/\D/g, "").slice(-10);
-
-function findMember(raw) {
-  const d = String(raw || "").trim().replace(/\D/g, "");
-  if (!d) return null;
-  if (d.length <= 6) return MEMBERS.find(m => String(m.code) === d) || null;
-  const n = d.slice(-10);
-  return MEMBERS.find(m => normPhone(m.phone) === n) || null;
 }
 
 function stopScanner() {
@@ -588,14 +752,18 @@ function nav(tab, sub = null) {
 function renderOwner() {
   RT++;
   const tok = RT;
-  const tabs = [
-    ["home", "الرئيسية", "home"],
-    ["members", "الأعضاء", "users"],
-    ["checkin", "الحضور", "qr"],
-    ["store", "الستور", "store"],
-    ["money", "المالية", "chart"],
-    ["settings", "الإعدادات", "settings"]
-  ];
+  const tabs = isAccountant()
+    ? [["money", "المالية", "chart"], ["settings", "الحساب", "settings"]]
+    : [
+        ["home", "الرئيسية", "home"],
+        ["members", "الأعضاء", "users"],
+        ["checkin", "الحضور", "qr"],
+        ["store", "الستور", "store"],
+        ["broadcast", "التغذية", "send"],
+        ["money", "المالية", "chart"],
+        ["settings", "الإعدادات", "settings"]
+      ];
+
   const end = toDate(G.gym.subscriptionEnd);
   root.innerHTML = `
   <div class="shell">
@@ -604,7 +772,7 @@ function renderOwner() {
         <div class="mini-logo">${logoSvg}</div>
         <div>
           <div class="gname">${esc(G.gym.name || "الجيم")}</div>
-          <div class="gsub">${esc(G.profile.name || "")}</div>
+          <div class="gsub">${esc(G.profile.name || "")} ${isAccountant() ? "· محاسب" : ""}</div>
         </div>
       </div>
       ${end ? `<div class="sub-pill">حتى ${fmtDate(end)}</div>` : ""}
@@ -616,25 +784,28 @@ function renderOwner() {
   </div>`;
   $$(".tabs button").forEach(b => b.addEventListener("click", () => nav(b.dataset.t, null)));
   const main = $("#main");
+  if (isAccountant() && S.tab !== "money" && S.tab !== "settings") S.tab = "money";
   if (S.sub) return SUBS[S.sub.type](main, tok);
   return SCREENS[S.tab](main, tok);
 }
 
 /* ---------- Shared pieces ---------- */
 function memberRowHtml(m, opts = {}) {
-  const st = memberState(m);
+  const st = calcMemberState(m);
   const due = Number(m.balance) > 0 ? `<span class="due"> · عليه ${money(m.balance)}</span>` : "";
   const wa = (opts.wa && m.phone)
-    ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waLink(m, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
+    ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
   return `
   <div class="mrow" data-id="${esc(m.id)}">
     <button class="mmain" data-open="${esc(m.id)}">
       <div class="name">${esc(m.name)} <span class="tag ${st.key}">${st.label}</span></div>
-      <div class="meta">كود ${esc(m.code)} · ${esc(leftText(st))}${due}</div>
+      <div class="meta">كود ${esc(m.code)} · ${esc(fmtFmtLeft(st))}${due}</div>
     </button>
     <div class="side">${wa}</div>
   </div>`;
 }
+const fmtFmtLeft = st => fmtLeftText(st);
+
 function wireOpen(root_) {
   $$("[data-open]", root_).forEach(b => b.addEventListener("click", () => nav(null, { type: "member", id: b.dataset.open })));
 }
@@ -661,7 +832,7 @@ async function screenHome(main, tok) {
   const todayRev = sum(payments.filter(p => p.date === t));
   const monthRev = sum(payments);
   const monthExp = sum(exp.docs.map(d => d.data()));
-  const states = MEMBERS.map(m => ({ m, st: memberState(m) }));
+  const states = MEMBERS.map(m => ({ m, st: calcMemberState(m) }));
   const active = states.filter(x => x.st.key === "active" || x.st.key === "soon").length;
   const expired = states.filter(x => x.st.key === "expired").length;
   const soon = states.filter(x => x.st.key === "soon").sort((a, b) => a.st.left - b.st.left).map(x => x.m);
@@ -727,7 +898,7 @@ function screenMembers(main) {
       return (m.name || "").toLowerCase().includes(q) || (digits && (String(m.code) === digits || normPhone(m.phone).includes(digits.slice(-10)) || String(m.phone || "").includes(digits)));
     });
     list = list.filter(m => {
-      const st = memberState(m);
+      const st = calcMemberState(m);
       if (S.filter === "active") return st.key === "active" || st.key === "soon";
       if (S.filter === "soon") return st.key === "soon";
       if (S.filter === "expired") return st.key === "expired";
@@ -746,7 +917,6 @@ function screenMembers(main) {
   draw();
 }
 
-/* ---------- Plan fields (shared by new member / renew) ---------- */
 function planFieldsHtml(defaultStart) {
   if (!PLANS.length) {
     return `<p class="msg err">${ico("alert", "sm")} لا توجد باقات اشتراك. أضف باقة من تبويب «الإعدادات» أولًا.</p>`;
@@ -802,7 +972,7 @@ function readPlanFields(box) {
   return { plan, start, price, paid, end: endOfDay(endStr) };
 }
 
-/* ---------- New member ---------- */
+/* ---------- New member (includes member portal password) ---------- */
 function subNewMember(main) {
   main.innerHTML = `
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
@@ -811,6 +981,11 @@ function subNewMember(main) {
   <form class="panel" id="mform" novalidate>
     <div class="field"><label for="mname">الاسم</label><input id="mname" autocomplete="off" required></div>
     <div class="field"><label for="mphone">رقم الموبايل</label><input id="mphone" type="tel" dir="ltr" inputmode="tel" autocomplete="off"></div>
+    <div class="field">
+      <label for="mpass">كلمة مرور دخول العضو</label>
+      <input id="mpass" type="text" dir="ltr" autocomplete="off" placeholder="مثال: 123456">
+      <div class="hint">يستخدمها العضو للدخول إلى حسابه من شاشة «دخول عضو».</div>
+    </div>
     ${planFieldsHtml(todayStr())}
     <button class="btn" type="submit" id="msave" ${PLANS.length ? "" : "disabled"}>${ico("check")} حفظ العضو</button>
   </form>`;
@@ -822,6 +997,7 @@ function subNewMember(main) {
     const msg = t => { $("#fmsg").innerHTML = t ? `<p class="msg err" role="alert">${ico("alert", "sm")} ${esc(t)}</p>` : ""; };
     const name = $("#mname").value.trim();
     const phone = $("#mphone").value.trim();
+    const password = $("#mpass").value.trim();
     if (!name) return msg("اكتب اسم العضو.");
     if (phone && MEMBERS.some(m => normPhone(m.phone) === normPhone(phone))) {
       if (!confirm("هذا الرقم مسجل لعضو آخر. هل تريد المتابعة؟")) return;
@@ -842,7 +1018,7 @@ function subNewMember(main) {
         code = String(next);
         tx.set(counterRef, { member: next }, { merge: true });
         tx.set(memberRef, {
-          name, phone, code, planId: f.plan.id, planName: f.plan.name,
+          name, phone, password, code, planId: f.plan.id, planName: f.plan.name,
           endDate: Timestamp.fromDate(f.end), balance: f.price - f.paid,
           createdAt: serverTimestamp()
         });
@@ -859,7 +1035,7 @@ function subNewMember(main) {
         }
       });
       MEMBERS.push({
-        id: memberRef.id, name, phone, code, planId: f.plan.id, planName: f.plan.name,
+        id: memberRef.id, name, phone, password, code, planId: f.plan.id, planName: f.plan.name,
         endDate: Timestamp.fromDate(f.end), balance: f.price - f.paid
       });
       toast(`تم حفظ ${name} — كود ${code}`);
@@ -875,7 +1051,7 @@ function subNewMember(main) {
 async function subMember(main, tok) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
-  const st = memberState(m);
+  const st = calcMemberState(m);
   main.innerHTML = `
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
   <div class="top"><div class="who">
@@ -884,15 +1060,16 @@ async function subMember(main, tok) {
   </div><span class="tag ${st.key}">${st.label}</span></div>
   <div class="panel">
     <div class="stat"><span>الباقة</span><b>${esc(m.planName || "—")}</b></div>
-    <div class="stat"><span>الاشتراك</span><b>${esc(leftText(st))}</b></div>
+    <div class="stat"><span>الاشتراك</span><b>${esc(fmtLeftText(st))}</b></div>
     <div class="stat"><span>المبلغ المتبقي</span><b class="${Number(m.balance) > 0 ? "due" : ""}">${money(m.balance)}</b></div>
+    <div class="stat"><span>كلمة مرور العضو</span><b>${esc(m.password || "غير محددة")}</b></div>
   </div>
   <div id="fmsg" style="margin-top:14px"></div>
   <div class="row" style="padding:14px 0 0">
     <div class="acts" style="margin-top:0">
       <button class="btn sm" id="renew">${ico("refresh", "sm")} تجديد الاشتراك</button>
       ${Number(m.balance) > 0 ? `<button class="btn soft sm" id="payBtn">${ico("wallet", "sm")} تسجيل دفعة</button>` : ""}
-      ${m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waLink(m, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : ""}
+      ${m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : ""}
       <button class="btn ghost sm" id="cardBtn">${ico("qr", "sm")} كارت العضو</button>
       <button class="btn ghost sm" id="editBtn">${ico("edit", "sm")} تعديل</button>
     </div>
@@ -900,7 +1077,7 @@ async function subMember(main, tok) {
   <div id="payBox"></div>
   <h2>${ico("refresh")} سجل الاشتراكات</h2>
   <div class="rows" id="subHist"><div class="empty">جاري التحميل…</div></div>
-  <h2>${ico("wallet")} سجل الدفعات والمشتريات</h2>
+  <h2>${ico("wallet")} سجل الدفعات</h2>
   <div class="rows" id="payHist"><div class="empty">جاري التحميل…</div></div>`;
 
   $("#back").addEventListener("click", () => nav("members", null));
@@ -968,7 +1145,7 @@ async function subMember(main, tok) {
 function subRenew(main) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
-  const st = memberState(m);
+  const st = calcMemberState(m);
   const defStart = (st.key === "active" || st.key === "soon") ? ymd(st.end) : todayStr();
   main.innerHTML = `
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
@@ -983,7 +1160,7 @@ function subRenew(main) {
 
   $("#rform").addEventListener("submit", async ev => {
     ev.preventDefault();
-    const msg = t => { $("#fmsg").innerHTML = t ? `<p class="msg err" role="alert">${esc(t)}</p>` : ""; };
+    const msg = t => { $("#fmsg").innerHTML = t ? `<p class="msg err" role="alert">${ico("alert", "sm")} ${esc(t)}</p>` : ""; };
     let f;
     try { f = readPlanFields(main); } catch (e) { return msg(e.message); }
     const btn = $("#rsave"); btn.disabled = true; btn.textContent = "جاري الحفظ…";
@@ -1027,17 +1204,18 @@ function subEdit(main) {
   <form class="panel" id="eform" novalidate>
     <div class="field"><label for="ename">الاسم</label><input id="ename" value="${esc(m.name)}"></div>
     <div class="field"><label for="ephone">رقم الموبايل</label><input id="ephone" type="tel" dir="ltr" inputmode="tel" value="${esc(m.phone || "")}"></div>
+    <div class="field"><label for="epass">كلمة مرور دخول العضو</label><input id="epass" type="text" dir="ltr" value="${esc(m.password || "")}"></div>
     <button class="btn" type="submit" id="esave">${ico("check")} حفظ التعديل</button>
   </form>`;
   $("#back").addEventListener("click", () => nav(null, { type: "member", id: m.id }));
   $("#eform").addEventListener("submit", async ev => {
     ev.preventDefault();
-    const name = $("#ename").value.trim(), phone = $("#ephone").value.trim();
+    const name = $("#ename").value.trim(), phone = $("#ephone").value.trim(), password = $("#epass").value.trim();
     if (!name) return toast("اكتب الاسم.");
     const btn = $("#esave"); btn.disabled = true;
     try {
-      await updateDoc(ref("members", m.id), { name, phone });
-      m.name = name; m.phone = phone;
+      await updateDoc(ref("members", m.id), { name, phone, password });
+      m.name = name; m.phone = phone; m.password = password;
       toast("تم الحفظ");
       nav(null, { type: "member", id: m.id });
     } catch (e) { btn.disabled = false; toast(errText(e)); }
@@ -1055,7 +1233,7 @@ async function subCard(main) {
     <div class="muted">${esc(G.gym.name || "")}</div>
     <div id="qr" style="margin:14px 0"><p class="muted">جاري إنشاء الكود…</p></div>
     <div class="bigcode">${esc(m.code)}</div>
-    <p class="hint">اعرض الكود أو اكتبه في شاشة الحضور. للطباعة أو الإرسال خذ لقطة شاشة.</p>
+    <p class="hint">اعرض الكود أو اكتبه في شاشة الحضور.</p>
   </div>`;
   $("#back").addEventListener("click", () => nav(null, { type: "member", id: m.id }));
   try {
@@ -1066,11 +1244,19 @@ async function subCard(main) {
     if (box) box.innerHTML = `<img src="${url}" alt="كود QR للعضو ${esc(m.name)}">`;
   } catch {
     const box = $("#qr");
-    if (box) box.innerHTML = `<p class="muted">تعذر إنشاء QR الآن. استخدم الكود الرقمي أدناه.</p>`;
+    if (box) box.innerHTML = `<p class="muted">تعذر إنشاء QR الآن.</p>`;
   }
 }
 
 /* ---------- Check-in ---------- */
+function findMember(raw) {
+  const d = String(raw || "").trim().replace(/\D/g, "");
+  if (!d) return null;
+  if (d.length <= 6) return MEMBERS.find(m => String(m.code) === d) || null;
+  const n = d.slice(-10);
+  return MEMBERS.find(m => normPhone(m.phone) === n) || null;
+}
+
 function screenCheckin(main, tok) {
   main.innerHTML = `
   <h2>${ico("qr")} تسجيل الحضور</h2>
@@ -1113,7 +1299,7 @@ async function startScan() {
       text => { stopScanner(); doCheckin(text); },
       () => {}
     );
-  } catch (e) {
+  } catch {
     scanner = null;
     box.innerHTML = `<p class="msg err">${ico("alert", "sm")} تعذر تشغيل الكاميرا. اسمح للمتصفح باستخدامها أو اكتب الكود يدويًا.</p>`;
   }
@@ -1127,12 +1313,12 @@ async function doCheckin(raw) {
     box.innerHTML = `<div class="result bad"><div class="rt">${ico("xCircle", "sm")} غير موجود</div><div>لا يوجد عضو بهذا الكود أو الرقم.</div></div>`;
     return;
   }
-  const st = memberState(m);
-  const waBtn = m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waLink(m, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
+  const st = calcMemberState(m);
+  const waBtn = m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
   if (st.key === "expired" || st.key === "none") {
     box.innerHTML = `<div class="result bad">
       <div class="rt">${ico("xCircle", "sm")} الدخول ممنوع — ${st.key === "none" ? "لا يوجد اشتراك" : "الاشتراك منتهي"}</div>
-      <div class="rn">${esc(m.name)}</div><div>${esc(leftText(st))}</div>
+      <div class="rn">${esc(m.name)}</div><div>${esc(fmtLeftText(st))}</div>
       <div class="acts"><button class="btn sm" id="goRenew">${ico("refresh", "sm")} تجديد الاشتراك</button>${waBtn}</div></div>`;
     $("#goRenew").addEventListener("click", () => nav("members", { type: "renew", id: m.id }));
     return;
@@ -1152,7 +1338,7 @@ async function doCheckin(raw) {
     });
     const dueLine = Number(m.balance) > 0 ? `<div class="due">عليه مبلغ متبقي ${money(m.balance)}</div>` : "";
     box.innerHTML = `<div class="result ok"><div class="rt">${ico("checkCircle", "sm")} تم تسجيل الحضور</div>
-      <div class="rn">${esc(m.name)}</div><div>${esc(leftText(st))}</div>${dueLine}
+      <div class="rn">${esc(m.name)}</div><div>${esc(fmtLeftText(st))}</div>${dueLine}
       ${st.key === "soon" ? `<div class="acts">${waBtn}</div>` : ""}</div>`;
     loadToday(RT);
   } catch (e) {
@@ -1175,9 +1361,7 @@ async function loadToday(tok) {
   }
 }
 
-/* =====================================================================
-   STORE & CAFETERIA (POS + INVENTORY)
-   ===================================================================== */
+/* ---------- Store & Cafeteria ---------- */
 function screenStore(main) {
   const CATS = { gym: "منتجات الجيم", cafe: "الكافتيريا" };
   main.innerHTML = `
@@ -1195,7 +1379,6 @@ function screenStore(main) {
 
   const body = $("#storeBody", main);
 
-  /* --- POS View --- */
   if (S.storeTab === "pos") {
     const filtered = PRODUCTS.filter(p => S.storeCat === "all" || p.category === S.storeCat);
     const total = S.cart.reduce((a, c) => a + c.price * c.qty, 0);
@@ -1313,18 +1496,15 @@ function screenStore(main) {
       const summary = S.cart.map(c => `${c.name} ×${c.qty}`).join("، ");
       try {
         const batch = writeBatch(db);
-        // خصم المخزون
         for (const item of S.cart) {
           batch.update(ref("products", item.id), { stock: increment(-item.qty) });
         }
-        // تسجيل عملية البيع
         batch.set(doc(col("store_sales")), {
           items: S.cart, total, mode,
           memberId: member ? member.id : null,
           memberName: member ? member.name : "عميل نقدي",
           date: todayStr(), ts: serverTimestamp(), by: G.uid
         });
-
         if (mode === "cash") {
           batch.set(doc(col("payments")), {
             memberId: null, memberName: "مبيعات الستور", amount: total, date: todayStr(),
@@ -1333,10 +1513,8 @@ function screenStore(main) {
         } else {
           batch.update(ref("members", member.id), { balance: increment(total) });
         }
-
         await batch.commit();
 
-        // تحديث الكاش المحلي
         for (const item of S.cart) {
           const p = PRODUCTS.find(x => x.id === item.id);
           if (p) p.stock = Math.max(0, (Number(p.stock) || 0) - item.qty);
@@ -1354,7 +1532,6 @@ function screenStore(main) {
     return;
   }
 
-  /* --- Manage Products View --- */
   const editing = S.editProd ? PRODUCTS.find(p => p.id === S.editProd) : null;
   body.innerHTML = `
   <h2>${ico(editing ? "edit" : "plus")} ${editing ? "تعديل منتج" : "إضافة منتج جديد"}</h2>
@@ -1448,7 +1625,110 @@ function screenStore(main) {
   });
 }
 
-/* ---------- Money + Financial Charts ---------- */
+/* ---------- Nutrition & Guidance WhatsApp Broadcast ---------- */
+const NUTRITION_TEMPLATES = [
+  {
+    title: "إرشادات التغذية والترطيب اليومية",
+    text: "أهلًا كابتن، تذكير بنظام التغذية اليومي: احرص على شرب 2.5 - 3 لتر ماء، وتناول مصدر بروتين واضح في كل وجبة، والالتزام بالنوم الكافي لدعم الاستشفاء العضلي."
+  },
+  {
+    title: "تنبيه قبل وبعد التمرين",
+    text: "أهلًا كابتن، للحصول على أفضل أداء في التمرين: تناول وجبة خفيفة غنية بالكربوهيدرات قبل التمرين بـ 60-90 دقيقة، ووجبة بروتين بعد التمرين خلال ساعتين."
+  }
+];
+
+function screenBroadcast(main) {
+  const targets = MEMBERS.filter(m => {
+    if (!m.phone || !waPhone(m.phone)) return false;
+    if (S.broadcastTarget === "active") {
+      const k = calcMemberState(m).key;
+      return k === "active" || k === "soon";
+    }
+    return true;
+  }).sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
+
+  if (S.broadcastIdx >= targets.length) S.broadcastIdx = 0;
+  const currentTarget = targets[S.broadcastIdx] || null;
+
+  main.innerHTML = `
+  <h2>${ico("send")} إرشادات وتغذية واتساب للأعضاء</h2>
+  <div class="panel">
+    <div class="field">
+      <label for="tplSel">قالب جاهز (اختياري)</label>
+      <select id="tplSel">
+        <option value="">-- اختر قالبًا جاهزًا أو اكتب رسالتك --</option>
+        ${NUTRITION_TEMPLATES.map((t, i) => `<option value="${i}">${esc(t.title)}</option>`).join("")}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="bMsg">نص الرسالة (إرشادات / نظام تغذية)</label>
+      <textarea id="bMsg" placeholder="اكتب نظام التغذية أو الإرشادات التي تريد إرسالها للأعضاء...">${esc(S.broadcastMsg)}</textarea>
+    </div>
+
+    <div class="field">
+      <label for="bTarget">الفئة المستهدفة (ذات أرقام واتساب صالحة)</label>
+      <select id="bTarget">
+        <option value="all" ${S.broadcastTarget === "all" ? "selected" : ""}>كل الأعضاء (${MEMBERS.filter(m=>waPhone(m.phone)).length})</option>
+        <option value="active" ${S.broadcastTarget === "active" ? "selected" : ""}>المشتركون النشطون فقط</option>
+      </select>
+    </div>
+
+    ${currentTarget ? `
+      <div class="panel" style="background:var(--brand-soft);border-color:var(--brand-border);margin-bottom:12px">
+        <div style="font-size:13px;color:var(--brand);font-weight:700">الإرسال المتتابع (${S.broadcastIdx + 1} من ${targets.length})</div>
+        <div style="font-weight:700;font-size:16px;margin:4px 0">${esc(currentTarget.name)} · ${esc(currentTarget.phone)}</div>
+        <div class="acts" style="margin-top:8px">
+          <a class="btn sm" id="sendCurWa" target="_blank" rel="noopener" href="${esc(waRawLink(currentTarget.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("send", "sm")} إرسال عبر واتساب</a>
+          <button class="btn ghost sm" type="button" id="nextWaBtn">التالي في القائمة</button>
+        </div>
+      </div>
+    ` : `<p class="hint">لا يوجد أعضاء بأرقام هاتف صالحة في هذه الفئة.</p>`}
+  </div>
+
+  <h2>${ico("users")} قائمة الإرسال (${targets.length})</h2>
+  <div class="rows">
+    ${targets.length ? targets.map((m, idx) => `
+      <div class="row">
+        <div class="name">${idx + 1}. ${esc(m.name)}</div>
+        <div class="meta">${esc(m.phone)} · ${esc(calcMemberState(m).label)}</div>
+        <div class="acts">
+          <a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("phone", "sm")} إرسال</a>
+        </div>
+      </div>
+    `).join("") : `<div class="empty">لا يوجد أعضاء متاحون للإرسال.</div>`}
+  </div>`;
+
+  $("#tplSel").addEventListener("change", e => {
+    const t = NUTRITION_TEMPLATES[Number(e.target.value)];
+    if (t) {
+      S.broadcastMsg = t.text;
+      screenBroadcast(main);
+    }
+  });
+  $("#bMsg").addEventListener("input", e => {
+    S.broadcastMsg = e.target.value;
+    const msgText = S.broadcastMsg || NUTRITION_TEMPLATES[0].text;
+    $$("a[href*='wa.me']", main).forEach(a => {
+      const m = targets.find(x => a.href.includes(waPhone(x.phone)));
+      if (m) a.href = waRawLink(m.phone, msgText);
+    });
+  });
+  $("#bTarget").addEventListener("change", e => {
+    S.broadcastTarget = e.target.value;
+    S.broadcastIdx = 0;
+    screenBroadcast(main);
+  });
+  const nextBtn = $("#nextWaBtn", main);
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      S.broadcastIdx = (S.broadcastIdx + 1) % targets.length;
+      screenBroadcast(main);
+    });
+  }
+}
+
+/* ---------- Money + Charts + Excel Export ---------- */
 async function screenMoney(main, tok) {
   main.innerHTML = `<p class="muted">جاري التحميل…</p>`;
   let pay, exp;
@@ -1471,7 +1751,10 @@ async function screenMoney(main, tok) {
   const storeRev = sum(payments.filter(p => p.type === "store"));
 
   main.innerHTML = `
-  <h2>${ico("wallet")} ملخص الشهر</h2>
+  <div class="top" style="margin-bottom:12px">
+    <h2 style="margin:0">${ico("wallet")} ملخص الشهر</h2>
+    <button class="btn soft sm" type="button" id="exportExcelBtn">${ico("download", "sm")} تصدير Excel</button>
+  </div>
   <div class="panel">
     <div class="stat"><span>${ico("trendingUp", "sm")} إجمالي الإيرادات</span><b>${money(rev)}</b></div>
     <div class="stat"><span>${ico("users", "sm")} إيراد الاشتراكات</span><b>${money(subRev)}</b></div>
@@ -1507,28 +1790,28 @@ async function screenMoney(main, tok) {
     <div class="acts"><button class="btn danger sm" data-delx="${esc(x.id)}">${ico("trash", "sm")} حذف</button></div></div>`).join("")
     : `<div class="empty">لا توجد مصروفات هذا الشهر.</div>`}</div>
 
-  <h2>${ico("trendingUp")} دفعات ومبيعات الشهر</h2>
+  <h2>${ico("trendingUp")} إيرادات الشهر</h2>
   <div class="rows">${payments.length ? payments.slice(0, 40).map(p => `
     <div class="row"><div class="name">${esc(p.memberName || "")} — ${money(p.amount)}</div>
     <div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("")
-    : `<div class="empty">لا توجد دفعات هذا الشهر.</div>`}</div>`;
+    : `<div class="empty">لا توجد إيرادات هذا الشهر.</div>`}</div>`;
 
-  // رسم المخططات البيانية إذا توفرت مكتبة Chart.js
+  $("#exportExcelBtn").addEventListener("click", () => {
+    exportRevenueExcel(payments, `revenues_${monthStart()}.csv`);
+    toast("تم تحميل شيت الإيرادات");
+  });
+
   if (typeof Chart !== "undefined") {
     destroyCharts();
     const now = new Date();
     const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-    const labels = [];
-    const revSeries = [];
-    const expSeries = [];
-
+    const labels = [], revSeries = [], expSeries = [];
     for (let d = 1; d <= daysInMonth; d++) {
       const ds = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(d)}`;
       labels.push(String(d));
       revSeries.push(sum(payments.filter(p => p.date === ds)));
       expSeries.push(sum(expenses.filter(x => x.date === ds)));
     }
-
     const isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
     const gridColor = isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.06)";
     const textColor = isDark ? "#94A3B8" : "#64748B";
@@ -1545,11 +1828,8 @@ async function screenMoney(main, tok) {
           ]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } }
-          },
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } },
           scales: {
             x: { grid: { display: false }, ticks: { color: textColor, maxTicksLimit: 10 } },
             y: { grid: { color: gridColor }, ticks: { color: textColor } }
@@ -1571,12 +1851,8 @@ async function screenMoney(main, tok) {
           }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          cutout: "65%",
-          plugins: {
-            legend: { position: "bottom", labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } }
-          }
+          responsive: true, maintainAspectRatio: false, cutout: "65%",
+          plugins: { legend: { position: "bottom", labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } }
         }
       }));
     }
@@ -1600,66 +1876,78 @@ async function screenMoney(main, tok) {
   }));
 }
 
-/* ---------- Settings (plans) ---------- */
+/* ---------- Settings ---------- */
 function screenSettings(main) {
   const editing = S.editPlan ? PLANS.find(p => p.id === S.editPlan) : null;
   main.innerHTML = `
-  <h2>${ico("package")} باقات الاشتراك</h2>
-  <div class="rows">${PLANS.length ? PLANS.map(p => `
-    <div class="row"><div class="name">${esc(p.name)}</div>
-    <div class="meta">${p.days} يوم · ${money(p.price)}</div>
-    <div class="acts">
-      <button class="btn ghost sm" data-editp="${esc(p.id)}">${ico("edit", "sm")} تعديل</button>
-      <button class="btn danger sm" data-delp="${esc(p.id)}">${ico("trash", "sm")} حذف</button>
-    </div></div>`).join("") : `<div class="empty">لا توجد باقات. أضف أول باقة من النموذج بالأسفل.</div>`}</div>
-  <h2>${ico(editing ? "edit" : "plus")} ${editing ? "تعديل باقة" : "إضافة باقة"}</h2>
-  <form class="panel" id="pform" novalidate>
-    <div class="field"><label for="pn">اسم الباقة</label><input id="pn" autocomplete="off" placeholder="مثال: شهري" value="${esc(editing?.name || "")}"></div>
-    <div class="two">
-      <div class="field"><label for="pd">المدة بالأيام</label><input id="pd" type="number" inputmode="numeric" min="1" dir="ltr" value="${esc(editing?.days ?? 30)}"></div>
-      <div class="field"><label for="pp">السعر</label><input id="pp" type="number" inputmode="decimal" min="0" dir="ltr" value="${esc(editing?.price ?? "")}"></div>
-    </div>
-    <button class="btn" type="submit" id="psave">${ico("check")} ${editing ? "حفظ التعديل" : "إضافة الباقة"}</button>
-    ${editing ? `<button class="linkbtn" type="button" id="pcancel">إلغاء التعديل</button>` : ""}
-  </form>
+  ${!isAccountant() ? `
+    <h2>${ico("package")} باقات الاشتراك</h2>
+    <div class="rows">${PLANS.length ? PLANS.map(p => `
+      <div class="row"><div class="name">${esc(p.name)}</div>
+      <div class="meta">${p.days} يوم · ${money(p.price)}</div>
+      <div class="acts">
+        <button class="btn ghost sm" data-editp="${esc(p.id)}">${ico("edit", "sm")} تعديل</button>
+        <button class="btn danger sm" data-delp="${esc(p.id)}">${ico("trash", "sm")} حذف</button>
+      </div></div>`).join("") : `<div class="empty">لا توجد باقات. أضف أول باقة من النموذج بالأسفل.</div>`}</div>
+
+    <h2>${ico(editing ? "edit" : "plus")} ${editing ? "تعديل باقة" : "إضافة باقة"}</h2>
+    <form class="panel" id="pform" novalidate>
+      <div class="field"><label for="pn">اسم الباقة</label><input id="pn" autocomplete="off" placeholder="مثال: شهري" value="${esc(editing?.name || "")}"></div>
+      <div class="two">
+        <div class="field"><label for="pd">المدة بالأيام</label><input id="pd" type="number" inputmode="numeric" min="1" dir="ltr" value="${esc(editing?.days ?? 30)}"></div>
+        <div class="field"><label for="pp">السعر</label><input id="pp" type="number" inputmode="decimal" min="0" dir="ltr" value="${esc(editing?.price ?? "")}"></div>
+      </div>
+      <button class="btn" type="submit" id="psave">${ico("check")} ${editing ? "حفظ التعديل" : "إضافة الباقة"}</button>
+      ${editing ? `<button class="linkbtn" type="button" id="pcancel">إلغاء التعديل</button>` : ""}
+    </form>
+  ` : ""}
+
   <h2>${ico("building")} الحساب</h2>
   <div class="panel">
     <div class="stat"><span>الجيم</span><b>${esc(G.gym.name || "")}</b></div>
-    <div class="stat"><span>المدير</span><b>${esc(G.profile.name || "")}</b></div>
+    <div class="stat"><span>الاسم</span><b>${esc(G.profile.name || "")}</b></div>
+    <div class="stat"><span>الصلاحية</span><b>${isAccountant() ? "محاسب" : "مدير الجيم"}</b></div>
     <div style="padding-top:12px"><button class="btn ghost" id="outBtn">${ico("logout", "sm")} تسجيل الخروج</button></div>
   </div>`;
 
   $("#outBtn").addEventListener("click", () => { stopScanner(); destroyCharts(); signOut(auth); });
-  $$("[data-editp]", main).forEach(b => b.addEventListener("click", () => { S.editPlan = b.dataset.editp; renderOwner(); window.scrollTo(0, document.body.scrollHeight); }));
-  $$("[data-delp]", main).forEach(b => b.addEventListener("click", async () => {
-    if (!confirm("حذف هذه الباقة؟ الأعضاء الحاليون لن يتأثروا.")) return;
-    try { await deleteDoc(ref("plans", b.dataset.delp)); await loadPlans(); renderOwner(); }
-    catch (e) { toast(errText(e)); }
-  }));
-  const cancel = $("#pcancel");
-  if (cancel) cancel.addEventListener("click", () => { S.editPlan = null; renderOwner(); });
-  $("#pform").addEventListener("submit", async ev => {
-    ev.preventDefault();
-    const name = $("#pn").value.trim(), days = Math.round(num($("#pd").value)), price = num($("#pp").value);
-    if (!name || days < 1) return toast("اكتب اسم الباقة ومدتها بالأيام.");
-    const btn = $("#psave"); btn.disabled = true;
-    try {
-      if (editing) await updateDoc(ref("plans", editing.id), { name, days, price });
-      else await addDoc(col("plans"), { name, days, price, createdAt: serverTimestamp() });
-      S.editPlan = null;
-      await loadPlans();
-      toast("تم الحفظ");
-      renderOwner();
-    } catch (e) { btn.disabled = false; toast(errText(e)); }
-  });
+
+  if (!isAccountant()) {
+    $$("[data-editp]", main).forEach(b => b.addEventListener("click", () => { S.editPlan = b.dataset.editp; renderOwner(); window.scrollTo(0, document.body.scrollHeight); }));
+    $$("[data-delp]", main).forEach(b => b.addEventListener("click", async () => {
+      if (!confirm("حذف هذه الباقة؟ الأعضاء الحاليون لن يتأثروا.")) return;
+      try { await deleteDoc(ref("plans", b.dataset.delp)); await loadPlans(); renderOwner(); }
+      catch (e) { toast(errText(e)); }
+    }));
+    const cancel = $("#pcancel");
+    if (cancel) cancel.addEventListener("click", () => { S.editPlan = null; renderOwner(); });
+    $("#pform").addEventListener("submit", async ev => {
+      ev.preventDefault();
+      const name = $("#pn").value.trim(), days = Math.round(num($("#pd").value)), price = num($("#pp").value);
+      if (!name || days < 1) return toast("اكتب اسم الباقة ومدتها بالأيام.");
+      const btn = $("#psave"); btn.disabled = true;
+      try {
+        if (editing) await updateDoc(ref("plans", editing.id), { name, days, price });
+        else await addDoc(col("plans"), { name, days, price, createdAt: serverTimestamp() });
+        S.editPlan = null;
+        await loadPlans();
+        toast("تم الحفظ");
+        renderOwner();
+      } catch (e) { btn.disabled = false; toast(errText(e)); }
+    });
+  }
 }
 
-const SCREENS = { home: screenHome, members: screenMembers, checkin: screenCheckin, store: screenStore, money: screenMoney, settings: screenSettings };
+const SCREENS = {
+  home: screenHome, members: screenMembers, checkin: screenCheckin,
+  store: screenStore, broadcast: screenBroadcast, money: screenMoney, settings: screenSettings
+};
 const SUBS = { member: subMember, newMember: subNewMember, renew: subRenew, edit: subEdit, card: subCard };
 
 async function startOwner(uid, profile, gym, gymId) {
   G = { uid, profile, gym, gymId };
-  S.tab = "home"; S.sub = null; S.filter = "all"; S.q = ""; S.editPlan = null;
+  S.tab = profile.role === "accountant" ? "money" : "home";
+  S.sub = null; S.filter = "all"; S.q = ""; S.editPlan = null;
   S.storeTab = "pos"; S.storeCat = "all"; S.cart = []; S.editProd = null;
   root.innerHTML = `<div class="loading">جاري تحميل بيانات الجيم…</div>`;
   try {
@@ -1671,7 +1959,7 @@ async function startOwner(uid, profile, gym, gymId) {
 }
 
 /* =====================================================================
-   SUPER ADMIN
+   SUPER ADMIN (Email validation + Active Status + Accountant creation)
    ===================================================================== */
 function viewAdmin(profile) {
   root.innerHTML = `
@@ -1684,17 +1972,21 @@ function viewAdmin(profile) {
       <button class="btn ghost" id="outBtn">${ico("logout", "sm")} خروج</button>
     </div>
 
-    <h2 style="margin-top:0">${ico("plus")} إضافة جيم جديد</h2>
+    <h2 style="margin-top:0">${ico("plus")} إضافة جيم ومدير</h2>
     <div id="formMsg"></div>
     <form class="panel" id="gymForm" novalidate>
       <div class="grid2">
         <div class="field"><label for="gName">اسم الجيم</label><input id="gName" required autocomplete="off"></div>
         <div class="field"><label for="oName">اسم المدير</label><input id="oName" required autocomplete="off"></div>
-        <div class="field"><label for="oEmail">إيميل المدير</label><input id="oEmail" type="email" dir="ltr" inputmode="email" required autocomplete="off"></div>
+        <div class="field">
+          <label for="oEmail">إيميل المدير</label>
+          <input id="oEmail" type="email" dir="ltr" inputmode="email" required autocomplete="off" placeholder="manager@gym.com">
+          <div class="hint">يجب أن يكون إيميلًا صحيحًا لتفعيل حساب الدخول.</div>
+        </div>
         <div class="field">
           <label for="oPass">كلمة مرور المدير</label>
           <input id="oPass" type="text" dir="ltr" required autocomplete="off">
-          <div class="hint">6 أحرف أو أرقام على الأقل. سلّمها للمدير وسيغيّرها لاحقًا.</div>
+          <div class="hint">6 أحرف أو أرقام على الأقل.</div>
         </div>
         <div class="field">
           <label for="gPlan">الباقة</label>
@@ -1703,13 +1995,12 @@ function viewAdmin(profile) {
         <div class="field">
           <label for="gMonths">مدة الاشتراك بالأشهر</label>
           <input id="gMonths" type="number" min="1" max="36" value="1" inputmode="numeric" dir="ltr">
-          <div class="hint">فترة تجريبية أو اشتراك مدفوع، كما تريد.</div>
         </div>
       </div>
       <button class="btn" type="submit" id="gymBtn">${ico("check")} إنشاء الجيم</button>
     </form>
 
-    <h2>${ico("building")} الجيمات</h2>
+    <h2>${ico("building")} الجيمات وحالة المديرين</h2>
     <div id="gymList"><div class="rows"><div class="empty">جاري التحميل…</div></div></div>
   </div>`;
 
@@ -1727,12 +2018,13 @@ async function onCreateGym(ev) {
   ev.preventDefault();
   const gName = $("#gName").value.trim();
   const oName = $("#oName").value.trim();
-  const oEmail = $("#oEmail").value.trim();
+  const oEmail = $("#oEmail").value.trim().toLowerCase();
   const oPass = $("#oPass").value;
   const plan = $("#gPlan").value;
   const months = Math.max(1, Math.min(36, parseInt($("#gMonths").value, 10) || 1));
 
   if (!gName || !oName || !oEmail || !oPass) return setFormMsg("أكمل كل الخانات.");
+  if (!isValidEmail(oEmail)) return setFormMsg("اكتب إيميلًا صحيحًا للمدير (مثال: name@domain.com).");
   if (oPass.length < 6) return setFormMsg("كلمة المرور لازم تكون 6 أحرف أو أرقام على الأقل.");
 
   const btn = $("#gymBtn");
@@ -1759,11 +2051,11 @@ async function onCreateGym(ev) {
 
     $("#gymForm").reset();
     $("#gMonths").value = 1;
-    setFormMsg(`تم إنشاء «${gName}». يدخل المدير بالإيميل ${oEmail}.`, "ok");
+    setFormMsg(`تم إنشاء «${gName}» وتفعيل حساب المدير (${oEmail}).`, "ok");
     loadGyms();
   } catch (e) {
     let t = errText(e);
-    if (uid) t += " تم إنشاء حساب المدير لكن لم يكتمل ربطه بالجيم. أرسل لي الرسالة دي وأصلحها.";
+    if (uid) t += " تم إنشاء حساب المدير لكن لم يكتمل ربطه بالجيم.";
     setFormMsg(t);
   } finally {
     btn.disabled = false; btn.innerHTML = `${ico("check")} إنشاء الجيم`;
@@ -1774,7 +2066,13 @@ async function loadGyms() {
   const box = $("#gymList");
   if (!box) return;
   try {
-    const snap = await getDocs(collection(db, "gyms"));
+    const [snap, usersSnap] = await Promise.all([
+      getDocs(collection(db, "gyms")),
+      getDocs(collection(db, "users"))
+    ]);
+    const usersMap = new Map();
+    usersSnap.docs.forEach(d => usersMap.set(d.id, d.data()));
+
     const gyms = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     gyms.sort((a, b) => (toDate(b.createdAt)?.getTime() || 0) - (toDate(a.createdAt)?.getTime() || 0));
 
@@ -1787,27 +2085,42 @@ async function loadGyms() {
       const end = toDate(g.subscriptionEnd);
       const expired = end && end.getTime() < Date.now();
       const status = g.status === "suspended" ? "suspended" : (expired ? "expired" : "active");
-      const label = { active: "نشط", suspended: "موقوف", expired: "منتهي" }[status];
+      const label = { active: "الجيم نشط", suspended: "الجيم موقوف", expired: "منتهي" }[status];
+      const mgr = g.ownerUid ? usersMap.get(g.ownerUid) : null;
+      const mgrActive = mgr ? mgr.active !== false : true;
+      const emailValid = isValidEmail(g.ownerEmail || mgr?.email);
+
       return `
-      <div class="row" data-id="${esc(g.id)}">
-        <div class="name">${esc(g.name || g.id)} <span class="tag ${status}">${label}</span></div>
+      <div class="row" data-id="${esc(g.id)}" data-uid="${esc(g.ownerUid || "")}">
+        <div class="name">
+          ${esc(g.name || g.id)}
+          <span class="tag ${status}">${label}</span>
+          <span class="tag ${mgrActive ? "active" : "suspended"}">${mgrActive ? "المدير نشط" : "المدير موقوف"}</span>
+        </div>
         <div class="meta">${esc(PLANS_LABEL[g.plan] || g.plan || "—")} · ينتهي ${fmtDate(end)}</div>
-        <div class="meta">${esc(g.ownerName || "")} ${g.ownerEmail ? "— " + esc(g.ownerEmail) : ""}</div>
+        <div class="meta">المدير: <b>${esc(g.ownerName || mgr?.name || "—")}</b> · الإيميل: <b>${esc(g.ownerEmail || mgr?.email || "—")}</b> <span class="tag ${emailValid ? "active" : "suspended"}">${emailValid ? "إيميل صحيح" : "إيميل غير صحيح"}</span></div>
         <div class="acts">
           <button class="btn ghost sm" data-act="extend">${ico("refresh", "sm")} تمديد 30 يوم</button>
-          <button class="btn ghost sm" data-act="toggle">${g.status === "suspended" ? "تفعيل" : "إيقاف"}</button>
+          <button class="btn ghost sm" data-act="toggleGym">${g.status === "suspended" ? "تفعيل الجيم" : "إيقاف الجيم"}</button>
+          ${g.ownerUid ? `<button class="btn soft sm" data-act="toggleMgr">${mgrActive ? "إيقاف حساب المدير" : "تنشيط حساب المدير"}</button>` : ""}
         </div>
       </div>`;
     }).join("")}</div>`;
 
     $$("button[data-act]", box).forEach(b => {
       b.addEventListener("click", async () => {
-        const id = b.closest(".row").dataset.id;
+        const row = b.closest(".row");
+        const id = row.dataset.id;
+        const uid = row.dataset.uid;
         const g = gyms.find(x => x.id === id);
         b.disabled = true;
         try {
-          if (b.dataset.act === "toggle") {
+          if (b.dataset.act === "toggleGym") {
             await updateDoc(doc(db, "gyms", id), { status: g.status === "suspended" ? "active" : "suspended" });
+          } else if (b.dataset.act === "toggleMgr" && uid) {
+            const curMgr = usersMap.get(uid);
+            const nextActive = curMgr ? curMgr.active === false : false;
+            await updateDoc(doc(db, "users", uid), { active: nextActive });
           } else {
             const cur = toDate(g.subscriptionEnd);
             const base = cur && cur.getTime() > Date.now() ? cur.getTime() : Date.now();
@@ -1830,7 +2143,11 @@ async function loadGyms() {
 onAuthStateChanged(auth, async user => {
   stopScanner();
   destroyCharts();
-  if (!user) { G = null; return viewLogin(); }
+  if (!user) {
+    G = null;
+    if (loginMode === "member") return;
+    return viewLogin();
+  }
   root.innerHTML = `<div class="loading">جاري التحميل…</div>`;
   try {
     const uSnap = await withTimeout(getDoc(doc(db, "users", user.uid)));
@@ -1839,7 +2156,7 @@ onAuthStateChanged(auth, async user => {
     }
     const profile = uSnap.data();
     if (profile.active !== true) {
-      return viewBlocked("الحساب موقوف", "تم إيقاف هذا الحساب. تواصل مع إدارة الجيم.");
+      return viewBlocked("الحساب موقوف", "تم إيقاف هذا الحساب. تواصل مع إدارة GymPro.");
     }
     if (profile.role === "superadmin") return viewAdmin(profile);
 
