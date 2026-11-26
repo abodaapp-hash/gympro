@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <style>
   :root {
     color-scheme: light dark;
@@ -103,6 +103,8 @@
     outline: 3px solid var(--brand); outline-offset: 2px;
   }
   .hint { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .pwrow { display: flex; gap: 8px; align-items: center; }
+  .pwrow input { flex: 1; min-width: 0; }
 
   button { font: inherit; cursor: pointer; transition: all .15s; }
   .btn {
@@ -135,6 +137,9 @@
   .msg.err { color: var(--danger); border-color: var(--danger); background: var(--bad-bg); }
   .msg.ok { color: var(--ok); border-color: var(--ok); background: var(--ok-bg); }
 
+  .cred { background: var(--brand-soft); border: 1px dashed var(--brand-border); border-radius: 14px; padding: 14px; margin-bottom: 14px; }
+  .mono { direction: ltr; unicode-bidi: plaintext; word-break: break-all; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
   .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
   .top .who { min-width: 0; }
   .top h1 { margin: 0; font-size: 20.5px; line-height: 1.3; }
@@ -152,25 +157,15 @@
     background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
     padding: 14px 16px; box-shadow: var(--shadow);
   }
-  .kpi.accent {
-    background: linear-gradient(135deg, #EA580C, #F97316);
-    color: #fff; border: 0;
-  }
+  .kpi.accent { background: linear-gradient(135deg, #EA580C, #F97316); color: #fff; border: 0; }
   .kpi.accent .kl { color: rgba(255,255,255,0.9); }
   .kpi .kl { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
   .kpi .kv { font-size: 20px; font-weight: 700; line-height: 1.2; }
 
-  /* Telecom-style Meter */
   .meter-box { margin-top: 10px; }
   .meter-top { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 6px; font-weight: 600; }
-  .meter-track {
-    width: 100%; height: 12px; background: var(--bg); border: 1px solid var(--line);
-    border-radius: 999px; overflow: hidden;
-  }
-  .meter-fill {
-    height: 100%; background: linear-gradient(90deg, #EA580C, #F97316);
-    border-radius: 999px; transition: width .35s ease;
-  }
+  .meter-track { width: 100%; height: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .meter-fill { height: 100%; background: linear-gradient(90deg, #EA580C, #F97316); border-radius: 999px; transition: width .35s ease; }
 
   .rows { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
   .row { padding: 13px 16px; border-bottom: 1px solid var(--line); }
@@ -195,17 +190,16 @@
   .loading { min-height: 100vh; display: grid; place-items: center; color: var(--muted); }
 
   .shell { min-height: 100vh; padding-bottom: calc(86px + env(safe-area-inset-bottom)); }
-  .oh {
-    background: var(--surface); border-bottom: 1px solid var(--line);
-    position: sticky; top: 0; z-index: 9;
-  }
+  .shell.notabs { padding-bottom: 24px; }
+  .oh { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 9; }
   .oh .in { max-width: 640px; margin: 0 auto; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .oh .brand-box { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .oh .mini-logo {
+  .mini-logo {
     width: 38px; height: 38px; border-radius: 11px;
     background: var(--brand); color: #fff; display: grid; place-items: center; flex: none; overflow: hidden;
   }
-  .oh .mini-logo img { width: 100%; height: 100%; object-fit: cover; }
+  .mini-logo svg { width: 22px; height: auto; }
+  .mini-logo img { width: 100%; height: 100%; object-fit: cover; }
   .oh .gname { font-weight: 700; font-size: 16px; line-height: 1.25; }
   .oh .gsub { color: var(--muted); font-size: 12px; }
   .oh .sub-pill {
@@ -232,10 +226,7 @@
     background: var(--brand); border-radius: 0 0 4px 4px;
   }
 
-  .seg {
-    display: flex; gap: 6px; background: var(--surface); padding: 5px;
-    border-radius: 14px; border: 1px solid var(--line); margin-bottom: 14px;
-  }
+  .seg { display: flex; gap: 6px; background: var(--surface); padding: 5px; border-radius: 14px; border: 1px solid var(--line); margin-bottom: 14px; }
   .seg button {
     flex: 1; border: 0; background: transparent; color: var(--muted);
     padding: 8px 10px; border-radius: 10px; font-weight: 600; font-size: 13px;
@@ -247,14 +238,11 @@
   .prod-card {
     background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
     padding: 12px; text-align: start; display: flex; flex-direction: column; justify-content: space-between;
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow); color: inherit;
   }
   .prod-card:hover:not([disabled]) { border-color: var(--brand); transform: translateY(-1px); }
   .prod-card[disabled] { opacity: 0.55; cursor: not-allowed; }
-  .prod-thumb {
-    width: 100%; height: 92px; object-fit: cover; border-radius: 10px;
-    background: var(--bg); margin-bottom: 8px; border: 1px solid var(--line);
-  }
+  .prod-thumb { width: 100%; height: 92px; object-fit: cover; border-radius: 10px; background: var(--bg); margin-bottom: 8px; border: 1px solid var(--line); }
   .prod-card .pname { font-weight: 700; font-size: 14.5px; margin: 4px 0; }
   .prod-card .pprice { font-weight: 700; color: var(--brand); font-size: 15px; }
   .prod-card .pstock { font-size: 11.5px; color: var(--muted); }
@@ -291,6 +279,8 @@
   .qrbox img { width: 200px; height: 200px; background: #fff; border-radius: 12px; padding: 8px; border: 1px solid var(--line); }
   .bigcode { font-size: 30px; font-weight: 700; letter-spacing: 3px; direction: ltr; color: var(--brand); }
 
+  .punch-btn { min-height: 64px; font-size: 18px; }
+
   .toast {
     position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(82px + env(safe-area-inset-bottom));
     background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 12px; z-index: 50;
@@ -312,11 +302,13 @@ setTimeout(function () {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {
   getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
-  createUserWithEmailAndPassword, sendPasswordResetEmail
+  createUserWithEmailAndPassword, sendPasswordResetEmail, updatePassword,
+  GoogleAuthProvider, signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   initializeFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc, collection, getDocs,
-  query, where, runTransaction, writeBatch, increment, serverTimestamp, Timestamp
+  query, where, runTransaction, writeBatch, increment, serverTimestamp, Timestamp,
+  deleteField, getCountFromServer
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -331,12 +323,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
+// نسخة ثانوية لإنشاء حسابات الدخول بدون تسجيل خروج المستخدم الحالي
 const app2 = initializeApp(firebaseConfig, "secondary");
 const auth2 = getAuth(app2);
 
 const root = document.getElementById("app");
 const DAY = 86400000;
 const PLANS_LABEL = { basic: "أساسية", pro: "متقدمة", premium: "خاصة" };
+const MEMBER_EMAIL_DOMAIN = "gympro-86c9a.web.app";
+const GYM_CODE_RE = /^[A-Za-z0-9_-]{6,40}$/;
+const ROLE_LABEL = { owner: "مدير الجيم", accountant: "محاسب", reception: "استقبال", captain: "كابتن", member: "عضو", superadmin: "مسؤول النظام" };
 
 const ICONS = {
   home: `<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>`,
@@ -374,9 +370,11 @@ const ICONS = {
   award: `<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>`,
   mapPin: `<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>`,
   creditCard: `<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>`,
-  image: `<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>`
+  image: `<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>`,
+  lock: `<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
+  copy: `<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>`,
+  shield: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`
 };
-
 const ico = (name, cls = "") => `<svg class="ico ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ""}</svg>`;
 
 /* ---------- Helpers ---------- */
@@ -407,6 +405,9 @@ const money = n => (Number(n) || 0).toLocaleString("en-US") + " ج";
 const sum = (arr, k = "amount") => arr.reduce((a, x) => a + (Number(x[k]) || 0), 0);
 const num = v => { const n = parseFloat(String(v).replace(/[^\d.]/g, "")); return isNaN(n) ? 0 : n; };
 const isValidEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(e || "").trim());
+const safeHttps = u => /^https:\/\//i.test(String(u || "").trim()) ? String(u).trim() : "";
+const csvSafe = v => { const s = String(v ?? ""); return /^[=+\-@\t\r]/.test(s) ? "'" + s : s; };
+const appLink = () => `${location.origin}${location.pathname}`;
 
 const withTimeout = (p, ms = 15000) => Promise.race([
   p, new Promise((_, rej) => setTimeout(() => rej({ code: "timeout" }), ms))
@@ -415,18 +416,25 @@ const withTimeout = (p, ms = 15000) => Promise.race([
 function errText(e) {
   const code = e?.code || "";
   const map = {
-    "auth/invalid-credential": "الإيميل أو كلمة المرور غير صحيحة.",
+    "auth/invalid-credential": "بيانات الدخول غير صحيحة.",
     "auth/invalid-email": "صيغة الإيميل غير صحيحة.",
-    "auth/user-not-found": "لا يوجد حساب بهذا الإيميل.",
+    "auth/user-not-found": "لا يوجد حساب بهذه البيانات.",
     "auth/wrong-password": "كلمة المرور غير صحيحة.",
     "auth/too-many-requests": "محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.",
     "auth/network-request-failed": "لا يوجد اتصال بالإنترنت.",
     "auth/email-already-in-use": "هذا الإيميل مستخدم بالفعل. استخدم إيميلًا آخر.",
-    "auth/weak-password": "كلمة المرور ضعيفة. استخدم 6 أحرف أو أرقام على الأقل.",
+    "auth/weak-password": "كلمة المرور ضعيفة. استخدم 8 أحرف وأرقام على الأقل.",
+    "auth/requires-recent-login": "لأسباب أمنية سجّل الدخول من جديد ثم أعد المحاولة.",
     "auth/unauthorized-domain": "هذا الرابط غير مضاف في Firebase. أضفه من Authentication ← Settings ← Authorized domains.",
-    "permission-denied": "ليس لديك صلاحية لهذه العملية. راجع قواعد الأمان.",
+    "permission-denied": "ليس لديك صلاحية لهذه العملية.",
     "unavailable": "تعذر الاتصال بقاعدة البيانات. حاول مرة أخرى.",
-    "timeout": "الاتصال بطيء أو منقطع. تأكد من الإنترنت ثم أعد المحاولة."
+    "auth/popup-blocked": "المتصفح منع نافذة جوجل. اسمح بالنوافذ المنبثقة ثم أعد المحاولة.",
+    "auth/operation-not-allowed": "تسجيل الدخول بجوجل غير مفعّل في Firebase بعد.",
+    "auth/account-exists-with-different-credential": "هذا الإيميل مسجل بطريقة دخول أخرى. ادخل بالإيميل وكلمة المرور.",
+    "timeout": "الاتصال بطيء أو منقطع. تأكد من الإنترنت ثم أعد المحاولة.",
+    "phone-invalid": "رقم الموبايل غير صالح. اكتب رقمًا صحيحًا ثم أعد المحاولة.",
+    "login-limit": "وصلت للحد الأقصى لإنشاء دخول هذا الرقم. تواصل مع الدعم.",
+    "weak-pass": e?.message || "كلمة المرور ضعيفة."
   };
   return map[code] || `تعذر إتمام العملية (${code || e?.message || "خطأ غير معروف"}).`;
 }
@@ -435,7 +443,17 @@ function toast(text) {
   const t = document.createElement("div");
   t.className = "toast"; t.setAttribute("role", "status"); t.textContent = text;
   document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2800);
+  setTimeout(() => t.remove(), 3000);
+}
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); toast("تم النسخ"); }
+  catch {
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); toast("تم النسخ"); } catch { toast("تعذر النسخ"); }
+    ta.remove();
+  }
 }
 
 const logoSvg = `
@@ -447,9 +465,16 @@ const logoSvg = `
   <rect x="57" y="9" width="5" height="14" rx="1.5"/>
 </svg>`;
 
-const gymLogoHtml = (gym, cls = "mini-logo") => gym?.logoUrl
-  ? `<div class="${cls}"><img src="${esc(gym.logoUrl)}" alt="${esc(gym.name || "شعار الجيم")}" onerror="this.style.display='none'"></div>`
-  : `<div class="${cls}">${logoSvg}</div>`;
+const gymLogoHtml = (gym, cls = "mini-logo") => {
+  const u = safeHttps(gym?.logoUrl);
+  return u
+    ? `<div class="${cls}"><img src="${esc(u)}" alt="" referrerpolicy="no-referrer" onerror="this.style.display='none'"></div>`
+    : `<div class="${cls}">${logoSvg}</div>`;
+};
+const imgTag = (url, cls, alt) => {
+  const u = safeHttps(url);
+  return u ? `<img class="${cls}" src="${esc(u)}" alt="${esc(alt || "")}" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : "";
+};
 
 const arabicDigitsToEn = s => String(s || "").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
 const normPhone = p => {
@@ -467,10 +492,51 @@ function waPhone(p) {
   if (d.startsWith("0")) d = "20" + d.slice(1);
   return d;
 }
-function waRawLink(phone, text) {
-  return `https://wa.me/${waPhone(phone)}?text=${encodeURIComponent(text)}`;
+const waRawLink = (phone, text) => `https://wa.me/${waPhone(phone)}?text=${encodeURIComponent(text)}`;
+
+/* ---------- Passwords ---------- */
+function pwError(p) {
+  if (!p || p.length < 8) return "كلمة المرور لازم تكون 8 أحرف أو أرقام على الأقل.";
+  if (!/[A-Za-z]/.test(p) || !/\d/.test(p)) return "كلمة المرور لازم تحتوي على حروف إنجليزية وأرقام.";
+  return "";
+}
+function genPassword(len = 10) {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+  for (let t = 0; t < 30; t++) {
+    const arr = new Uint32Array(len);
+    crypto.getRandomValues(arr);
+    let out = "";
+    for (let i = 0; i < len; i++) out += chars[arr[i] % chars.length];
+    if (!pwError(out)) return out;
+  }
+  return "Gp" + Date.now().toString(36).slice(-8) + "7";
+}
+function wireGen(inputSel, btnSel, scope = document) {
+  const b = $(btnSel, scope), i = $(inputSel, scope);
+  if (b && i) b.addEventListener("click", () => { i.value = genPassword(); });
+}
+const memberEmail = (gymId, phone10, ver = 0) => `${gymId}_${phone10}_${ver}@${MEMBER_EMAIL_DOMAIN}`.toLowerCase();
+
+async function createAuthUser(email, password) {
+  const cred = await createUserWithEmailAndPassword(auth2, email, password);
+  const uid = cred.user.uid;
+  await signOut(auth2);
+  return uid;
 }
 
+/* ---------- Idle auto-logout ---------- */
+const IDLE_MS = 30 * 60 * 1000;
+const IDLE_EVENTS = ["click", "keydown", "touchstart", "scroll"];
+let idleTimer = null;
+let flashMsg = "";
+const idleReset = () => {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { flashMsg = "تم تسجيل الخروج تلقائيًا لعدم النشاط."; signOut(auth); }, IDLE_MS);
+};
+function startIdle() { stopIdle(); IDLE_EVENTS.forEach(ev => window.addEventListener(ev, idleReset, { passive: true })); idleReset(); }
+function stopIdle() { clearTimeout(idleTimer); IDLE_EVENTS.forEach(ev => window.removeEventListener(ev, idleReset)); }
+
+/* ---------- Member / session math ---------- */
 function calcMemberState(m) {
   const end = toDate(m.endDate);
   if (!end) return { key: "none", label: "بدون اشتراك", left: null, end: null, pct: 0 };
@@ -486,7 +552,6 @@ function calcMemberState(m) {
 const fmtLeftText = st => st.end
   ? (st.key === "expired" ? `انتهى ${fmtDate(st.end)}` : (st.left <= 1 ? "ينتهي اليوم" : `متبقي ${st.left} يوم`))
   : "لم يشترك بعد";
-
 function sessionsText(m) {
   const left = Number(m.sessionsLeft);
   if (isNaN(left)) return "غير محدد";
@@ -495,14 +560,11 @@ function sessionsText(m) {
 }
 
 function haversineMeters(lat1, lon1, lat2, lon2) {
-  const R = 6371000;
-  const toRad = x => x * Math.PI / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
+  const R = 6371000, toRad = x => x * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
   const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
-
 function getCurrentGps() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) return reject(new Error("المتصفح لا يدعم تحديد الموقع GPS."));
@@ -522,13 +584,12 @@ function exportRevenueExcel(rows, filename) {
     const amt = Number(r.amount) || 0;
     total += amt;
     const typeLabel = r.type === "store" ? "ستور وكافتيريا" : (r.type === "balance" ? "سداد متبقي" : "اشتراك");
-    const cells = [r.date || "", typeLabel, r.memberName || "", r.note || "", amt]
+    const cells = [csvSafe(r.date), typeLabel, csvSafe(r.memberName), csvSafe(r.note), amt]
       .map(v => `"${String(v ?? "").replace(/"/g, '""')}"`);
     lines.push(cells.join(","));
   }
   lines.push(`"","","","الإجمالي","${total}"`);
-  const csv = "\uFEFF" + lines.join("\r\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url; a.download = filename;
@@ -536,7 +597,50 @@ function exportRevenueExcel(rows, filename) {
   URL.revokeObjectURL(url);
 }
 
-/* ---------- Two-Sided PDF ID Card ---------- */
+/* ---------- Credentials card (shown once, never stored) ---------- */
+function credHtml(c) {
+  return `
+  <div class="cred">
+    <div style="font-weight:700;margin-bottom:6px">${ico("lock", "sm")} ${esc(c.title)}</div>
+    ${c.rows.map(([k, v]) => `<div class="stat"><span>${esc(k)}</span><b class="mono">${esc(v)}</b></div>`).join("")}
+    <p class="hint">${ico("alert", "sm")} كلمة المرور تظهر هنا مرة واحدة فقط ولا يتم حفظها في أي مكان. انسخها أو أرسلها الآن.</p>
+    <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn sm" type="button" data-copycred>${ico("copy", "sm")} نسخ البيانات</button>
+      ${c.phone ? `<a class="btn soft sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(c.phone, c.text))}">${ico("send", "sm")} إرسال واتساب</a>` : ""}
+    </div>
+  </div>`;
+}
+function wireCred(scope, c) {
+  const b = $("[data-copycred]", scope);
+  if (b && c) b.addEventListener("click", () => copyText(c.text));
+}
+
+/* ---------- Change-password panel (all roles) ---------- */
+function pwPanelHtml() {
+  return `
+  <h2>${ico("lock")} تغيير كلمة المرور</h2>
+  <form class="panel" id="pwForm" novalidate>
+    <div class="field"><label for="np1">كلمة المرور الجديدة</label><input id="np1" type="password" dir="ltr" autocomplete="new-password" maxlength="128"></div>
+    <div class="field"><label for="np2">تأكيد كلمة المرور</label><input id="np2" type="password" dir="ltr" autocomplete="new-password" maxlength="128">
+    <div class="hint">8 أحرف على الأقل وتحتوي على حروف إنجليزية وأرقام.</div></div>
+    <button class="btn" type="submit" id="pwBtn">${ico("check")} حفظ كلمة المرور</button>
+  </form>`;
+}
+function wirePwForm(scope = document) {
+  const f = $("#pwForm", scope); if (!f) return;
+  f.addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const a = $("#np1", f).value, b = $("#np2", f).value;
+    const pe = pwError(a); if (pe) return toast(pe);
+    if (a !== b) return toast("كلمتا المرور غير متطابقتين.");
+    const btn = $("#pwBtn", f); btn.disabled = true;
+    try { await updatePassword(auth.currentUser, a); f.reset(); toast("تم تغيير كلمة المرور"); }
+    catch (e) { toast(errText(e)); }
+    finally { btn.disabled = false; }
+  });
+}
+
+/* ---------- Two-sided PDF ID card (QR holds only the member code) ---------- */
 async function downloadMemberIdPdf(gym, member, gymId) {
   const { jsPDF } = await import("https://esm.sh/jspdf@2.5.1");
   const mod = await import("https://esm.sh/qrcode@1.5.4");
@@ -555,92 +659,82 @@ async function downloadMemberIdPdf(gym, member, gymId) {
   };
 
   const frontImg = makeFace((ctx, w, h) => {
-    ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = "#EA580C";
-    ctx.fillRect(0, 0, w, 13);
-    ctx.fillStyle = "#FFF7ED";
-    ctx.beginPath();
-    ctx.arc(14, 38, 17, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.direction = "rtl";
-    ctx.textAlign = "right";
-    ctx.fillStyle = "#FFFFFF";
+    ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#EA580C"; ctx.fillRect(0, 0, w, 13);
+    ctx.fillStyle = "#FFF7ED"; ctx.beginPath(); ctx.arc(14, 38, 17, 0, Math.PI * 2); ctx.fill();
+    ctx.direction = "rtl"; ctx.textAlign = "right"; ctx.fillStyle = "#FFFFFF";
     ctx.font = "bold 4.3px 'IBM Plex Sans Arabic', sans-serif";
     ctx.fillText(gym?.name || "GymPro", w - 5, 8.2);
-
-    ctx.textAlign = "left";
-    ctx.fillStyle = "#FFEDD5";
-    ctx.font = "bold 3.3px sans-serif";
+    ctx.textAlign = "left"; ctx.fillStyle = "#FFEDD5"; ctx.font = "bold 3.3px sans-serif";
     ctx.fillText(`#${member.code || ""}`, 5, 8);
-
-    ctx.direction = "rtl";
-    ctx.textAlign = "right";
-    ctx.fillStyle = "#0F172A";
+    ctx.direction = "rtl"; ctx.textAlign = "right"; ctx.fillStyle = "#0F172A";
     ctx.font = "bold 5.8px 'IBM Plex Sans Arabic', sans-serif";
     ctx.fillText(member.name || "عضو", w - 5, 22.5);
-
-    ctx.fillStyle = "#EA580C";
-    ctx.font = "bold 3.9px 'IBM Plex Sans Arabic', sans-serif";
-    ctx.fillText(`الباقة: ${member.planName || "—"} · متبقي ${sessionsText(member)}`, w - 5, 30.5);
-
-    ctx.fillStyle = "#475569";
-    ctx.font = "3.8px 'IBM Plex Sans Arabic', sans-serif";
+    ctx.fillStyle = "#EA580C"; ctx.font = "bold 3.9px 'IBM Plex Sans Arabic', sans-serif";
+    ctx.fillText(`الباقة: ${member.planName || "—"} · ${sessionsText(member)}`, w - 5, 30.5);
+    ctx.fillStyle = "#475569"; ctx.font = "3.8px 'IBM Plex Sans Arabic', sans-serif";
     ctx.fillText(`الاشتراك: ${subText}`, w - 5, 37.5);
-
     if (member.phone) {
-      ctx.fillStyle = "#64748B";
-      ctx.font = "3.5px sans-serif";
+      ctx.fillStyle = "#64748B"; ctx.font = "3.5px sans-serif";
       ctx.fillText(`الموبايل: ${member.phone}`, w - 5, 44.5);
     }
-    ctx.fillStyle = "#F97316";
-    ctx.fillRect(0, h - 2.5, w, 2.5);
+    ctx.fillStyle = "#F97316"; ctx.fillRect(0, h - 2.5, w, 2.5);
   });
 
-  const payload = `GYMPRO|${gymId}|${member.code || member.id}|${member.password || ""}`;
-  const qrUrl = await QR.toDataURL(payload, { margin: 1, width: 320, color: { dark: "#0F172A", light: "#FFFFFF" } });
-  const qrEl = await new Promise((res, rej) => {
-    const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = qrUrl;
-  });
+  const qrUrl = await QR.toDataURL(`GYMPRO|${gymId}|${member.code || member.id}`, { margin: 1, width: 320, color: { dark: "#0F172A", light: "#FFFFFF" } });
+  const qrEl = await new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = qrUrl; });
 
   const backImg = makeFace((ctx, w, h) => {
-    ctx.fillStyle = "#FFF7ED";
-    ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(3.5, 3.5, w - 7, h - 7);
-
-    const sz = 23;
-    ctx.drawImage(qrEl, (w - sz) / 2, 5.5, sz, sz);
-
-    ctx.direction = "rtl";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#64748B";
-    ctx.font = "bold 3.4px 'IBM Plex Sans Arabic', sans-serif";
-    ctx.fillText("كلمة المرور الخاصة بالدخول", w / 2, 33.5);
-
-    ctx.fillStyle = "#EA580C";
-    ctx.font = "bold 5.4px sans-serif";
-    ctx.fillText(String(member.password || "—"), w / 2, 41);
-
-    ctx.fillStyle = "#94A3B8";
-    ctx.font = "2.9px 'IBM Plex Sans Arabic', sans-serif";
-    ctx.fillText("امسح QR لتسجيل الدخول أو استخدم الكود وكلمة المرور", w / 2, 47.5);
+    ctx.fillStyle = "#FFF7ED"; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#FFFFFF"; ctx.fillRect(3.5, 3.5, w - 7, h - 7);
+    const sz = 25;
+    ctx.drawImage(qrEl, (w - sz) / 2, 6, sz, sz);
+    ctx.direction = "rtl"; ctx.textAlign = "center";
+    ctx.fillStyle = "#EA580C"; ctx.font = "bold 5.2px sans-serif";
+    ctx.fillText(`كود العضوية ${member.code || ""}`, w / 2, 38);
+    ctx.fillStyle = "#64748B"; ctx.font = "3px 'IBM Plex Sans Arabic', sans-serif";
+    ctx.fillText("اعرض الكود عند الدخول. للدخول لحسابك استخدم رقم موبايلك وكلمة المرور", w / 2, 44);
+    ctx.fillText("التي سلّمها لك الاستقبال.", w / 2, 48.2);
   });
 
   const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: [wMm, hMm] });
   pdf.addImage(frontImg, "PNG", 0, 0, wMm, hMm);
   pdf.addPage([wMm, hMm], "landscape");
   pdf.addImage(backImg, "PNG", 0, 0, wMm, hMm);
-
   const safeName = String(member.name || "member").replace(/[^\w\u0600-\u06FF-]+/g, "_");
   pdf.save(`ID_${safeName}_${member.code || "card"}.pdf`);
 }
 
-/* ---------- Login (Staff + Fixed Member Login) ---------- */
+/* =====================================================================
+   LOGIN
+   ===================================================================== */
 let loginMode = "staff";
+let memberGymCode = "";
+let gymFromLink = false;
+(function initGymFromUrl() {
+  try {
+    const p = new URLSearchParams(location.search).get("g");
+    if (p && GYM_CODE_RE.test(p)) { memberGymCode = p; gymFromLink = true; loginMode = "member"; localStorage.setItem("gp_gym", p); }
+    else { const s = localStorage.getItem("gp_gym"); if (s && GYM_CODE_RE.test(s)) memberGymCode = s; }
+  } catch {}
+})();
+
+async function memberSignIn(gymId, phone10, password) {
+  let last = null;
+  for (let ver = 0; ver <= 2; ver++) {
+    try { await signInWithEmailAndPassword(auth, memberEmail(gymId, phone10, ver), password); return; }
+    catch (e) {
+      last = e;
+      if (["auth/invalid-credential", "auth/user-not-found", "auth/wrong-password", "auth/invalid-email"].includes(e.code)) continue;
+      throw e;
+    }
+  }
+  throw last || { code: "auth/invalid-credential" };
+}
 
 function viewLogin(message = "", okMessage = "") {
+  if (!message && flashMsg) { message = flashMsg; flashMsg = ""; }
+  const haveGym = GYM_CODE_RE.test(memberGymCode);
   root.innerHTML = `
   <div class="wrap login">
     <div class="mark">
@@ -649,7 +743,7 @@ function viewLogin(message = "", okMessage = "") {
     </div>
 
     <div class="seg" style="margin-bottom:14px">
-      <button type="button" class="${loginMode === "staff" ? "active" : ""}" id="modeStaff">${ico("building", "sm")} الإدارة / المحاسب / الاستقبال</button>
+      <button type="button" class="${loginMode === "staff" ? "active" : ""}" id="modeStaff">${ico("building", "sm")} الإدارة والموظفون</button>
       <button type="button" class="${loginMode === "member" ? "active" : ""}" id="modeMember">${ico("user", "sm")} دخول عضو</button>
     </div>
 
@@ -657,7 +751,7 @@ function viewLogin(message = "", okMessage = "") {
     ${okMessage ? `<p class="msg ok" role="status">${ico("checkCircle", "sm")} ${esc(okMessage)}</p>` : ""}
 
     ${loginMode === "staff" ? `
-      <p class="lead">دخول المدير، المحاسب، موظف الاستقبال، أو المسؤول.</p>
+      <p class="lead">دخول المدير، المحاسب، الاستقبال، الكابتن، أو مسؤول النظام.</p>
       <form class="panel" id="loginForm" novalidate>
         <div class="field">
           <label for="email">الإيميل</label>
@@ -670,17 +764,30 @@ function viewLogin(message = "", okMessage = "") {
         <button class="btn" type="submit" id="loginBtn">${ico("logout")} دخول</button>
         <button class="linkbtn" type="button" id="resetBtn">نسيت كلمة المرور؟</button>
       </form>
+      <div class="hint" style="text-align:center;margin:12px 0">أو</div>
+      <button class="btn ghost" type="button" id="googleBtn" style="width:100%;min-height:48px">${ico("user")} الدخول بحساب جوجل</button>
+      <div class="hint" style="text-align:center;margin-top:6px">للموظفين المضافين بإيميل Gmail الخاص بهم.</div>
     ` : `
-      <p class="lead">ادخل بالاسم أو رقم الموبايل وكلمة المرور لعرض عضويتك وسجل الدخول والستور والدفع.</p>
+      <p class="lead">ادخل برقم موبايلك وكلمة المرور التي سلّمها لك الجيم.</p>
       <form class="panel" id="memberLoginForm" novalidate>
         <div class="field">
-          <label for="mId">الاسم أو رقم الموبايل</label>
-          <input id="mId" autocomplete="username" required placeholder="مثال: أحمد محمود أو 01012345678">
+          <label for="mPhone">رقم الموبايل</label>
+          <input id="mPhone" type="tel" dir="ltr" inputmode="tel" autocomplete="username" placeholder="01012345678" required>
         </div>
         <div class="field">
           <label for="mPass">كلمة المرور</label>
           <input id="mPass" type="password" dir="ltr" autocomplete="current-password" required>
         </div>
+        ${haveGym ? `
+          <p class="hint" style="margin:0 0 10px">الجيم محفوظ على هذا الجهاز.
+            ${gymFromLink ? "" : `<button type="button" class="linkbtn" id="changeGym" style="padding:0">تغيير الجيم</button>`}</p>
+        ` : `
+          <div class="field">
+            <label for="mGym">كود الجيم</label>
+            <input id="mGym" dir="ltr" autocomplete="off" placeholder="موجود في الرابط الذي أرسله لك الجيم">
+            <div class="hint">الأسهل أن تفتح الرابط الذي أرسله لك الجيم وسيُملأ الكود تلقائيًا.</div>
+          </div>
+        `}
         <button class="btn" type="submit" id="mLoginBtn">${ico("user")} دخول العضو</button>
       </form>
     `}
@@ -698,206 +805,48 @@ function viewLogin(message = "", okMessage = "") {
       if (!isValidEmail(email)) return viewLogin("صيغة الإيميل غير صحيحة.");
       const btn = $("#loginBtn");
       btn.disabled = true; btn.textContent = "جاري الدخول…";
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-      } catch (e) {
-        viewLogin(errText(e));
+      try { await signInWithEmailAndPassword(auth, email, pass); }
+      catch (e) {
+        viewLogin(["auth/too-many-requests", "auth/network-request-failed"].includes(e.code) ? errText(e) : "الإيميل أو كلمة المرور غير صحيحة.");
         if ($("#email")) $("#email").value = email;
       }
     });
-
     $("#resetBtn").addEventListener("click", async () => {
       const email = $("#email").value.trim().toLowerCase();
       if (!email || !isValidEmail(email)) return viewLogin("اكتب إيميلًا صحيحًا أولًا ثم اضغط «نسيت كلمة المرور».");
-      try {
-        await sendPasswordResetEmail(auth, email);
-        viewLogin("", `أرسلنا رابط إعادة تعيين كلمة المرور إلى ${email}.`);
-      } catch (e) {
+      try { await sendPasswordResetEmail(auth, email); } catch {}
+      viewLogin("", "إذا كان الإيميل مسجلًا فسيصلك رابط إعادة تعيين كلمة المرور.");
+    });
+    $("#googleBtn").addEventListener("click", async ev => {
+      const b = ev.currentTarget; b.disabled = true;
+      try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+      catch (e) {
+        b.disabled = false;
+        if (["auth/popup-closed-by-user", "auth/cancelled-popup-request"].includes(e.code)) return;
         viewLogin(errText(e));
       }
     });
   } else {
+    const ch = $("#changeGym");
+    if (ch) ch.addEventListener("click", () => { memberGymCode = ""; try { localStorage.removeItem("gp_gym"); } catch {} viewLogin(); });
     $("#memberLoginForm").addEventListener("submit", async ev => {
       ev.preventDefault();
-      const idVal = $("#mId").value.trim();
-      const passVal = $("#mPass").value.trim();
-      if (!idVal || !passVal) return viewLogin("اكتب الاسم أو رقم الموبايل وكلمة المرور.");
-
+      const phone10 = normPhone($("#mPhone").value);
+      const pass = $("#mPass").value;
+      const gym = GYM_CODE_RE.test(memberGymCode) ? memberGymCode : ($("#mGym")?.value.trim() || "");
+      if (!GYM_CODE_RE.test(gym)) return viewLogin("كود الجيم غير صحيح. افتح الرابط الذي أرسله لك الجيم.");
+      if (phone10.length < 9 || !pass) return viewLogin("اكتب رقم الموبايل وكلمة المرور.");
       const btn = $("#mLoginBtn");
-      btn.disabled = true; btn.textContent = "جاري البحث…";
+      btn.disabled = true; btn.textContent = "جاري الدخول…";
       try {
-        const gymsSnap = await getDocs(collection(db, "gyms"));
-        const inputPhone = normPhone(idVal);
-        const inputName = normName(idVal);
-
-        for (const gDoc of gymsSnap.docs) {
-          const gid = gDoc.id;
-          const gym = gDoc.data();
-          const mSnap = await getDocs(collection(db, "gyms", gid, "members"));
-          const matched = mSnap.docs.map(d => ({ id: d.id, ...d.data() })).find(m => {
-            const mPhone = normPhone(m.phone);
-            const mName = normName(m.name);
-            const matchByPhone = inputPhone.length >= 8 && mPhone === inputPhone;
-            const matchByName = inputName.length >= 2 && mName === inputName;
-            const passOk = String(m.password ?? "").trim() === passVal;
-            return (matchByPhone || matchByName) && passOk;
-          });
-
-          if (matched) {
-            const [attSnap, paySnap, prodsSnap] = await Promise.all([
-              getDocs(query(collection(db, "gyms", gid, "attendance"), where("memberId", "==", matched.id))),
-              getDocs(query(collection(db, "gyms", gid, "payments"), where("memberId", "==", matched.id))),
-              getDocs(collection(db, "gyms", gid, "products"))
-            ]);
-            const logs = attSnap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
-            const paidTotal = sum(paySnap.docs.map(d => d.data()));
-            const products = prodsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-            return renderMemberPortal(gid, gym, matched, logs, paidTotal, products);
-          }
-        }
-        viewLogin("الاسم أو رقم الموبايل أو كلمة المرور غير صحيحة.");
+        await memberSignIn(gym, phone10, pass);
+        memberGymCode = gym;
+        try { localStorage.setItem("gp_gym", gym); } catch {}
       } catch (e) {
-        viewLogin(errText(e));
+        viewLogin(["auth/too-many-requests", "auth/network-request-failed"].includes(e.code) ? errText(e) : "رقم الموبايل أو كلمة المرور غير صحيحة.");
       }
     });
   }
-}
-
-/* ---------- Member Portal (Meter + Paid + Logs + Store + Pay Links) ---------- */
-let memberPortalTab = "card";
-
-async function renderMemberPortal(gymId, gym, member, logs, paidTotal, products) {
-  const st = calcMemberState(member);
-  let qrImgHtml = `<div class="bigcode">${esc(member.code)}</div>`;
-  try {
-    const mod = await import("https://esm.sh/qrcode@1.5.4");
-    const QR = mod.default || mod;
-    const payload = `GYMPRO|${gymId}|${member.code || member.id}|${member.password || ""}`;
-    const url = await QR.toDataURL(payload, { margin: 1, width: 320 });
-    qrImgHtml = `<img src="${url}" alt="كود QR للعضو ${esc(member.name)}">`;
-  } catch {}
-
-  const instapay = gym.instapay || "";
-  const vodafone = gym.vodafoneCash || "";
-  const orange = gym.orangeCash || "";
-
-  root.innerHTML = `
-  <div class="shell">
-    <header class="oh"><div class="in">
-      <div class="brand-box">
-        ${gymLogoHtml(gym)}
-        <div>
-          <div class="gname">${esc(gym.name || "الجيم")}</div>
-          <div class="gsub">${esc(member.name)} · كود ${esc(member.code)}</div>
-        </div>
-      </div>
-      <button class="btn ghost sm" id="mOutBtn">${ico("logout", "sm")} خروج</button>
-    </div></header>
-
-    <main class="wrap">
-      <div class="seg">
-        <button type="button" class="${memberPortalTab === "card" ? "active" : ""}" data-mpt="card">${ico("user", "sm")} العضوية</button>
-        <button type="button" class="${memberPortalTab === "store" ? "active" : ""}" data-mpt="store">${ico("store", "sm")} الستور</button>
-        <button type="button" class="${memberPortalTab === "pay" ? "active" : ""}" data-mpt="pay">${ico("creditCard", "sm")} الدفع</button>
-      </div>
-
-      ${memberPortalTab === "card" ? `
-        <div class="panel">
-          <div class="top" style="margin-bottom:10px">
-            <div class="who">
-              <h1 style="font-size:18px">${esc(member.name)}</h1>
-              <div class="sub">الباقة: ${esc(member.planName || "—")}</div>
-            </div>
-            <span class="tag ${st.key}">${st.label}</span>
-          </div>
-
-          <div class="meter-box">
-            <div class="meter-top">
-              <span>المتبقي في مدة الاشتراك</span>
-              <span>${st.pct}% (${esc(fmtLeftText(st))})</span>
-            </div>
-            <div class="meter-track"><div class="meter-fill" style="width:${st.pct}%"></div></div>
-          </div>
-
-          <div class="stat" style="margin-top:12px"><span>التمارين المتبقية</span><b>${esc(sessionsText(member))}</b></div>
-          <div class="stat"><span>إجمالي المدفوع</span><b>${money(paidTotal)}</b></div>
-          <div class="stat"><span>المتبقي عليه</span><b class="${Number(member.balance) > 0 ? "due" : ""}">${money(member.balance)}</b></div>
-          <div class="stat"><span>تاريخ الانتهاء</span><b>${st.end ? fmtDate(st.end) : "—"}</b></div>
-        </div>
-
-        <div class="panel qrbox" style="margin-top:14px">
-          <div style="font-weight:700;margin-bottom:8px">كود الدخول السريع</div>
-          ${qrImgHtml}
-          <div class="bigcode" style="margin-top:8px">${esc(member.code)}</div>
-        </div>
-
-        <h2>${ico("clock")} سجل دخول الجيم (${logs.length})</h2>
-        <div class="rows">
-          ${logs.length ? logs.slice(0, 30).map(l => `
-            <div class="row">
-              <div class="name">تم تسجيل الدخول</div>
-              <div class="meta">${esc(fmtDateTime(toDate(l.ts)) || l.date || "")}</div>
-            </div>
-          `).join("") : `<div class="empty">لا يوجد سجل دخول بعد.</div>`}
-        </div>
-      ` : ""}
-
-      ${memberPortalTab === "store" ? `
-        <h2>${ico("store")} منتجات وعروض الجيم والكافتيريا</h2>
-        ${products.length ? `
-          <div class="prod-grid">
-            ${products.map(p => `
-              <div class="prod-card">
-                <div>
-                  ${p.imgUrl ? `<img class="prod-thumb" src="${esc(p.imgUrl)}" alt="${esc(p.name)}" onerror="this.style.display='none'">` : ""}
-                  <span class="tag cat">${ico(p.category === "cafe" ? "coffee" : "dumbbell", "sm")} ${p.category === "cafe" ? "الكافتيريا" : "منتجات الجيم"}</span>
-                  <div class="pname">${esc(p.name)}</div>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-                  <span class="pprice">${money(p.price)}</span>
-                  <span class="pstock">${(Number(p.stock) || 0) > 0 ? `متوفر (${p.stock})` : "غير متوفر"}</span>
-                </div>
-              </div>
-            `).join("")}
-          </div>
-        ` : `<div class="panel empty">لا توجد منتجات متاحة في الستور حاليًا.</div>`}
-      ` : ""}
-
-      ${memberPortalTab === "pay" ? `
-        <h2>${ico("creditCard")} طرق الدفع المتاحة</h2>
-        <div class="panel">
-          <div class="stat"><span>المستحق عليك حاليًا</span><b class="${Number(member.balance) > 0 ? "due" : ""}">${money(member.balance)}</b></div>
-
-          <div class="field" style="margin-top:14px">
-            <label>إنستا باي (InstaPay)</label>
-            ${instapay ? `<div class="meta" style="margin-bottom:8px">البيانات: <b>${esc(instapay)}</b></div>
-            <a class="btn" target="_blank" rel="noopener" href="${esc(instapay.startsWith("http") ? instapay : `https://ipn.eg/${instapay}`)}">${ico("creditCard")} فتح إنستا باي</a>`
-            : `<p class="hint">لم يتم إضافة رابط إنستا باي للجيم بعد.</p>`}
-          </div>
-
-          <div class="field" style="margin-top:14px">
-            <label>فودافون كاش (Vodafone Cash)</label>
-            ${vodafone ? `<div class="meta" style="margin-bottom:8px">الرقم / الرابط: <b>${esc(vodafone)}</b></div>
-            <a class="btn soft" target="_blank" rel="noopener" href="${esc(vodafone.startsWith("http") ? vodafone : `https://wa.me/${waPhone(vodafone)}`)}">${ico("phone")} تواصل / دفع فودافون كاش</a>`
-            : `<p class="hint">لم يتم إضافة رقم/رابط فودافون كاش للجيم بعد.</p>`}
-          </div>
-
-          <div class="field" style="margin-top:14px">
-            <label>أورانج كاش (Orange Cash)</label>
-            ${orange ? `<div class="meta" style="margin-bottom:8px">الرقم / الرابط: <b>${esc(orange)}</b></div>
-            <a class="btn ghost" target="_blank" rel="noopener" href="${esc(orange.startsWith("http") ? orange : `https://wa.me/${waPhone(orange)}`)}">${ico("phone")} تواصل / دفع أورانج كاش</a>`
-            : `<p class="hint">لم يتم إضافة رقم/رابط أورانج كاش للجيم بعد.</p>`}
-          </div>
-        </div>
-      ` : ""}
-    </main>
-  </div>`;
-
-  $("#mOutBtn").addEventListener("click", () => { loginMode = "member"; viewLogin(); });
-  $$("[data-mpt]").forEach(b => b.addEventListener("click", () => {
-    memberPortalTab = b.dataset.mpt;
-    renderMemberPortal(gymId, gym, member, logs, paidTotal, products);
-  }));
 }
 
 function viewBlocked(title, text, retry = false) {
@@ -916,10 +865,165 @@ function viewBlocked(title, text, retry = false) {
 }
 
 /* =====================================================================
-   GYM APP (Owner / Accountant / Reception)
+   MEMBER PORTAL (Firebase Auth session, phone login)
+   ===================================================================== */
+async function startMember(uid, profile) {
+  const gid = profile.gymId, mid = profile.memberId;
+  root.innerHTML = `<div class="loading">جاري تحميل عضويتك…</div>`;
+  try {
+    const [mSnap, pubSnap, attSnap, paySnap, prodsSnap] = await withTimeout(Promise.all([
+      getDoc(doc(db, "gyms", gid, "members", mid)),
+      getDoc(doc(db, "gyms", gid, "meta", "public")),
+      getDocs(query(collection(db, "gyms", gid, "attendance"), where("memberId", "==", mid))),
+      getDocs(query(collection(db, "gyms", gid, "payments"), where("memberId", "==", mid))),
+      getDocs(collection(db, "gyms", gid, "products"))
+    ]), 20000);
+    if (!mSnap.exists()) return viewBlocked("العضوية غير موجودة", "لم نجد بيانات عضويتك. تواصل مع الاستقبال.");
+    const logs = attSnap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
+    renderMemberPortal({
+      gymId: gid,
+      pub: { name: profile.gymName || "الجيم", ...(pubSnap.exists() ? pubSnap.data() : {}) },
+      member: { id: mSnap.id, ...mSnap.data() },
+      logs, paidTotal: sum(paySnap.docs.map(d => d.data())),
+      products: prodsSnap.docs.map(d => ({ id: d.id, ...d.data() })),
+      tab: "card"
+    });
+  } catch (e) {
+    viewBlocked("تعذر تحميل بياناتك", errText(e), true);
+  }
+}
+
+async function renderMemberPortal(ctx) {
+  const { gymId, pub, member, logs, paidTotal, products, tab } = ctx;
+  const st = calcMemberState(member);
+  let qrImgHtml = `<div class="bigcode">${esc(member.code)}</div>`;
+  if (tab === "card") {
+    try {
+      const mod = await import("https://esm.sh/qrcode@1.5.4");
+      const QR = mod.default || mod;
+      const url = await QR.toDataURL(`GYMPRO|${gymId}|${member.code || member.id}`, { margin: 1, width: 320 });
+      qrImgHtml = `<img src="${url}" alt="كود QR للعضو ${esc(member.name)}">`;
+    } catch {}
+  }
+
+  const payLink = (val, fallback) => {
+    const v = String(val || "").trim();
+    if (!v) return "";
+    return /^https:\/\//i.test(v) ? v : fallback(v);
+  };
+  const instapay = String(pub.instapay || "").trim();
+  const vodafone = String(pub.vodafoneCash || "").trim();
+  const orange = String(pub.orangeCash || "").trim();
+
+  root.innerHTML = `
+  <div class="shell">
+    <header class="oh"><div class="in">
+      <div class="brand-box">
+        ${gymLogoHtml(pub)}
+        <div>
+          <div class="gname">${esc(pub.name || "الجيم")}</div>
+          <div class="gsub">${esc(member.name)} · كود ${esc(member.code)}</div>
+        </div>
+      </div>
+      <button class="btn ghost sm" id="mOutBtn">${ico("logout", "sm")} خروج</button>
+    </div></header>
+
+    <main class="wrap">
+      <div class="seg">
+        <button type="button" class="${tab === "card" ? "active" : ""}" data-mpt="card">${ico("user", "sm")} العضوية</button>
+        <button type="button" class="${tab === "store" ? "active" : ""}" data-mpt="store">${ico("store", "sm")} الستور</button>
+        <button type="button" class="${tab === "pay" ? "active" : ""}" data-mpt="pay">${ico("creditCard", "sm")} الدفع</button>
+        <button type="button" class="${tab === "acct" ? "active" : ""}" data-mpt="acct">${ico("lock", "sm")} حسابي</button>
+      </div>
+
+      ${tab === "card" ? `
+        <div class="panel">
+          <div class="top" style="margin-bottom:10px">
+            <div class="who"><h1 style="font-size:18px">${esc(member.name)}</h1><div class="sub">الباقة: ${esc(member.planName || "—")}</div></div>
+            <span class="tag ${st.key}">${st.label}</span>
+          </div>
+          <div class="meter-box">
+            <div class="meter-top"><span>المتبقي في مدة الاشتراك</span><span>${st.pct}% (${esc(fmtLeftText(st))})</span></div>
+            <div class="meter-track"><div class="meter-fill" style="width:${st.pct}%"></div></div>
+          </div>
+          <div class="stat" style="margin-top:12px"><span>التمارين المتبقية</span><b>${esc(sessionsText(member))}</b></div>
+          <div class="stat"><span>إجمالي المدفوع</span><b>${money(paidTotal)}</b></div>
+          <div class="stat"><span>المتبقي عليك</span><b class="${Number(member.balance) > 0 ? "due" : ""}">${money(member.balance)}</b></div>
+          <div class="stat"><span>تاريخ الانتهاء</span><b>${st.end ? fmtDate(st.end) : "—"}</b></div>
+        </div>
+
+        <div class="panel qrbox" style="margin-top:14px">
+          <div style="font-weight:700;margin-bottom:8px">كود الدخول السريع</div>
+          ${qrImgHtml}
+          <div class="bigcode" style="margin-top:8px">${esc(member.code)}</div>
+        </div>
+
+        <h2>${ico("clock")} سجل دخول الجيم (${logs.length})</h2>
+        <div class="rows">
+          ${logs.length ? logs.slice(0, 30).map(l => `
+            <div class="row"><div class="name">تم تسجيل الدخول</div><div class="meta">${esc(fmtDateTime(toDate(l.ts)))}</div></div>
+          `).join("") : `<div class="empty">لا يوجد سجل دخول بعد.</div>`}
+        </div>
+      ` : ""}
+
+      ${tab === "store" ? `
+        <h2>${ico("store")} منتجات وعروض الجيم والكافتيريا</h2>
+        ${products.length ? `
+          <div class="prod-grid">
+            ${products.map(p => `
+              <div class="prod-card">
+                <div>
+                  ${imgTag(p.imgUrl, "prod-thumb", p.name)}
+                  <span class="tag cat">${ico(p.category === "cafe" ? "coffee" : "dumbbell", "sm")} ${p.category === "cafe" ? "الكافتيريا" : "منتجات الجيم"}</span>
+                  <div class="pname">${esc(p.name)}</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+                  <span class="pprice">${money(p.price)}</span>
+                  <span class="pstock">${(Number(p.stock) || 0) > 0 ? `متوفر (${esc(p.stock)})` : "غير متوفر"}</span>
+                </div>
+              </div>`).join("")}
+          </div>` : `<div class="panel empty">لا توجد منتجات متاحة حاليًا.</div>`}
+      ` : ""}
+
+      ${tab === "pay" ? `
+        <h2>${ico("creditCard")} طرق الدفع المتاحة</h2>
+        <div class="panel">
+          <div class="stat"><span>المستحق عليك حاليًا</span><b class="${Number(member.balance) > 0 ? "due" : ""}">${money(member.balance)}</b></div>
+          <div class="field" style="margin-top:14px">
+            <label>إنستا باي (InstaPay)</label>
+            ${instapay ? `<div class="meta" style="margin-bottom:8px">البيانات: <b>${esc(instapay)}</b></div>
+              <a class="btn" target="_blank" rel="noopener noreferrer" href="${esc(payLink(instapay, v => `https://ipn.eg/${encodeURIComponent(v)}`))}">${ico("creditCard")} فتح إنستا باي</a>`
+              : `<p class="hint">لم يضف الجيم بيانات إنستا باي بعد.</p>`}
+          </div>
+          <div class="field" style="margin-top:14px">
+            <label>فودافون كاش</label>
+            ${vodafone ? `<div class="meta" style="margin-bottom:8px">الرقم: <b>${esc(vodafone)}</b></div>
+              <a class="btn soft" target="_blank" rel="noopener noreferrer" href="${esc(payLink(vodafone, v => `https://wa.me/${waPhone(v)}`))}">${ico("phone")} تواصل للدفع</a>`
+              : `<p class="hint">لم يضف الجيم رقم فودافون كاش بعد.</p>`}
+          </div>
+          <div class="field" style="margin-top:14px">
+            <label>أورانج كاش</label>
+            ${orange ? `<div class="meta" style="margin-bottom:8px">الرقم: <b>${esc(orange)}</b></div>
+              <a class="btn ghost" target="_blank" rel="noopener noreferrer" href="${esc(payLink(orange, v => `https://wa.me/${waPhone(v)}`))}">${ico("phone")} تواصل للدفع</a>`
+              : `<p class="hint">لم يضف الجيم رقم أورانج كاش بعد.</p>`}
+          </div>
+        </div>
+      ` : ""}
+
+      ${tab === "acct" ? `${pwPanelHtml()}` : ""}
+    </main>
+  </div>`;
+
+  $("#mOutBtn").addEventListener("click", () => signOut(auth));
+  $$("[data-mpt]").forEach(b => b.addEventListener("click", () => renderMemberPortal({ ...ctx, tab: b.dataset.mpt })));
+  wirePwForm();
+}
+
+/* =====================================================================
+   GYM STAFF APP (owner / accountant / reception)
    ===================================================================== */
 const S = {
-  tab: "home", sub: null, filter: "all", q: "",
+  tab: "home", sub: null, filter: "all", q: "", editPlan: null, cred: null,
   storeTab: "pos", storeCat: "all", cart: [], editProd: null,
   broadcastTarget: "all", broadcastMsg: "", broadcastIdx: 0
 };
@@ -935,32 +1039,16 @@ let charts = [];
 const col = name => collection(db, "gyms", G.gymId, name);
 const ref = (name, id) => doc(db, "gyms", G.gymId, name, id);
 const role = () => G?.profile?.role || "owner";
+const isOwner = () => role() === "owner";
 const isAccountant = () => role() === "accountant";
 const isReception = () => role() === "reception";
 
-function destroyCharts() {
-  charts.forEach(c => { try { c.destroy(); } catch {} });
-  charts = [];
-}
+function destroyCharts() { charts.forEach(c => { try { c.destroy(); } catch {} }); charts = []; }
 
-async function loadMembers() {
-  const snap = await getDocs(col("members"));
-  MEMBERS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-}
-async function loadPlans() {
-  const snap = await getDocs(col("plans"));
-  PLANS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  PLANS.sort((a, b) => (a.days || 0) - (b.days || 0));
-}
-async function loadProducts() {
-  const snap = await getDocs(col("products"));
-  PRODUCTS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  PRODUCTS.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
-}
-async function loadCaptains() {
-  const snap = await getDocs(col("captains"));
-  CAPTAINS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-}
+async function loadMembers() { const s = await getDocs(col("members")); MEMBERS = s.docs.map(d => ({ id: d.id, ...d.data() })); }
+async function loadPlans() { const s = await getDocs(col("plans")); PLANS = s.docs.map(d => ({ id: d.id, ...d.data() })); PLANS.sort((a, b) => (a.days || 0) - (b.days || 0)); }
+async function loadProducts() { const s = await getDocs(col("products")); PRODUCTS = s.docs.map(d => ({ id: d.id, ...d.data() })); PRODUCTS.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar")); }
+async function loadCaptains() { const s = await getDocs(col("captains")); CAPTAINS = s.docs.map(d => ({ id: d.id, ...d.data() })); }
 
 function reminderText(m) {
   const st = calcMemberState(m);
@@ -971,47 +1059,34 @@ function reminderText(m) {
 }
 
 function stopScanner() {
-  if (scanner) {
-    const s = scanner; scanner = null;
-    s.stop().then(() => s.clear()).catch(() => {});
-  }
+  if (scanner) { const s = scanner; scanner = null; s.stop().then(() => s.clear()).catch(() => {}); }
 }
 
 function nav(tab, sub = null) {
-  stopScanner();
-  destroyCharts();
+  stopScanner(); destroyCharts();
   if (tab) S.tab = tab;
   S.sub = sub;
   renderOwner();
   window.scrollTo(0, 0);
 }
 
+function tabsForRole() {
+  const r = role();
+  if (r === "accountant") return [["money", "المالية", "chart"], ["settings", "حسابي", "settings"]];
+  if (r === "reception") return [["members", "الأعضاء", "users"], ["checkin", "الحضور", "qr"], ["store", "الستور", "store"], ["settings", "حسابي", "settings"]];
+  return [
+    ["home", "الرئيسية", "home"], ["members", "الأعضاء", "users"], ["checkin", "الحضور", "qr"],
+    ["captains", "الكباتن", "mapPin"], ["store", "الستور", "store"], ["broadcast", "التغذية", "send"],
+    ["money", "المالية", "chart"], ["settings", "الإعدادات", "settings"]
+  ];
+}
+
 function renderOwner() {
   RT++;
   const tok = RT;
-  const hideMoney = Boolean(G.gym.hideMoneyForStaff) && !isAccountant() && role() !== "owner";
-  const hideSettings = Boolean(G.gym.hideSettingsForStaff) && role() !== "owner";
-
-  let tabs = [];
-  if (isAccountant()) {
-    tabs = [["money", "المالية", "chart"], ["settings", "الحساب", "settings"]];
-  } else {
-    tabs = [
-      ["home", "الرئيسية", "home"],
-      ["members", "الأعضاء", "users"],
-      ["checkin", "الحضور", "qr"],
-      ["captains", "الكباتن", "mapPin"],
-      ["store", "الستور", "store"],
-      ["broadcast", "التغذية", "send"]
-    ];
-    if (!hideMoney) tabs.push(["money", "المالية", "chart"]);
-    if (!hideSettings) tabs.push(["settings", "الإعدادات", "settings"]);
-  }
-
+  const tabs = tabsForRole();
   if (!tabs.some(t => t[0] === S.tab)) S.tab = tabs[0][0];
-
   const end = toDate(G.gym.subscriptionEnd);
-  const roleLabel = isAccountant() ? "محاسب" : (isReception() ? "استقبال" : "مدير الجيم");
 
   root.innerHTML = `
   <div class="shell">
@@ -1020,10 +1095,10 @@ function renderOwner() {
         ${gymLogoHtml(G.gym)}
         <div>
           <div class="gname">${esc(G.gym.name || "الجيم")}</div>
-          <div class="gsub">${esc(G.profile.name || "")} · ${roleLabel}</div>
+          <div class="gsub">${esc(G.profile.name || "")} · ${esc(ROLE_LABEL[role()] || "")}</div>
         </div>
       </div>
-      ${end ? `<div class="sub-pill">حتى ${fmtDate(end)}</div>` : ""}
+      ${end && isOwner() ? `<div class="sub-pill">حتى ${fmtDate(end)}</div>` : ""}
     </div></header>
     <main id="main" class="wrap"></main>
     <nav class="tabs" aria-label="التنقل">
@@ -1036,28 +1111,27 @@ function renderOwner() {
   return SCREENS[S.tab](main, tok);
 }
 
-/* ---------- Member Row ---------- */
+/* ---------- Member row ---------- */
 function memberRowHtml(m, opts = {}) {
   const st = calcMemberState(m);
   const due = Number(m.balance) > 0 ? `<span class="due"> · عليه ${money(m.balance)}</span>` : "";
-  const lastIn = toDate(m.lastCheckinAt);
   const wa = (opts.wa && m.phone)
-    ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
+    ? `<a class="btn ghost sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
   return `
   <div class="mrow" data-id="${esc(m.id)}">
     <button class="mmain" data-open="${esc(m.id)}">
       <div class="name">${esc(m.name)} <span class="tag ${st.key}">${st.label}</span></div>
-      <div class="meta">كود ${esc(m.code)} · باقي ${esc(sessionsText(m))} · ${esc(fmtLeftText(st))}${due}</div>
-      <div class="meta">آخر دخول: ${esc(fmtDateTime(lastIn))}</div>
+      <div class="meta">كود ${esc(m.code)} · ${esc(sessionsText(m))} · ${esc(fmtLeftText(st))}${due}</div>
+      <div class="meta">آخر دخول: ${esc(fmtDateTime(toDate(m.lastCheckinAt)))}</div>
     </button>
     <div class="side">${wa}</div>
   </div>`;
 }
-function wireOpen(root_) {
-  $$("[data-open]", root_).forEach(b => b.addEventListener("click", () => nav(null, { type: "member", id: b.dataset.open })));
+function wireOpen(scope) {
+  $$("[data-open]", scope).forEach(b => b.addEventListener("click", () => nav(null, { type: "member", id: b.dataset.open })));
 }
 
-/* ---------- Home ---------- */
+/* ---------- Home (owner) ---------- */
 async function screenHome(main, tok) {
   main.innerHTML = `<p class="muted">جاري التحميل…</p>`;
   let att, pay, exp;
@@ -1088,14 +1162,8 @@ async function screenHome(main, tok) {
   main.innerHTML = `
   <h2>${ico("trendingUp")} ملخص اليوم</h2>
   <div class="kpi-grid">
-    <div class="kpi accent">
-      <div class="kl">${ico("wallet", "sm")} إيراد اليوم</div>
-      <div class="kv">${money(todayRev)}</div>
-    </div>
-    <div class="kpi">
-      <div class="kl">${ico("qr", "sm")} حضور اليوم</div>
-      <div class="kv">${att.size}</div>
-    </div>
+    <div class="kpi accent"><div class="kl">${ico("wallet", "sm")} إيراد اليوم</div><div class="kv">${money(todayRev)}</div></div>
+    <div class="kpi"><div class="kl">${ico("qr", "sm")} حضور اليوم</div><div class="kv">${att.size}</div></div>
   </div>
 
   <h2>${ico("users")} الأعضاء</h2>
@@ -1120,17 +1188,14 @@ async function screenHome(main, tok) {
   wireOpen(main);
 }
 
-/* ---------- Members ---------- */
+/* ---------- Members list ---------- */
 function screenMembers(main) {
   main.innerHTML = `
   <div class="toolbar">
     <input id="q" type="search" placeholder="بحث بالاسم أو الموبايل أو الكود" value="${esc(S.q)}">
     <select id="flt" aria-label="تصفية">
-      <option value="all">الكل</option>
-      <option value="active">ساري</option>
-      <option value="soon">ينتهي قريبًا</option>
-      <option value="expired">منتهي</option>
-      <option value="owing">عليه مبلغ</option>
+      <option value="all">الكل</option><option value="active">ساري</option><option value="soon">ينتهي قريبًا</option>
+      <option value="expired">منتهي</option><option value="owing">عليه مبلغ</option>
     </select>
   </div>
   <button class="btn" id="newMember" style="margin-bottom:14px">${ico("userPlus")} عضو جديد</button>
@@ -1138,12 +1203,10 @@ function screenMembers(main) {
   $("#flt").value = S.filter;
 
   const draw = () => {
-    const q = normName(S.q);
-    const digits = normPhone(S.q);
+    const q = normName(S.q), digits = normPhone(S.q);
     let list = MEMBERS.filter(m => {
       if (!q) return true;
-      return normName(m.name).includes(q)
-        || (digits && (String(m.code) === digits || normPhone(m.phone).includes(digits)));
+      return normName(m.name).includes(q) || (digits && (String(m.code) === digits || normPhone(m.phone).includes(digits)));
     });
     list = list.filter(m => {
       const st = calcMemberState(m);
@@ -1165,33 +1228,20 @@ function screenMembers(main) {
   draw();
 }
 
+/* ---------- Plan fields (new member / renew) ---------- */
 function planFieldsHtml(defaultStart) {
-  if (!PLANS.length) {
-    return `<p class="msg err">${ico("alert", "sm")} لا توجد باقات اشتراك. أضف باقة من تبويب «الإعدادات» أولًا.</p>`;
-  }
+  if (!PLANS.length) return `<p class="msg err">${ico("alert", "sm")} لا توجد باقات اشتراك. اطلب من المدير إضافة باقة من «الإعدادات».</p>`;
   return `
   <div class="field">
     <label for="pf-plan">الباقة</label>
-    <select id="pf-plan">${PLANS.map(p => `<option value="${esc(p.id)}">${esc(p.name)} — ${p.days} يوم — ${p.sessions || 30} تمرينة — ${money(p.price)}</option>`).join("")}</select>
+    <select id="pf-plan">${PLANS.map(p => `<option value="${esc(p.id)}">${esc(p.name)} — ${esc(p.days)} يوم — ${esc(p.sessions || 30)} تمرينة — ${money(p.price)}</option>`).join("")}</select>
   </div>
-  <div class="field">
-    <label for="pf-start">تاريخ بداية الاشتراك</label>
-    <input id="pf-start" type="date" dir="ltr" value="${esc(defaultStart)}">
-  </div>
+  <div class="field"><label for="pf-start">تاريخ بداية الاشتراك</label><input id="pf-start" type="date" dir="ltr" value="${esc(defaultStart)}"></div>
   <div class="two">
-    <div class="field">
-      <label for="pf-price">السعر</label>
-      <input id="pf-price" type="number" inputmode="decimal" min="0" dir="ltr">
-    </div>
-    <div class="field">
-      <label for="pf-paid">المدفوع الآن</label>
-      <input id="pf-paid" type="number" inputmode="decimal" min="0" dir="ltr">
-    </div>
+    <div class="field"><label for="pf-price">السعر</label><input id="pf-price" type="number" inputmode="decimal" min="0" dir="ltr"></div>
+    <div class="field"><label for="pf-paid">المدفوع الآن</label><input id="pf-paid" type="number" inputmode="decimal" min="0" dir="ltr"></div>
   </div>
-  <div class="field">
-    <label for="pf-sess">عدد التمارين في الباقة</label>
-    <input id="pf-sess" type="number" inputmode="numeric" min="1" dir="ltr" value="30">
-  </div>
+  <div class="field"><label for="pf-sess">عدد التمارين في الباقة</label><input id="pf-sess" type="number" inputmode="numeric" min="1" dir="ltr" value="30"></div>
   <p class="hint" id="pf-rem"></p>`;
 }
 function wirePlanFields(box) {
@@ -1203,21 +1253,17 @@ function wirePlanFields(box) {
   };
   const fill = () => {
     const p = PLANS.find(x => x.id === sel.value);
-    price.value = p ? p.price : 0;
-    paid.value = p ? p.price : 0;
+    price.value = p ? p.price : 0; paid.value = p ? p.price : 0;
     if (sess && p) sess.value = p.sessions || 30;
     upd();
   };
-  sel.addEventListener("change", fill);
-  price.addEventListener("input", upd);
-  paid.addEventListener("input", upd);
+  sel.addEventListener("change", fill); price.addEventListener("input", upd); paid.addEventListener("input", upd);
   fill();
 }
 function readPlanFields(box) {
   const plan = PLANS.find(x => x.id === $("#pf-plan", box)?.value);
   const start = $("#pf-start", box)?.value;
-  const price = num($("#pf-price", box)?.value);
-  const paid = num($("#pf-paid", box)?.value);
+  const price = num($("#pf-price", box)?.value), paid = num($("#pf-paid", box)?.value);
   const sessions = Math.max(1, Math.round(num($("#pf-sess", box)?.value) || plan?.sessions || 30));
   if (!plan) throw new Error("اختر باقة.");
   if (!start) throw new Error("اختر تاريخ البداية.");
@@ -1226,23 +1272,59 @@ function readPlanFields(box) {
   return { plan, start, price, paid, sessions, startTs: Timestamp.fromDate(parseYmd(start)), end: endOfDay(endStr) };
 }
 
+/* ---------- Member login provisioning (phone + generated password) ---------- */
+async function provisionMemberLogin(m, password) {
+  const phone10 = normPhone(m.phone);
+  if (phone10.length < 9) throw { code: "phone-invalid" };
+  const pe = pwError(password);
+  if (pe) throw { code: "weak-pass", message: pe };
+  let uid = null, ver = 0, email = "";
+  for (ver = 0; ver <= 2; ver++) {
+    email = memberEmail(G.gymId, phone10, ver);
+    try { uid = await createAuthUser(email, password); break; }
+    catch (e) { if (e.code === "auth/email-already-in-use") continue; throw e; }
+  }
+  if (!uid) throw { code: "login-limit" };
+  const batch = writeBatch(db);
+  batch.set(doc(db, "users", uid), {
+    name: m.name, role: "member", active: true, gymId: G.gymId, gymName: G.gym.name || "",
+    memberId: m.id, loginVer: ver, email, createdAt: serverTimestamp(), createdBy: G.uid
+  });
+  batch.update(ref("members", m.id), { loginUid: uid, loginVer: ver, loginPhone: phone10 });
+  if (m.loginUid) batch.update(doc(db, "users", m.loginUid), { active: false });
+  await batch.commit();
+  m.loginUid = uid; m.loginVer = ver; m.loginPhone = phone10;
+}
+function memberCredDescriptor(m, pass) {
+  const link = `${appLink()}?g=${encodeURIComponent(G.gymId)}`;
+  const phone10 = normPhone(m.phone);
+  const text = `أهلًا ${m.name}، بيانات دخولك لبوابة ${G.gym.name || "الجيم"}:\nالرابط: ${link}\nرقم الموبايل: ${phone10}\nكلمة المرور: ${pass}\nنوصيك بتغيير كلمة المرور بعد أول دخول.`;
+  return {
+    scope: `member:${m.id}`, title: `بيانات دخول ${m.name}`, phone: m.phone, text,
+    rows: [["الرابط", link], ["رقم الموبايل", phone10], ["كلمة المرور", pass]]
+  };
+}
+
+/* ---------- New member ---------- */
 function subNewMember(main) {
   main.innerHTML = `
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
   <h2>${ico("userPlus")} عضو جديد</h2>
   <div id="fmsg"></div>
   <form class="panel" id="mform" novalidate>
-    <div class="field"><label for="mname">الاسم</label><input id="mname" autocomplete="off" required></div>
-    <div class="field"><label for="mphone">رقم الموبايل</label><input id="mphone" type="tel" dir="ltr" inputmode="tel" autocomplete="off"></div>
+    <div class="field"><label for="mname">الاسم</label><input id="mname" autocomplete="off" maxlength="100" required></div>
+    <div class="field"><label for="mphone">رقم الموبايل (هو اسم الدخول)</label><input id="mphone" type="tel" dir="ltr" inputmode="tel" autocomplete="off" maxlength="20" placeholder="01012345678"></div>
     <div class="field">
       <label for="mpass">كلمة مرور دخول العضو</label>
-      <input id="mpass" type="text" dir="ltr" autocomplete="off" placeholder="مثال: 1234">
+      <div class="pwrow"><input id="mpass" type="text" dir="ltr" autocomplete="off" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" id="genPw">${ico("refresh", "sm")} توليد</button></div>
+      <div class="hint">تظهر لك مرة واحدة بعد الحفظ لتسلّمها للعضو. امسحها لو لا تريد إنشاء دخول الآن.</div>
     </div>
     ${planFieldsHtml(todayStr())}
     <button class="btn" type="submit" id="msave" ${PLANS.length ? "" : "disabled"}>${ico("check")} حفظ العضو</button>
   </form>`;
   $("#back").addEventListener("click", () => nav("members", null));
   wirePlanFields(main);
+  wireGen("#mpass", "#genPw", main);
 
   $("#mform").addEventListener("submit", async ev => {
     ev.preventDefault();
@@ -1251,6 +1333,10 @@ function subNewMember(main) {
     const phone = $("#mphone").value.trim();
     const password = $("#mpass").value.trim();
     if (!name) return msg("اكتب اسم العضو.");
+    if (password) {
+      if (normPhone(phone).length < 9) return msg("اكتب رقم موبايل صحيحًا لإنشاء الدخول، أو امسح كلمة المرور.");
+      const pe = pwError(password); if (pe) return msg(pe);
+    }
     if (phone && MEMBERS.some(m => normPhone(m.phone) === normPhone(phone))) {
       if (!confirm("هذا الرقم مسجل لعضو آخر. هل تريد المتابعة؟")) return;
     }
@@ -1270,7 +1356,7 @@ function subNewMember(main) {
         code = String(next);
         tx.set(counterRef, { member: next }, { merge: true });
         tx.set(memberRef, {
-          name, phone, password, code,
+          name, phone, code,
           planId: f.plan.id, planName: f.plan.name, planDays: Number(f.plan.days) || 30,
           startDate: f.startTs, endDate: Timestamp.fromDate(f.end),
           sessionsTotal: f.sessions, sessionsLeft: f.sessions,
@@ -1288,12 +1374,21 @@ function subNewMember(main) {
           });
         }
       });
-      MEMBERS.push({
-        id: memberRef.id, name, phone, password, code,
+      const newM = {
+        id: memberRef.id, name, phone, code,
         planId: f.plan.id, planName: f.plan.name, planDays: Number(f.plan.days) || 30,
         startDate: f.startTs, endDate: Timestamp.fromDate(f.end),
         sessionsTotal: f.sessions, sessionsLeft: f.sessions, balance: f.price - f.paid
-      });
+      };
+      MEMBERS.push(newM);
+      if (password) {
+        try {
+          await provisionMemberLogin(newM, password);
+          S.cred = memberCredDescriptor(newM, password);
+        } catch (e) {
+          toast("تم حفظ العضو لكن تعذر إنشاء الدخول: " + errText(e));
+        }
+      }
       toast(`تم حفظ ${name} — كود ${code}`);
       nav("members", { type: "member", id: memberRef.id });
     } catch (e) {
@@ -1303,44 +1398,88 @@ function subNewMember(main) {
   });
 }
 
+/* ---------- Member detail ---------- */
 async function subMember(main, tok) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
   const st = calcMemberState(m);
+  const cred = S.cred && S.cred.scope === `member:${m.id}` ? S.cred : null;
+  if (cred) S.cred = null;
+  const hasLogin = Boolean(m.loginUid);
+
   main.innerHTML = `
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
   <div class="top"><div class="who">
     <h1>${esc(m.name)}</h1>
     <div class="sub">كود ${esc(m.code)}${m.phone ? " · " + esc(m.phone) : ""}</div>
   </div><span class="tag ${st.key}">${st.label}</span></div>
+  ${cred ? credHtml(cred) : ""}
   <div class="panel">
     <div class="stat"><span>الباقة</span><b>${esc(m.planName || "—")}</b></div>
     <div class="stat"><span>الاشتراك</span><b>${esc(fmtLeftText(st))}</b></div>
     <div class="stat"><span>التمارين المتبقية</span><b>${esc(sessionsText(m))}</b></div>
     <div class="stat"><span>آخر دخول</span><b>${esc(fmtDateTime(toDate(m.lastCheckinAt)))}</b></div>
     <div class="stat"><span>المبلغ المتبقي</span><b class="${Number(m.balance) > 0 ? "due" : ""}">${money(m.balance)}</b></div>
-    <div class="stat"><span>كلمة مرور العضو</span><b>${esc(m.password || "غير محددة")}</b></div>
+    <div class="stat"><span>دخول العضو بالموبايل</span><b>${hasLogin ? "مفعّل" : "غير مفعّل"}</b></div>
   </div>
   <div id="fmsg" style="margin-top:14px"></div>
   <div class="row" style="padding:14px 0 0">
     <div class="acts" style="margin-top:0">
       <button class="btn sm" id="renew">${ico("refresh", "sm")} تجديد الاشتراك</button>
       ${Number(m.balance) > 0 ? `<button class="btn soft sm" id="payBtn">${ico("wallet", "sm")} تسجيل دفعة</button>` : ""}
-      ${m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : ""}
+      ${m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : ""}
       <button class="btn ghost sm" id="cardBtn">${ico("qr", "sm")} كارت PDF</button>
       <button class="btn ghost sm" id="editBtn">${ico("edit", "sm")} تعديل</button>
+      <button class="btn soft sm" id="loginBtn">${ico("lock", "sm")} ${hasLogin ? "كلمة مرور جديدة / إعادة إنشاء الدخول" : "إنشاء دخول للعضو"}</button>
+      ${hasLogin ? `<button class="btn ghost sm" id="loginToggle">${ico("shield", "sm")} إيقاف / تفعيل الدخول</button>` : ""}
     </div>
   </div>
   <div id="payBox"></div>
+  <div id="loginBox"></div>
   <h2>${ico("refresh")} سجل الاشتراكات</h2>
   <div class="rows" id="subHist"><div class="empty">جاري التحميل…</div></div>
-  <h2>${ico("wallet")} سجل الدفعات</h2>
-  <div class="rows" id="payHist"><div class="empty">جاري التحميل…</div></div>`;
+  ${isOwner() ? `<h2>${ico("wallet")} سجل الدفعات</h2><div class="rows" id="payHist"><div class="empty">جاري التحميل…</div></div>` : ""}`;
 
+  wireCred(main, cred);
   $("#back").addEventListener("click", () => nav("members", null));
   $("#renew").addEventListener("click", () => nav(null, { type: "renew", id: m.id }));
   $("#cardBtn").addEventListener("click", () => nav(null, { type: "card", id: m.id }));
   $("#editBtn").addEventListener("click", () => nav(null, { type: "edit", id: m.id }));
+
+  $("#loginBtn").addEventListener("click", () => {
+    if (normPhone(m.phone).length < 9) return toast("أضف رقم موبايل صحيحًا للعضو أولًا من «تعديل».");
+    $("#loginBox").innerHTML = `
+    <form class="panel" id="loginForm" style="margin-top:14px" novalidate>
+      <div class="field"><label for="lpass">كلمة المرور الجديدة للعضو</label>
+        <div class="pwrow"><input id="lpass" type="text" dir="ltr" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" id="lgen">${ico("refresh", "sm")} توليد</button></div>
+        <div class="hint">${hasLogin ? "سيتوقف الدخول القديم ويُنشأ دخول جديد. " : ""}الدخول برقم الموبايل ${esc(normPhone(m.phone))}.</div></div>
+      <button class="btn" type="submit" id="lsave">${ico("check")} حفظ وإظهار البيانات</button>
+    </form>`;
+    wireGen("#lpass", "#lgen", main);
+    $("#loginForm").addEventListener("submit", async ev => {
+      ev.preventDefault();
+      const pass = $("#lpass").value.trim();
+      const btn = $("#lsave"); btn.disabled = true;
+      try {
+        await provisionMemberLogin(m, pass);
+        S.cred = memberCredDescriptor(m, pass);
+        nav(null, { type: "member", id: m.id });
+      } catch (e) { btn.disabled = false; $("#fmsg").innerHTML = `<p class="msg err">${ico("alert", "sm")} ${esc(errText(e))}</p>`; }
+    });
+  });
+
+  const lt = $("#loginToggle");
+  if (lt) lt.addEventListener("click", async () => {
+    lt.disabled = true;
+    try {
+      const uRef = doc(db, "users", m.loginUid);
+      const s = await getDoc(uRef);
+      const next = !(s.exists() && s.data().active === true);
+      await updateDoc(uRef, { active: next });
+      toast(next ? "تم تفعيل دخول العضو" : "تم إيقاف دخول العضو");
+    } catch (e) { toast(errText(e)); }
+    lt.disabled = false;
+  });
 
   const payBtn = $("#payBtn");
   if (payBtn) payBtn.addEventListener("click", () => {
@@ -1373,28 +1512,29 @@ async function subMember(main, tok) {
   });
 
   try {
-    const [s1, s2] = await Promise.all([
-      getDocs(query(col("subscriptions"), where("memberId", "==", m.id))),
-      getDocs(query(col("payments"), where("memberId", "==", m.id)))
-    ]);
+    const jobs = [getDocs(query(col("subscriptions"), where("memberId", "==", m.id)))];
+    if (isOwner()) jobs.push(getDocs(query(col("payments"), where("memberId", "==", m.id))));
+    const [s1, s2] = await Promise.all(jobs);
     if (tok !== RT) return;
     const subs = s1.docs.map(d => d.data()).sort((a, b) => String(b.start).localeCompare(String(a.start)));
-    const pays = s2.docs.map(d => d.data()).sort((a, b) => String(b.date).localeCompare(String(a.date)));
     $("#subHist").innerHTML = subs.length ? subs.map(s => `
       <div class="row"><div class="name">${esc(s.planName)}</div>
       <div class="meta">${esc(s.start)} إلى ${esc(s.end)} · السعر ${money(s.price)} · مدفوع ${money(s.paid)}</div></div>`).join("")
       : `<div class="empty">لا يوجد سجل.</div>`;
-    $("#payHist").innerHTML = pays.length ? pays.map(p => `
-      <div class="row"><div class="name">${money(p.amount)}</div>
-      <div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("")
-      : `<div class="empty">لا توجد دفعات.</div>`;
+    if (s2) {
+      const pays = s2.docs.map(d => d.data()).sort((a, b) => String(b.date).localeCompare(String(a.date)));
+      $("#payHist").innerHTML = pays.length ? pays.map(p => `
+        <div class="row"><div class="name">${money(p.amount)}</div><div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("")
+        : `<div class="empty">لا توجد دفعات.</div>`;
+    }
   } catch (e) {
     if (tok !== RT) return;
     $("#subHist").innerHTML = `<div class="empty">${esc(errText(e))}</div>`;
-    $("#payHist").innerHTML = "";
+    const ph = $("#payHist"); if (ph) ph.innerHTML = "";
   }
 }
 
+/* ---------- Renew ---------- */
 function subRenew(main) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
@@ -1450,6 +1590,7 @@ function subRenew(main) {
   });
 }
 
+/* ---------- Edit member ---------- */
 function subEdit(main) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
@@ -1457,28 +1598,29 @@ function subEdit(main) {
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
   <h2>${ico("edit")} تعديل بيانات العضو</h2>
   <form class="panel" id="eform" novalidate>
-    <div class="field"><label for="ename">الاسم</label><input id="ename" value="${esc(m.name)}"></div>
-    <div class="field"><label for="ephone">رقم الموبايل</label><input id="ephone" type="tel" dir="ltr" inputmode="tel" value="${esc(m.phone || "")}"></div>
-    <div class="field"><label for="epass">كلمة مرور دخول العضو</label><input id="epass" type="text" dir="ltr" value="${esc(m.password || "")}"></div>
+    <div class="field"><label for="ename">الاسم</label><input id="ename" maxlength="100" value="${esc(m.name)}"></div>
+    <div class="field"><label for="ephone">رقم الموبايل</label><input id="ephone" type="tel" dir="ltr" inputmode="tel" maxlength="20" value="${esc(m.phone || "")}">
+      ${m.loginUid ? `<div class="hint">لو غيّرت الرقم، اضغط بعدها «كلمة مرور جديدة / إعادة إنشاء الدخول» ليعمل الدخول بالرقم الجديد.</div>` : ""}</div>
     <div class="field"><label for="esess">التمارين المتبقية</label><input id="esess" type="number" inputmode="numeric" min="0" dir="ltr" value="${esc(m.sessionsLeft ?? 30)}"></div>
     <button class="btn" type="submit" id="esave">${ico("check")} حفظ التعديل</button>
   </form>`;
   $("#back").addEventListener("click", () => nav(null, { type: "member", id: m.id }));
   $("#eform").addEventListener("submit", async ev => {
     ev.preventDefault();
-    const name = $("#ename").value.trim(), phone = $("#ephone").value.trim(), password = $("#epass").value.trim();
+    const name = $("#ename").value.trim(), phone = $("#ephone").value.trim();
     const sessionsLeft = Math.max(0, Math.round(num($("#esess").value)));
     if (!name) return toast("اكتب الاسم.");
     const btn = $("#esave"); btn.disabled = true;
     try {
-      await updateDoc(ref("members", m.id), { name, phone, password, sessionsLeft });
-      m.name = name; m.phone = phone; m.password = password; m.sessionsLeft = sessionsLeft;
+      await updateDoc(ref("members", m.id), { name, phone, sessionsLeft });
+      m.name = name; m.phone = phone; m.sessionsLeft = sessionsLeft;
       toast("تم الحفظ");
       nav(null, { type: "member", id: m.id });
     } catch (e) { btn.disabled = false; toast(errText(e)); }
   });
 }
 
+/* ---------- Member card ---------- */
 async function subCard(main) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
@@ -1486,27 +1628,22 @@ async function subCard(main) {
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
   <div class="panel qrbox">
     <h2 style="margin:0 0 4px;justify-content:center">${esc(m.name)}</h2>
-    <div class="muted">${esc(G.gym.name || "")} · باقي ${esc(sessionsText(m))}</div>
+    <div class="muted">${esc(G.gym.name || "")} · ${esc(sessionsText(m))}</div>
     <div id="qr" style="margin:14px 0"><p class="muted">جاري إنشاء الكود…</p></div>
     <div class="bigcode">${esc(m.code)}</div>
-    <p class="hint">كلمة المرور: <b>${esc(m.password || "—")}</b></p>
-    <div class="acts" style="justify-content:center;margin-top:12px">
+    <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px">
       <button class="btn sm" type="button" id="pdfBtn">${ico("download", "sm")} تحميل كارت PDF</button>
-      ${m.phone ? `<a class="btn soft sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, `أهلًا ${m.name}، بطاقة عضويتك في ${G.gym.name || "الجيم"} جاهزة. كود الدخول: ${m.code} وكلمة المرور: ${m.password || "—"}`))}"><${"span"} class="inline-ico">${ico("send", "sm")} إرسال واتساب</${"span"}></a>` : ""}
     </div>
   </div>`;
   $("#back").addEventListener("click", () => nav(null, { type: "member", id: m.id }));
   $("#pdfBtn").addEventListener("click", async () => {
-    try {
-      await downloadMemberIdPdf(G.gym, m, G.gymId);
-      toast("تم إنشاء ملف كارت العضو PDF");
-    } catch (e) { toast(errText(e)); }
+    try { await downloadMemberIdPdf(G.gym, m, G.gymId); toast("تم إنشاء كارت العضو PDF"); }
+    catch (e) { toast(errText(e)); }
   });
   try {
     const mod = await import("https://esm.sh/qrcode@1.5.4");
     const QR = mod.default || mod;
-    const payload = `GYMPRO|${G.gymId}|${m.code || m.id}|${m.password || ""}`;
-    const url = await QR.toDataURL(payload, { margin: 1, width: 440 });
+    const url = await QR.toDataURL(`GYMPRO|${G.gymId}|${m.code || m.id}`, { margin: 1, width: 440 });
     const box = $("#qr");
     if (box) box.innerHTML = `<img src="${url}" alt="كود QR للعضو ${esc(m.name)}">`;
   } catch {
@@ -1515,13 +1652,12 @@ async function subCard(main) {
   }
 }
 
-/* ---------- Check-in (Camera QR + PDF Payload + Sessions Left + Date/Time) ---------- */
+/* ---------- Check-in ---------- */
 function findMemberFromScan(raw) {
   const txt = String(raw || "").trim();
   if (!txt) return null;
   if (txt.startsWith("GYMPRO|")) {
-    const parts = txt.split("|");
-    const codePart = parts[2] || "";
+    const codePart = txt.split("|")[2] || "";
     return MEMBERS.find(m => String(m.code) === codePart || m.id === codePart) || null;
   }
   const d = arabicDigitsToEn(txt).replace(/\D/g, "");
@@ -1536,8 +1672,8 @@ function screenCheckin(main, tok) {
   <h2>${ico("qr")} تسجيل الحضور (كاميرا / كود)</h2>
   <form class="panel" id="cform" novalidate>
     <div class="field">
-      <label for="ccode">كود العضو أو رقم الموبايل أو نص الكود</label>
-      <input id="ccode" dir="ltr" autocomplete="off" autofocus placeholder="مثال: 1001 أو 010xxxxxxxx">
+      <label for="ccode">كود العضو أو رقم الموبايل</label>
+      <input id="ccode" dir="ltr" autocomplete="off" placeholder="مثال: 1001 أو 010xxxxxxxx">
     </div>
     <div class="two">
       <button class="btn" type="submit">${ico("check")} تسجيل</button>
@@ -1551,8 +1687,7 @@ function screenCheckin(main, tok) {
 
   $("#cform").addEventListener("submit", ev => {
     ev.preventDefault();
-    const v = $("#ccode").value;
-    $("#ccode").value = "";
+    const v = $("#ccode").value; $("#ccode").value = "";
     doCheckin(v);
   });
   $("#scanBtn").addEventListener("click", startScan);
@@ -1567,12 +1702,8 @@ async function startScan() {
     const Html5Qrcode = mod.Html5Qrcode || mod.default?.Html5Qrcode;
     const s = new Html5Qrcode("reader");
     scanner = s;
-    await s.start(
-      { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 230, height: 230 } },
-      text => { stopScanner(); doCheckin(text); },
-      () => {}
-    );
+    await s.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 230, height: 230 } },
+      text => { stopScanner(); doCheckin(text); }, () => {});
   } catch {
     scanner = null;
     box.innerHTML = `<p class="msg err">${ico("alert", "sm")} تعذر تشغيل الكاميرا. اسمح للمتصفح باستخدامها أو اكتب الكود يدويًا.</p>`;
@@ -1588,7 +1719,7 @@ async function doCheckin(raw) {
     return;
   }
   const st = calcMemberState(m);
-  const waBtn = m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
+  const waBtn = m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
   if (st.key === "expired" || st.key === "none") {
     box.innerHTML = `<div class="result bad">
       <div class="rt">${ico("xCircle", "sm")} الدخول ممنوع — ${st.key === "none" ? "لا يوجد اشتراك" : "الاشتراك منتهي"}</div>
@@ -1603,30 +1734,22 @@ async function doCheckin(raw) {
     if (exists.exists()) {
       const at = toDate(exists.data().ts);
       box.innerHTML = `<div class="result warn"><div class="rt">${ico("alert", "sm")} سُجّل حضوره اليوم بالفعل${at ? " الساعة " + fmtTime(at) : ""}</div>
-        <div class="rn">${esc(m.name)}</div>
-        <div>باقي تمرينة: <b>${esc(sessionsText(m))}</b> · ${esc(fmtLeftText(st))}</div></div>`;
+        <div class="rn">${esc(m.name)}</div><div>${esc(sessionsText(m))} · ${esc(fmtLeftText(st))}</div></div>`;
       return;
     }
-
-    const nowTs = serverTimestamp();
     const curSess = Number(m.sessionsLeft);
     const nextSess = isNaN(curSess) ? null : Math.max(0, curSess - 1);
-
-    await setDoc(aRef, {
-      memberId: m.id, memberName: m.name, code: m.code, date: todayStr(),
-      ts: nowTs, by: G.uid
-    });
-    const upd = { lastCheckinAt: nowTs };
+    await setDoc(aRef, { memberId: m.id, memberName: m.name, code: m.code, date: todayStr(), ts: serverTimestamp(), by: G.uid });
+    const upd = { lastCheckinAt: serverTimestamp() };
     if (nextSess !== null) upd.sessionsLeft = nextSess;
     await updateDoc(ref("members", m.id), upd);
-
     if (nextSess !== null) m.sessionsLeft = nextSess;
     m.lastCheckinAt = { toDate: () => new Date() };
 
     const dueLine = Number(m.balance) > 0 ? `<div class="due">عليه مبلغ متبقي ${money(m.balance)}</div>` : "";
-    box.innerHTML = `<div class="result ok"><div class="rt">${ico("checkCircle", "sm")} تم تسجيل الحضور (${fmtDateTime(new Date())})</div>
+    box.innerHTML = `<div class="result ok"><div class="rt">${ico("checkCircle", "sm")} تم تسجيل الحضور (${esc(fmtDateTime(new Date()))})</div>
       <div class="rn">${esc(m.name)}</div>
-      <div>باقي تمرينة: <b>${esc(sessionsText(m))}</b> · ${esc(fmtLeftText(st))}</div>${dueLine}
+      <div>${esc(sessionsText(m))} · ${esc(fmtLeftText(st))}</div>${dueLine}
       ${st.key === "soon" ? `<div class="acts">${waBtn}</div>` : ""}</div>`;
     loadToday(RT);
   } catch (e) {
@@ -1649,153 +1772,207 @@ async function loadToday(tok) {
   }
 }
 
-/* ---------- Captains GPS Attendance ---------- */
-function screenCaptains(main) {
-  const gymLat = Number(G.gym.lat);
-  const gymLng = Number(G.gym.lng);
-  const maxRadius = Number(G.gym.gpsRadius) || 250;
-  const hasGymLoc = !isNaN(gymLat) && !isNaN(gymLng) && G.gym.lat !== undefined && G.gym.lng !== undefined && G.gym.lat !== "";
+/* ---------- Captains (owner): manage + create logins + see punches ---------- */
+async function provisionCaptainLogin(cap, email, password) {
+  const uid = await createAuthUser(email, password);
+  const batch = writeBatch(db);
+  batch.set(doc(db, "users", uid), {
+    name: cap.name, role: "captain", active: true, gymId: G.gymId, gymName: G.gym.name || "",
+    captainId: cap.id, email, createdAt: serverTimestamp(), createdBy: G.uid
+  });
+  batch.update(ref("captains", cap.id), { loginUid: uid, loginEmail: email });
+  await batch.commit();
+  cap.loginUid = uid; cap.loginEmail = email;
+}
+function loginCredDescriptor(scope, title, name, email, pass) {
+  const link = appLink();
+  return {
+    scope, title, phone: "", rows: [["الرابط", link], ["الإيميل", email], ["كلمة المرور", pass]],
+    text: `أهلًا ${name}، بيانات دخولك:\nالرابط: ${link}\nالإيميل: ${email}\nكلمة المرور: ${pass}\nنوصيك بتغيير كلمة المرور بعد أول دخول.`
+  };
+}
+
+async function screenCaptains(main, tok) {
+  const gymLat = Number(G.gym.lat), gymLng = Number(G.gym.lng);
+  const hasLoc = G.gym.lat !== undefined && G.gym.lat !== "" && G.gym.lng !== undefined && G.gym.lng !== "" && !isNaN(gymLat) && !isNaN(gymLng);
+  const cred = S.cred && S.cred.scope === "captains" ? S.cred : null;
+  if (cred) S.cred = null;
 
   main.innerHTML = `
-  <h2>${ico("mapPin")} حضور وانصراف الكباتن (GPS)</h2>
+  <h2>${ico("mapPin")} الكباتن والبصمة (GPS)</h2>
+  ${cred ? credHtml(cred) : ""}
   <div class="panel" style="margin-bottom:14px">
-    <div style="font-weight:700;font-size:14px">إعداد موقع الجيم الجغرافي</div>
-    <div class="hint">يُستخدم للتحقق من وجود الكابتن داخل نطاق الجيم عند تسجيل الحضور أو الانصراف.</div>
+    <div style="font-weight:700;font-size:14px">موقع الجيم الجغرافي</div>
+    <div class="hint">يُستخدم للتحقق من وجود الكابتن داخل نطاق الجيم عند البصمة. ${hasLoc ? "" : "لم يُحدد الموقع بعد."}</div>
     <div class="two" style="margin-top:10px">
-      <div class="field"><label for="gLat">خط العرض (Latitude)</label><input id="gLat" dir="ltr" value="${esc(G.gym.lat ?? "")}" placeholder="30.0444"></div>
-      <div class="field"><label for="gLng">خط الطول (Longitude)</label><input id="gLng" dir="ltr" value="${esc(G.gym.lng ?? "")}" placeholder="31.2357"></div>
+      <div class="field"><label for="gLat">خط العرض</label><input id="gLat" dir="ltr" value="${esc(G.gym.lat ?? "")}" placeholder="30.0444"></div>
+      <div class="field"><label for="gLng">خط الطول</label><input id="gLng" dir="ltr" value="${esc(G.gym.lng ?? "")}" placeholder="31.2357"></div>
     </div>
     <div class="two">
-      <div class="field"><label for="gRad">النطاق المسموح (متر)</label><input id="gRad" type="number" dir="ltr" value="${esc(maxRadius)}"></div>
+      <div class="field"><label for="gRad">النطاق المسموح (متر)</label><input id="gRad" type="number" dir="ltr" value="${esc(Number(G.gym.gpsRadius) || 250)}"></div>
       <div class="field" style="display:flex;align-items:flex-end"><button class="btn soft" type="button" id="useCurLocBtn">${ico("mapPin", "sm")} موقعي الحالي</button></div>
     </div>
     <button class="btn" type="button" id="saveLocBtn">${ico("check")} حفظ موقع الجيم</button>
   </div>
 
-  ${!isReception() ? `
   <h2>${ico("plus")} إضافة كابتن</h2>
   <form class="panel" id="capForm" novalidate>
     <div class="two">
-      <div class="field"><label for="cName">اسم الكابتن</label><input id="cName" placeholder="مثال: كابتن كريم"></div>
-      <div class="field"><label for="cRole">التخصص</label><input id="cRole" placeholder="حديد / لياقة / تغذية"></div>
+      <div class="field"><label for="cName">اسم الكابتن</label><input id="cName" maxlength="100" placeholder="كابتن كريم"></div>
+      <div class="field"><label for="cRole">التخصص</label><input id="cRole" maxlength="60" placeholder="حديد / لياقة"></div>
     </div>
+    <div class="field"><label for="cEmail">إيميل دخول الكابتن (اختياري)</label><input id="cEmail" type="email" dir="ltr" autocomplete="off" placeholder="captain@email.com"></div>
+    <div class="field"><label for="cPass">كلمة المرور</label>
+      <div class="pwrow"><input id="cPass" type="text" dir="ltr" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" id="cGen">${ico("refresh", "sm")} توليد</button></div>
+      <div class="hint">يدخل الكابتن بالإيميل ويرى صفحة البصمة الخاصة به فقط.</div></div>
     <button class="btn" type="submit" id="capSave">${ico("check")} إضافة الكابتن</button>
-  </form>` : ""}
+  </form>
 
-  <h2>${ico("users")} سجل الكباتن اليوم (${todayStr()})</h2>
-  <div class="rows">
+  <h2>${ico("users")} الكباتن (${CAPTAINS.length})</h2>
+  <div class="rows" id="capList">
     ${CAPTAINS.length ? CAPTAINS.map(c => {
-      const isTodayIn = c.lastDate === todayStr() && c.status === "in";
-      const isTodayOut = c.lastDate === todayStr() && c.status === "out";
+      const todayIn = c.lastDate === todayStr() && c.status === "in";
+      const todayOut = c.lastDate === todayStr() && c.status === "out";
       return `
       <div class="row" data-cid="${esc(c.id)}">
-        <div class="name">
-          ${esc(c.name)}
-          <span class="tag ${isTodayIn ? "active" : (isTodayOut ? "soon" : "none")}">${isTodayIn ? "حاضر الآن" : (isTodayOut ? "انصرف اليوم" : "لم يسجل اليوم")}</span>
+        <div class="name">${esc(c.name)}
+          <span class="tag ${todayIn ? "active" : (todayOut ? "soon" : "none")}">${todayIn ? "حاضر الآن" : (todayOut ? "انصرف اليوم" : "لم يسجل اليوم")}</span>
+          <span class="tag ${c.loginUid ? "active" : "none"}">${c.loginUid ? "له دخول" : "بدون دخول"}</span>
         </div>
-        <div class="meta">${esc(c.role || "كابتن")} · آخر تحديث: ${esc(fmtDateTime(toDate(c.lastAt)))}</div>
+        <div class="meta">${esc(c.role || "كابتن")} · آخر بصمة: ${esc(fmtDateTime(toDate(c.lastAt)))}${c.loginEmail ? " · " + esc(c.loginEmail) : ""}</div>
         <div class="acts">
-          <button class="btn sm" data-gps="in">${ico("mapPin", "sm")} بصمة حضور GPS</button>
-          <button class="btn ghost sm" data-gps="out">${ico("logout", "sm")} بصمة انصراف GPS</button>
-          ${!isReception() ? `<button class="btn danger sm" data-delc="${esc(c.id)}">${ico("trash", "sm")} حذف</button>` : ""}
+          ${c.loginUid ? `<button class="btn ghost sm" data-ctog="${esc(c.id)}">${ico("shield", "sm")} إيقاف / تفعيل الدخول</button>`
+            : `<button class="btn soft sm" data-cnew="${esc(c.id)}">${ico("lock", "sm")} إنشاء دخول</button>`}
+          <button class="btn danger sm" data-delc="${esc(c.id)}">${ico("trash", "sm")} حذف</button>
         </div>
+        <div data-cbox="${esc(c.id)}"></div>
       </div>`;
     }).join("") : `<div class="empty">لا يوجد كباتن مضافون بعد.</div>`}
-  </div>`;
+  </div>
+
+  <h2>${ico("clock")} بصمات اليوم</h2>
+  <div class="rows" id="punchList"><div class="empty">جاري التحميل…</div></div>`;
+
+  wireCred(main, cred);
+  wireGen("#cPass", "#cGen", main);
 
   $("#useCurLocBtn").addEventListener("click", async () => {
     try {
       const loc = await getCurrentGps();
-      $("#gLat").value = loc.lat.toFixed(6);
-      $("#gLng").value = loc.lng.toFixed(6);
+      $("#gLat").value = loc.lat.toFixed(6); $("#gLng").value = loc.lng.toFixed(6);
       toast(`تم التقاط الإحداثيات (دقة ${loc.acc}م)`);
     } catch (e) { toast(e.message); }
   });
-
   $("#saveLocBtn").addEventListener("click", async () => {
-    const lat = num($("#gLat").value);
-    const lng = num($("#gLng").value);
+    const lat = num($("#gLat").value), lng = num($("#gLng").value);
     const gpsRadius = Math.max(20, Math.round(num($("#gRad").value) || 250));
     if (!lat || !lng) return toast("أدخل خط العرض وخط الطول أولًا.");
     try {
-      await updateDoc(doc(db, "gyms", G.gymId), { lat, lng, gpsRadius });
-      G.gym.lat = lat; G.gym.lng = lng; G.gym.gpsRadius = gpsRadius;
+      await setDoc(ref("meta", "public"), { lat, lng, gpsRadius }, { merge: true });
+      Object.assign(G.gym, { lat, lng, gpsRadius });
       toast("تم حفظ موقع الجيم");
-      screenCaptains(main);
+      renderOwner();
     } catch (e) { toast(errText(e)); }
   });
 
-  const capForm = $("#capForm", main);
-  if (capForm) {
-    capForm.addEventListener("submit", async ev => {
+  $("#capForm").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const name = $("#cName").value.trim(), spec = $("#cRole").value.trim();
+    const email = $("#cEmail").value.trim().toLowerCase(), pass = $("#cPass").value.trim();
+    if (!name) return toast("اكتب اسم الكابتن.");
+    if (email) {
+      if (!isValidEmail(email)) return toast("صيغة الإيميل غير صحيحة.");
+      const pe = pwError(pass); if (pe) return toast(pe);
+    }
+    const btn = $("#capSave"); btn.disabled = true;
+    try {
+      const dRef = await addDoc(col("captains"), { name, role: spec || "كابتن", createdAt: serverTimestamp() });
+      const cap = { id: dRef.id, name, role: spec || "كابتن" };
+      CAPTAINS.push(cap);
+      if (email) {
+        try {
+          await provisionCaptainLogin(cap, email, pass);
+          S.cred = loginCredDescriptor("captains", `بيانات دخول ${name}`, name, email, pass);
+        } catch (e) { toast("تمت إضافة الكابتن لكن تعذر إنشاء الدخول: " + errText(e)); }
+      } else toast("تمت إضافة الكابتن");
+      renderOwner();
+    } catch (e) { btn.disabled = false; toast(errText(e)); }
+  });
+
+  $$("[data-cnew]", main).forEach(b => b.addEventListener("click", () => {
+    const cap = CAPTAINS.find(x => x.id === b.dataset.cnew);
+    const box = $(`[data-cbox="${b.dataset.cnew}"]`, main);
+    box.innerHTML = `
+    <form class="panel" style="margin-top:10px" novalidate>
+      <div class="field"><label>إيميل الكابتن</label><input type="email" dir="ltr" data-f="email" autocomplete="off"></div>
+      <div class="field"><label>كلمة المرور</label><div class="pwrow"><input type="text" dir="ltr" data-f="pass" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" data-f="gen">${ico("refresh", "sm")} توليد</button></div></div>
+      <button class="btn" type="submit">${ico("check")} إنشاء الدخول</button>
+    </form>`;
+    $("[data-f='gen']", box).addEventListener("click", () => { $("[data-f='pass']", box).value = genPassword(); });
+    $("form", box).addEventListener("submit", async ev => {
       ev.preventDefault();
-      const name = $("#cName").value.trim(), roleTxt = $("#cRole").value.trim();
-      if (!name) return toast("اكتب اسم الكابتن.");
+      const email = $("[data-f='email']", box).value.trim().toLowerCase(), pass = $("[data-f='pass']", box).value.trim();
+      if (!isValidEmail(email)) return toast("صيغة الإيميل غير صحيحة.");
+      const pe = pwError(pass); if (pe) return toast(pe);
       try {
-        const dRef = await addDoc(col("captains"), { name, role: roleTxt || "كابتن", createdAt: serverTimestamp() });
-        CAPTAINS.push({ id: dRef.id, name, role: roleTxt || "كابتن" });
-        toast("تمت إضافة الكابتن");
-        screenCaptains(main);
+        await provisionCaptainLogin(cap, email, pass);
+        S.cred = loginCredDescriptor("captains", `بيانات دخول ${cap.name}`, cap.name, email, pass);
+        renderOwner();
       } catch (e) { toast(errText(e)); }
     });
-  }
+  }));
 
-  $$("[data-gps]", main).forEach(b => b.addEventListener("click", async () => {
-    const cid = b.closest(".row").dataset.cid;
-    const cap = CAPTAINS.find(x => x.id === cid);
-    const type = b.dataset.gps;
+  $$("[data-ctog]", main).forEach(b => b.addEventListener("click", async () => {
+    const cap = CAPTAINS.find(x => x.id === b.dataset.ctog);
     b.disabled = true;
     try {
-      const loc = await getCurrentGps();
-      let dist = null;
-      if (hasGymLoc) {
-        dist = Math.round(haversineMeters(loc.lat, loc.lng, gymLat, gymLng));
-        if (dist > maxRadius) {
-          b.disabled = false;
-          return toast(`أنت خارج نطاق الجيم (${dist} متر من أصل ${maxRadius} متر).`);
-        }
-      }
-      const now = new Date();
-      await addDoc(col("captain_attendance"), {
-        captainId: cid, captainName: cap?.name || "", type, date: todayStr(),
-        lat: loc.lat, lng: loc.lng, distanceMeters: dist, ts: serverTimestamp(), by: G.uid
-      });
-      await updateDoc(ref("captains", cid), {
-        status: type, lastDate: todayStr(), lastAt: serverTimestamp(), lastDist: dist
-      });
-      if (cap) { cap.status = type; cap.lastDate = todayStr(); cap.lastAt = { toDate: () => now }; }
-      toast(type === "in" ? `تم تسجيل حضور ${cap.name} (GPS)` : `تم تسجيل انصراف ${cap.name} (GPS)`);
-      screenCaptains(main);
-    } catch (e) {
-      b.disabled = false;
-      toast(e.message || errText(e));
-    }
+      const uRef = doc(db, "users", cap.loginUid);
+      const s = await getDoc(uRef);
+      const next = !(s.exists() && s.data().active === true);
+      await updateDoc(uRef, { active: next });
+      toast(next ? "تم تفعيل دخول الكابتن" : "تم إيقاف دخول الكابتن");
+    } catch (e) { toast(errText(e)); }
+    b.disabled = false;
   }));
 
   $$("[data-delc]", main).forEach(b => b.addEventListener("click", async () => {
-    if (!confirm("حذف هذا الكابتن؟")) return;
+    if (!confirm("حذف هذا الكابتن؟ سيتوقف دخوله أيضًا.")) return;
+    const cap = CAPTAINS.find(x => x.id === b.dataset.delc);
     try {
-      await deleteDoc(ref("captains", b.dataset.delc));
+      const batch = writeBatch(db);
+      if (cap?.loginUid) batch.update(doc(db, "users", cap.loginUid), { active: false });
+      batch.delete(ref("captains", b.dataset.delc));
+      await batch.commit();
       CAPTAINS = CAPTAINS.filter(x => x.id !== b.dataset.delc);
-      screenCaptains(main);
+      renderOwner();
     } catch (e) { toast(errText(e)); }
   }));
+
+  try {
+    const snap = await getDocs(query(col("captain_attendance"), where("date", "==", todayStr())));
+    if (tok !== RT) return;
+    const rows = snap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
+    $("#punchList").innerHTML = rows.length ? rows.map(r => `
+      <div class="row"><div class="name">${esc(r.captainName)} <span class="tag ${r.type === "in" ? "active" : "soon"}">${r.type === "in" ? "حضور" : "انصراف"}</span></div>
+      <div class="meta">${esc(fmtDateTime(toDate(r.ts)))}${r.distanceMeters != null ? ` · ${esc(r.distanceMeters)} متر من الجيم` : ""}</div></div>`).join("")
+      : `<div class="empty">لا توجد بصمات اليوم.</div>`;
+  } catch (e) {
+    if (tok === RT) $("#punchList").innerHTML = `<div class="empty">${esc(errText(e))}</div>`;
+  }
 }
 
-/* ---------- Store & Cafeteria (with Image URL) ---------- */
+/* ---------- Store & Cafeteria ---------- */
 function screenStore(main) {
   const CATS = { gym: "منتجات الجيم", cafe: "الكافتيريا" };
+  if (!isOwner()) S.storeTab = "pos";
   main.innerHTML = `
-  <div class="seg">
+  ${isOwner() ? `<div class="seg">
     <button class="${S.storeTab === "pos" ? "active" : ""}" data-st="pos">${ico("cart", "sm")} نقطة البيع</button>
     <button class="${S.storeTab === "manage" ? "active" : ""}" data-st="manage">${ico("package", "sm")} إدارة المنتجات</button>
-  </div>
+  </div>` : ""}
   <div id="storeBody"></div>`;
 
-  $$(".seg button", main).forEach(b => b.addEventListener("click", () => {
-    S.storeTab = b.dataset.st; S.editProd = null; screenStore(main);
-  }));
-
+  $$(".seg button", main).forEach(b => b.addEventListener("click", () => { S.storeTab = b.dataset.st; S.editProd = null; screenStore(main); }));
   const body = $("#storeBody", main);
 
   if (S.storeTab === "pos") {
@@ -1810,22 +1987,20 @@ function screenStore(main) {
         <option value="gym">منتجات ومكملات الجيم</option>
       </select>
     </div>
-
     ${filtered.length ? `
     <div class="prod-grid">
       ${filtered.map(p => {
         const out = (Number(p.stock) || 0) <= 0;
-        const catIcon = p.category === "cafe" ? "coffee" : "dumbbell";
         return `
         <button class="prod-card" data-addc="${esc(p.id)}" ${out ? "disabled" : ""}>
           <div>
-            ${p.imgUrl ? `<img class="prod-thumb" src="${esc(p.imgUrl)}" alt="${esc(p.name)}" onerror="this.style.display='none'">` : ""}
-            <span class="tag cat">${ico(catIcon, "sm")} ${esc(CATS[p.category] || "منتج")}</span>
+            ${imgTag(p.imgUrl, "prod-thumb", p.name)}
+            <span class="tag cat">${ico(p.category === "cafe" ? "coffee" : "dumbbell", "sm")} ${esc(CATS[p.category] || "منتج")}</span>
             <div class="pname">${esc(p.name)}</div>
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
             <span class="pprice">${money(p.price)}</span>
-            <span class="pstock">${out ? "نفد المخزون" : `متاح ${p.stock}`}</span>
+            <span class="pstock">${out ? "نفد المخزون" : `متاح ${esc(p.stock)}`}</span>
           </div>
         </button>`;
       }).join("")}
@@ -1836,30 +2011,23 @@ function screenStore(main) {
       ${S.cart.length ? `
         ${S.cart.map(item => `
           <div class="cart-item">
-            <div>
-              <div style="font-weight:700">${esc(item.name)}</div>
-              <div class="muted" style="font-size:13px">${money(item.price)} × ${item.qty} = <b>${money(item.price * item.qty)}</b></div>
-            </div>
+            <div><div style="font-weight:700">${esc(item.name)}</div>
+            <div class="muted" style="font-size:13px">${money(item.price)} × ${item.qty} = <b>${money(item.price * item.qty)}</b></div></div>
             <div class="qty-ctrl">
-              <button type="button" data-dec="${esc(item.id)}">${ico("minus", "sm")}</button>
+              <button type="button" data-dec="${esc(item.id)}" aria-label="إنقاص">${ico("minus", "sm")}</button>
               <b>${item.qty}</b>
-              <button type="button" data-inc="${esc(item.id)}">${ico("plus", "sm")}</button>
+              <button type="button" data-inc="${esc(item.id)}" aria-label="زيادة">${ico("plus", "sm")}</button>
             </div>
-          </div>
-        `).join("")}
+          </div>`).join("")}
         <div class="stat big" style="margin-top:8px"><span>الإجمالي</span><b>${money(total)}</b></div>
         <div class="field" style="margin-top:12px">
           <label for="payMode">طريقة الدفع</label>
-          <select id="payMode">
-            <option value="cash">دفع نقدي الآن (كاش)</option>
-            <option value="credit">إضافة على حساب عضو (آجل)</option>
-          </select>
+          <select id="payMode"><option value="cash">دفع نقدي الآن (كاش)</option><option value="credit">إضافة على حساب عضو (آجل)</option></select>
         </div>
         <div class="field" id="creditMemberBox" style="display:none">
           <label for="creditMember">اختر العضو</label>
-          <select id="creditMember">
-            <option value="">-- اختر العضو --</option>
-            ${MEMBERS.slice().sort((a,b)=>(a.name||"").localeCompare(b.name||"","ar")).map(m => `<option value="${esc(m.id)}">${esc(m.name)} (كود ${esc(m.code)})</option>`).join("")}
+          <select id="creditMember"><option value="">-- اختر العضو --</option>
+            ${MEMBERS.slice().sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar")).map(m => `<option value="${esc(m.id)}">${esc(m.name)} (كود ${esc(m.code)})</option>`).join("")}
           </select>
         </div>
         <button class="btn" id="checkoutBtn" style="margin-top:8px">${ico("check")} إتمام عملية البيع</button>
@@ -1873,12 +2041,8 @@ function screenStore(main) {
       const p = PRODUCTS.find(x => x.id === b.dataset.addc);
       if (!p) return;
       const ex = S.cart.find(c => c.id === p.id);
-      if (ex) {
-        if (ex.qty >= Number(p.stock)) return toast("لا توجد كمية إضافية في المخزون.");
-        ex.qty++;
-      } else {
-        S.cart.push({ id: p.id, name: p.name, price: Number(p.price), qty: 1, category: p.category });
-      }
+      if (ex) { if (ex.qty >= Number(p.stock)) return toast("لا توجد كمية إضافية في المخزون."); ex.qty++; }
+      else S.cart.push({ id: p.id, name: p.name, price: Number(p.price), qty: 1, category: p.category });
       screenStore(main);
     }));
     $$("[data-inc]", body).forEach(b => b.addEventListener("click", () => {
@@ -1891,17 +2055,16 @@ function screenStore(main) {
       const idx = S.cart.findIndex(c => c.id === b.dataset.dec);
       if (idx > -1) { S.cart[idx].qty--; if (S.cart[idx].qty <= 0) S.cart.splice(idx, 1); screenStore(main); }
     }));
-
     const modeSel = $("#payMode", body);
     if (modeSel) modeSel.addEventListener("change", () => { $("#creditMemberBox").style.display = modeSel.value === "credit" ? "block" : "none"; });
 
-    const chkBtn = $("#checkoutBtn", body);
-    if (chkBtn) chkBtn.addEventListener("click", async () => {
+    const chk = $("#checkoutBtn", body);
+    if (chk) chk.addEventListener("click", async () => {
       const mode = $("#payMode").value;
       const memberId = mode === "credit" ? $("#creditMember").value : "";
       const member = memberId ? MEMBERS.find(m => m.id === memberId) : null;
       if (mode === "credit" && !member) return toast("اختر العضو لإضافة المبلغ على حسابه.");
-      chkBtn.disabled = true; chkBtn.textContent = "جاري التسجيل…";
+      chk.disabled = true; chk.textContent = "جاري التسجيل…";
       const summary = S.cart.map(c => `${c.name} ×${c.qty}`).join("، ");
       try {
         const batch = writeBatch(db);
@@ -1927,7 +2090,7 @@ function screenStore(main) {
         S.cart = [];
         toast(mode === "cash" ? `تم بيع بقيمة ${money(total)}` : `تمت إضافة ${money(total)} على حساب ${member.name}`);
         screenStore(main);
-      } catch (e) { chkBtn.disabled = false; chkBtn.innerHTML = `${ico("check")} إتمام عملية البيع`; toast(errText(e)); }
+      } catch (e) { chk.disabled = false; chk.innerHTML = `${ico("check")} إتمام عملية البيع`; toast(errText(e)); }
     });
     return;
   }
@@ -1936,17 +2099,14 @@ function screenStore(main) {
   body.innerHTML = `
   <h2>${ico(editing ? "edit" : "plus")} ${editing ? "تعديل منتج" : "إضافة منتج جديد"}</h2>
   <form class="panel" id="prodForm" novalidate>
-    <div class="field"><label for="prName">اسم المنتج</label><input id="prName" value="${esc(editing?.name || "")}" placeholder="مثال: بروتين واي، مياه، مشروب طاقة"></div>
+    <div class="field"><label for="prName">اسم المنتج</label><input id="prName" maxlength="100" value="${esc(editing?.name || "")}" placeholder="مثال: بروتين واي، مياه"></div>
     <div class="field"><label for="prCat">القسم</label>
       <select id="prCat">
         <option value="cafe" ${editing?.category === "cafe" ? "selected" : ""}>الكافتيريا والمشروبات</option>
         <option value="gym" ${editing?.category === "gym" ? "selected" : ""}>منتجات ومكملات الجيم</option>
-      </select>
-    </div>
-    <div class="field">
-      <label for="prImg">${ico("image", "sm")} رابط صورة المنتج (اختياري)</label>
-      <input id="prImg" dir="ltr" value="${esc(editing?.imgUrl || "")}" placeholder="https://...">
-    </div>
+      </select></div>
+    <div class="field"><label for="prImg">${ico("image", "sm")} رابط صورة المنتج (https فقط، اختياري)</label>
+      <input id="prImg" dir="ltr" value="${esc(editing?.imgUrl || "")}" placeholder="https://..."></div>
     <div class="two">
       <div class="field"><label for="prPrice">سعر البيع</label><input id="prPrice" type="number" inputmode="decimal" min="0" dir="ltr" value="${esc(editing?.price ?? "")}"></div>
       <div class="field"><label for="prStock">الكمية بالمخزون</label><input id="prStock" type="number" inputmode="numeric" min="0" dir="ltr" value="${esc(editing?.stock ?? 10)}"></div>
@@ -1960,7 +2120,7 @@ function screenStore(main) {
     ${PRODUCTS.length ? PRODUCTS.map(p => `
       <div class="row">
         <div class="name">${esc(p.name)} <span class="tag cat">${esc(CATS[p.category] || "منتج")}</span></div>
-        <div class="meta">السعر: <b>${money(p.price)}</b> · المتاح: <b>${p.stock ?? 0}</b></div>
+        <div class="meta">السعر: <b>${money(p.price)}</b> · المتاح: <b>${esc(p.stock ?? 0)}</b></div>
         <div class="acts">
           <button class="btn ghost sm" data-editpr="${esc(p.id)}">${ico("edit", "sm")} تعديل</button>
           <button class="btn danger sm" data-delpr="${esc(p.id)}">${ico("trash", "sm")} حذف</button>
@@ -1976,10 +2136,10 @@ function screenStore(main) {
     try { await deleteDoc(ref("products", b.dataset.delpr)); await loadProducts(); toast("تم حذف المنتج"); screenStore(main); }
     catch (e) { toast(errText(e)); }
   }));
-
   $("#prodForm", body).addEventListener("submit", async ev => {
     ev.preventDefault();
-    const name = $("#prName").value.trim(), category = $("#prCat").value, imgUrl = $("#prImg").value.trim();
+    const name = $("#prName").value.trim(), category = $("#prCat").value;
+    const imgUrl = safeHttps($("#prImg").value);
     const price = num($("#prPrice").value), stock = Math.max(0, Math.round(num($("#prStock").value)));
     if (!name || price <= 0) return toast("اكتب اسم المنتج وسعرًا صحيحًا.");
     const btn = $("#prSave"); btn.disabled = true;
@@ -1991,12 +2151,11 @@ function screenStore(main) {
   });
 }
 
-/* ---------- Nutrition Broadcast ---------- */
+/* ---------- Nutrition broadcast (owner) ---------- */
 const NUTRITION_TEMPLATES = [
   { title: "إرشادات التغذية والترطيب اليومية", text: "أهلًا كابتن، تذكير بنظام التغذية اليومي: احرص على شرب 2.5 - 3 لتر ماء، وتناول مصدر بروتين واضح في كل وجبة، والالتزام بالنوم الكافي." },
   { title: "تنبيه قبل وبعد التمرين", text: "أهلًا كابتن، تناول وجبة خفيفة غنية بالكربوهيدرات قبل التمرين بـ 60-90 دقيقة، ووجبة بروتين بعد التمرين خلال ساعتين." }
 ];
-
 function screenBroadcast(main) {
   const targets = MEMBERS.filter(m => m.phone && waPhone(m.phone) && (S.broadcastTarget === "all" || ["active", "soon"].includes(calcMemberState(m).key)))
     .sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
@@ -2007,42 +2166,41 @@ function screenBroadcast(main) {
   <h2>${ico("send")} إرشادات وتغذية واتساب للأعضاء</h2>
   <div class="panel">
     <div class="field"><label for="tplSel">قالب جاهز</label>
-      <select id="tplSel"><option value="">-- اختر قالبًا --</option>${NUTRITION_TEMPLATES.map((t, i) => `<option value="${i}">${esc(t.title)}</option>`).join("")}</select>
-    </div>
+      <select id="tplSel"><option value="">-- اختر قالبًا --</option>${NUTRITION_TEMPLATES.map((t, i) => `<option value="${i}">${esc(t.title)}</option>`).join("")}</select></div>
     <div class="field"><label for="bMsg">نص الرسالة</label><textarea id="bMsg" placeholder="اكتب الإرشادات أو نظام التغذية...">${esc(S.broadcastMsg)}</textarea></div>
     <div class="field"><label for="bTarget">الفئة المستهدفة</label>
       <select id="bTarget">
         <option value="all" ${S.broadcastTarget === "all" ? "selected" : ""}>كل الأعضاء</option>
         <option value="active" ${S.broadcastTarget === "active" ? "selected" : ""}>النشطون فقط</option>
-      </select>
-    </div>
+      </select></div>
     ${cur ? `<div class="panel" style="background:var(--brand-soft);border-color:var(--brand-border)">
       <div style="font-size:12.5px;color:var(--brand);font-weight:700">الإرسال المتتابع (${S.broadcastIdx + 1} من ${targets.length})</div>
       <div style="font-weight:700;font-size:15.5px;margin:4px 0">${esc(cur.name)} · ${esc(cur.phone)}</div>
-      <div class="acts" style="margin-top:8px">
-        <a class="btn sm" target="_blank" rel="noopener" href="${esc(waRawLink(cur.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("send", "sm")} إرسال واتساب</a>
+      <div class="acts" style="margin-top:8px;display:flex;gap:8px">
+        <a class="btn sm" id="curWa" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(cur.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("send", "sm")} إرسال واتساب</a>
         <button class="btn ghost sm" type="button" id="nextWaBtn">التالي</button>
-      </div>
-    </div>` : `<p class="hint">لا يوجد أعضاء بأرقام صالحة.</p>`}
+      </div></div>` : `<p class="hint">لا يوجد أعضاء بأرقام صالحة.</p>`}
   </div>
 
   <h2>${ico("users")} قائمة الإرسال (${targets.length})</h2>
   <div class="rows">${targets.length ? targets.map((m, i) => `
     <div class="row"><div class="name">${i + 1}. ${esc(m.name)}</div><div class="meta">${esc(m.phone)}</div>
-    <div class="acts"><a class="btn ghost sm" target="_blank" rel="noopener" href="${esc(waRawLink(m.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("phone", "sm")} إرسال</a></div></div>`).join("") : `<div class="empty">لا يوجد أعضاء.</div>`}</div>`;
+    <div class="acts"><a class="btn ghost sm" data-wa="${esc(m.id)}" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("phone", "sm")} إرسال</a></div></div>`).join("")
+    : `<div class="empty">لا يوجد أعضاء.</div>`}</div>`;
 
   $("#tplSel").addEventListener("change", e => { const t = NUTRITION_TEMPLATES[Number(e.target.value)]; if (t) { S.broadcastMsg = t.text; screenBroadcast(main); } });
   $("#bMsg").addEventListener("input", e => {
     S.broadcastMsg = e.target.value;
     const txt = S.broadcastMsg || NUTRITION_TEMPLATES[0].text;
-    $$("a[href*='wa.me']", main).forEach(a => { const m = targets.find(x => a.href.includes(waPhone(x.phone))); if (m) a.href = waRawLink(m.phone, txt); });
+    $$("a[data-wa]", main).forEach(a => { const m = targets.find(x => x.id === a.dataset.wa); if (m) a.href = waRawLink(m.phone, txt); });
+    const cw = $("#curWa", main); if (cw && cur) cw.href = waRawLink(cur.phone, txt);
   });
   $("#bTarget").addEventListener("change", e => { S.broadcastTarget = e.target.value; S.broadcastIdx = 0; screenBroadcast(main); });
-  const nextBtn = $("#nextWaBtn", main);
-  if (nextBtn) nextBtn.addEventListener("click", () => { S.broadcastIdx = (S.broadcastIdx + 1) % targets.length; screenBroadcast(main); });
+  const nb = $("#nextWaBtn", main);
+  if (nb) nb.addEventListener("click", () => { S.broadcastIdx = (S.broadcastIdx + 1) % targets.length; screenBroadcast(main); });
 }
 
-/* ---------- Money + Charts + Excel ---------- */
+/* ---------- Money (owner + accountant) ---------- */
 async function screenMoney(main, tok) {
   main.innerHTML = `<p class="muted">جاري التحميل…</p>`;
   let pay, exp;
@@ -2086,7 +2244,7 @@ async function screenMoney(main, tok) {
 
   <h2>${ico("plus")} إضافة مصروف</h2>
   <form class="panel" id="xform" novalidate>
-    <div class="field"><label for="xt">البند</label><input id="xt" placeholder="مثال: كهرباء، رواتب، صيانة"></div>
+    <div class="field"><label for="xt">البند</label><input id="xt" maxlength="120" placeholder="مثال: كهرباء، رواتب، صيانة"></div>
     <div class="two">
       <div class="field"><label for="xa">المبلغ</label><input id="xa" type="number" inputmode="decimal" min="0" dir="ltr"></div>
       <div class="field"><label for="xd">التاريخ</label><input id="xd" type="date" dir="ltr" value="${todayStr()}"></div>
@@ -2097,11 +2255,13 @@ async function screenMoney(main, tok) {
   <h2>${ico("trendingDown")} مصروفات الشهر</h2>
   <div class="rows">${expenses.length ? expenses.slice(0, 40).map(x => `
     <div class="row"><div class="name">${esc(x.title)} — ${money(x.amount)}</div><div class="meta">${esc(x.date)}</div>
-    <div class="acts"><button class="btn danger sm" data-delx="${esc(x.id)}">${ico("trash", "sm")} حذف</button></div></div>`).join("") : `<div class="empty">لا توجد مصروفات هذا الشهر.</div>`}</div>
+    ${isOwner() ? `<div class="acts"><button class="btn danger sm" data-delx="${esc(x.id)}">${ico("trash", "sm")} حذف</button></div>` : ""}</div>`).join("")
+    : `<div class="empty">لا توجد مصروفات هذا الشهر.</div>`}</div>
 
   <h2>${ico("trendingUp")} إيرادات الشهر</h2>
   <div class="rows">${payments.length ? payments.slice(0, 40).map(p => `
-    <div class="row"><div class="name">${esc(p.memberName || "")} — ${money(p.amount)}</div><div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("") : `<div class="empty">لا توجد إيرادات هذا الشهر.</div>`}</div>`;
+    <div class="row"><div class="name">${esc(p.memberName || "")} — ${money(p.amount)}</div><div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("")
+    : `<div class="empty">لا توجد إيرادات هذا الشهر.</div>`}</div>`;
 
   $("#exportExcelBtn").addEventListener("click", () => { exportRevenueExcel(payments, `revenues_${monthStart()}.csv`); toast("تم تحميل شيت الإيرادات"); });
 
@@ -2119,7 +2279,6 @@ async function screenMoney(main, tok) {
     const isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
     const gridColor = isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.06)";
     const textColor = isDark ? "#94A3B8" : "#64748B";
-
     const ctx1 = $("#revExpChart")?.getContext("2d");
     if (ctx1) charts.push(new Chart(ctx1, {
       type: "bar",
@@ -2129,17 +2288,14 @@ async function screenMoney(main, tok) {
       ] },
       options: { responsive: true, maintainAspectRatio: false,
         plugins: { legend: { labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } },
-        scales: { x: { grid: { display: false }, ticks: { color: textColor, maxTicksLimit: 10 } }, y: { grid: { color: gridColor }, ticks: { color: textColor } } }
-      }
+        scales: { x: { grid: { display: false }, ticks: { color: textColor, maxTicksLimit: 10 } }, y: { grid: { color: gridColor }, ticks: { color: textColor } } } }
     }));
-
     const ctx2 = $("#sourceChart")?.getContext("2d");
     if (ctx2) charts.push(new Chart(ctx2, {
       type: "doughnut",
       data: { labels: ["اشتراكات الجيم", "الستور والكافتيريا"], datasets: [{ data: [subRev || 0, storeRev || 0], backgroundColor: ["#EA580C", "#FDBA74"], borderWidth: 0 }] },
       options: { responsive: true, maintainAspectRatio: false, cutout: "65%",
-        plugins: { legend: { position: "bottom", labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } }
-      }
+        plugins: { legend: { position: "bottom", labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } } }
     }));
   }
 
@@ -2157,37 +2313,65 @@ async function screenMoney(main, tok) {
   }));
 }
 
-/* ---------- Settings (Gym Logo + Payment Links + Reception Page Hide + Plans) ---------- */
-function screenSettings(main) {
-  const editing = S.editPlan ? PLANS.find(p => p.id === S.editPlan) : null;
+/* ---------- Settings ---------- */
+async function loadStaffList(box, tok) {
+  try {
+    const [a, b] = await Promise.all([
+      getDocs(query(collection(db, "users"), where("gymId", "==", G.gymId), where("role", "==", "reception"))),
+      getDocs(query(collection(db, "users"), where("gymId", "==", G.gymId), where("role", "==", "accountant")))
+    ]);
+    if (tok !== RT) return;
+    const list = [...a.docs, ...b.docs].map(d => ({ id: d.id, ...d.data() }));
+    box.innerHTML = list.length ? list.map(u => `
+      <div class="row">
+        <div class="name">${esc(u.name)} <span class="tag cat">${esc(ROLE_LABEL[u.role] || u.role)}</span>
+          <span class="tag ${u.active === true ? "active" : "suspended"}">${u.active === true ? "نشط" : "موقوف"}</span></div>
+        <div class="meta">${esc(u.email || "")}</div>
+        <div class="acts"><button class="btn ghost sm" data-stog="${esc(u.id)}" data-sact="${u.active === true ? "1" : "0"}">${ico("shield", "sm")} ${u.active === true ? "إيقاف الحساب" : "تفعيل الحساب"}</button></div>
+      </div>`).join("") : `<div class="empty">لا توجد حسابات موظفين بعد.</div>`;
+    $$("[data-stog]", box).forEach(btn => btn.addEventListener("click", async () => {
+      btn.disabled = true;
+      try { await updateDoc(doc(db, "users", btn.dataset.stog), { active: btn.dataset.sact !== "1" }); toast("تم التحديث"); loadStaffList(box, tok); }
+      catch (e) { btn.disabled = false; toast(errText(e)); }
+    }));
+  } catch (e) {
+    if (tok === RT) box.innerHTML = `<div class="empty">${esc(errText(e))}</div>`;
+  }
+}
+
+function screenSettings(main, tok) {
+  const owner = isOwner();
+  const cred = S.cred && S.cred.scope === "settings" ? S.cred : null;
+  if (cred) S.cred = null;
+  const editing = owner && S.editPlan ? PLANS.find(p => p.id === S.editPlan) : null;
+  const legacy = owner ? MEMBERS.filter(m => Object.prototype.hasOwnProperty.call(m, "password")) : [];
+  const memberLink = `${appLink()}?g=${encodeURIComponent(G.gymId)}`;
+
   main.innerHTML = `
-  <h2>${ico("creditCard")} هوية الجيم وروابط الدفع وصلاحيات الاستقبال</h2>
+  ${cred ? credHtml(cred) : ""}
+  ${owner ? `
+  <h2>${ico("creditCard")} هوية الجيم وروابط الدفع</h2>
   <form class="panel" id="gymCfgForm" novalidate>
-    <div class="field"><label for="cfgLogo">${ico("image", "sm")} رابط شعار الجيم (Logo URL)</label><input id="cfgLogo" dir="ltr" value="${esc(G.gym.logoUrl || "")}" placeholder="https://..."></div>
-    <div class="field"><label for="cfgInsta">رابط / حساب إنستا باي (InstaPay)</label><input id="cfgInsta" dir="ltr" value="${esc(G.gym.instapay || "")}" placeholder="https://ipn.eg/... أو username@instapay"></div>
+    <div class="field"><label for="cfgLogo">${ico("image", "sm")} رابط شعار الجيم (https)</label><input id="cfgLogo" dir="ltr" value="${esc(G.gym.logoUrl || "")}" placeholder="https://..."></div>
+    <div class="field"><label for="cfgInsta">إنستا باي (رابط أو عنوان)</label><input id="cfgInsta" dir="ltr" maxlength="200" value="${esc(G.gym.instapay || "")}" placeholder="https://ipn.eg/... أو username@instapay"></div>
     <div class="two">
-      <div class="field"><label for="cfgVoda">فودافون كاش</label><input id="cfgVoda" dir="ltr" value="${esc(G.gym.vodafoneCash || "")}" placeholder="010xxxxxxxx"></div>
-      <div class="field"><label for="cfgOrange">أورانج كاش</label><input id="cfgOrange" dir="ltr" value="${esc(G.gym.orangeCash || "")}" placeholder="012xxxxxxxx"></div>
-    </div>
-    <div class="field">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-        <input type="checkbox" id="cfgHideMoney" style="width:auto;min-height:auto" ${G.gym.hideMoneyForStaff ? "checked" : ""}>
-        <span>إخفاء صفحة المالية والإيرادات عن حساب الاستقبال</span>
-      </label>
-    </div>
-    <div class="field">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-        <input type="checkbox" id="cfgHideSettings" style="width:auto;min-height:auto" ${G.gym.hideSettingsForStaff ? "checked" : ""}>
-        <span>إخفاء صفحة الإعدادات عن حساب الاستقبال</span>
-      </label>
+      <div class="field"><label for="cfgVoda">فودافون كاش</label><input id="cfgVoda" dir="ltr" maxlength="60" value="${esc(G.gym.vodafoneCash || "")}" placeholder="010xxxxxxxx"></div>
+      <div class="field"><label for="cfgOrange">أورانج كاش</label><input id="cfgOrange" dir="ltr" maxlength="60" value="${esc(G.gym.orangeCash || "")}" placeholder="012xxxxxxxx"></div>
     </div>
     <button class="btn" type="submit" id="saveCfgBtn">${ico("check")} حفظ إعدادات الجيم</button>
   </form>
 
+  <h2>${ico("phone")} رابط دخول الأعضاء</h2>
+  <div class="panel">
+    <div class="hint" style="margin:0 0 8px">أرسل هذا الرابط للأعضاء مع رقم موبايلهم وكلمة المرور التي تولّدها لهم. الرابط يملأ كود الجيم تلقائيًا.</div>
+    <div class="mono" style="font-size:12.5px;margin-bottom:10px">${esc(memberLink)}</div>
+    <button class="btn soft sm" type="button" id="copyMemberLink">${ico("copy", "sm")} نسخ الرابط</button>
+  </div>
+
   <h2>${ico("package")} باقات الاشتراك</h2>
   <div class="rows">${PLANS.length ? PLANS.map(p => `
     <div class="row"><div class="name">${esc(p.name)}</div>
-    <div class="meta">${p.days} يوم · ${p.sessions || 30} تمرينة · ${money(p.price)}</div>
+    <div class="meta">${esc(p.days)} يوم · ${esc(p.sessions || 30)} تمرينة · ${money(p.price)}</div>
     <div class="acts">
       <button class="btn ghost sm" data-editp="${esc(p.id)}">${ico("edit", "sm")} تعديل</button>
       <button class="btn danger sm" data-delp="${esc(p.id)}">${ico("trash", "sm")} حذف</button>
@@ -2195,7 +2379,7 @@ function screenSettings(main) {
 
   <h2>${ico(editing ? "edit" : "plus")} ${editing ? "تعديل باقة" : "إضافة باقة"}</h2>
   <form class="panel" id="pform" novalidate>
-    <div class="field"><label for="pn">اسم الباقة</label><input id="pn" value="${esc(editing?.name || "")}" placeholder="مثال: شهري"></div>
+    <div class="field"><label for="pn">اسم الباقة</label><input id="pn" maxlength="60" value="${esc(editing?.name || "")}" placeholder="مثال: شهري"></div>
     <div class="two">
       <div class="field"><label for="pd">المدة بالأيام</label><input id="pd" type="number" inputmode="numeric" min="1" dir="ltr" value="${esc(editing?.days ?? 30)}"></div>
       <div class="field"><label for="pp">السعر</label><input id="pp" type="number" inputmode="decimal" min="0" dir="ltr" value="${esc(editing?.price ?? "")}"></div>
@@ -2205,34 +2389,65 @@ function screenSettings(main) {
     ${editing ? `<button class="linkbtn" type="button" id="pcancel">إلغاء التعديل</button>` : ""}
   </form>
 
+  <h2>${ico("users")} حسابات الموظفين (استقبال / محاسب)</h2>
+  <div class="rows" id="staffList"><div class="empty">جاري التحميل…</div></div>
+  <h2>${ico("plus")} إضافة موظف</h2>
+  <form class="panel" id="staffForm" novalidate>
+    <div class="two">
+      <div class="field"><label for="sName">الاسم</label><input id="sName" maxlength="100"></div>
+      <div class="field"><label for="sRole">الصلاحية</label>
+        <select id="sRole"><option value="reception">استقبال</option><option value="accountant">محاسب</option></select></div>
+    </div>
+    <div class="field"><label for="sEmail">الإيميل</label><input id="sEmail" type="email" dir="ltr" autocomplete="off"></div>
+    <div class="field"><label for="sPass">كلمة المرور</label>
+      <div class="pwrow"><input id="sPass" type="text" dir="ltr" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" id="sGen">${ico("refresh", "sm")} توليد</button></div>
+      <div class="hint">الاستقبال: الأعضاء والحضور والستور فقط. المحاسب: المالية فقط.</div></div>
+    <button class="btn" type="submit" id="sSave">${ico("check")} إنشاء الحساب</button>
+  </form>
+
+  <h2>${ico("shield")} الأمان</h2>
+  <div class="panel">
+    ${legacy.length ? `
+      <p class="msg err" style="margin-bottom:10px">${ico("alert", "sm")} يوجد ${legacy.length} عضو لديهم كلمة مرور قديمة محفوظة كنص في قاعدة البيانات. احذفها الآن، ثم أنشئ لهم دخولًا جديدًا من صفحة العضو.</p>
+      <button class="btn danger" type="button" id="purgeBtn">${ico("trash", "sm")} حذف كلمات المرور القديمة (${legacy.length})</button>
+    ` : `<div class="stat"><span>كلمات مرور مخزنة كنص</span><b>لا يوجد</b></div>`}
+  </div>
+  ` : ""}
+
   <h2>${ico("building")} الحساب</h2>
   <div class="panel">
     <div class="stat"><span>الجيم</span><b>${esc(G.gym.name || "")}</b></div>
     <div class="stat"><span>المستخدم</span><b>${esc(G.profile.name || "")}</b></div>
-    <div style="padding-top:12px"><button class="btn ghost" id="outBtn">${ico("logout", "sm")} تسجيل الخروج</button></div>
-  </div>`;
+    <div class="stat"><span>الصلاحية</span><b>${esc(ROLE_LABEL[role()] || "")}</b></div>
+  </div>
+  ${pwPanelHtml()}
+  <div style="margin-top:14px"><button class="btn ghost" id="outBtn">${ico("logout", "sm")} تسجيل الخروج</button></div>`;
 
+  wireCred(main, cred);
+  wirePwForm(main);
   $("#outBtn").addEventListener("click", () => { stopScanner(); destroyCharts(); signOut(auth); });
+  if (!owner) return;
 
   $("#gymCfgForm").addEventListener("submit", async ev => {
     ev.preventDefault();
-    const logoUrl = $("#cfgLogo").value.trim();
-    const instapay = $("#cfgInsta").value.trim();
-    const vodafoneCash = $("#cfgVoda").value.trim();
-    const orangeCash = $("#cfgOrange").value.trim();
-    const hideMoneyForStaff = $("#cfgHideMoney").checked;
-    const hideSettingsForStaff = $("#cfgHideSettings").checked;
+    const data = {
+      name: G.gym.name || "",
+      logoUrl: safeHttps($("#cfgLogo").value),
+      instapay: $("#cfgInsta").value.trim(),
+      vodafoneCash: $("#cfgVoda").value.trim(),
+      orangeCash: $("#cfgOrange").value.trim()
+    };
+    const btn = $("#saveCfgBtn"); btn.disabled = true;
     try {
-      await updateDoc(doc(db, "gyms", G.gymId), {
-        logoUrl, instapay, vodafoneCash, orangeCash, hideMoneyForStaff, hideSettingsForStaff
-      });
-      Object.assign(G.gym, { logoUrl, instapay, vodafoneCash, orangeCash, hideMoneyForStaff, hideSettingsForStaff });
+      await setDoc(ref("meta", "public"), data, { merge: true });
+      Object.assign(G.gym, data);
       toast("تم حفظ إعدادات الجيم");
       renderOwner();
-    } catch (e) { toast(errText(e)); }
+    } catch (e) { btn.disabled = false; toast(errText(e)); }
   });
+  $("#copyMemberLink").addEventListener("click", () => copyText(memberLink));
 
-  $$("[data-editp]", main).forEach(b => b.addEventListener("click", () => { S.editPlan = b.dataset.editp; renderOwner(); window.scrollTo(0, document.body.scrollHeight); }));
+  $$("[data-editp]", main).forEach(b => b.addEventListener("click", () => { S.editPlan = b.dataset.editp; renderOwner(); }));
   $$("[data-delp]", main).forEach(b => b.addEventListener("click", async () => {
     if (!confirm("حذف هذه الباقة؟")) return;
     try { await deleteDoc(ref("plans", b.dataset.delp)); await loadPlans(); renderOwner(); } catch (e) { toast(errText(e)); }
@@ -2251,23 +2466,68 @@ function screenSettings(main) {
       S.editPlan = null; await loadPlans(); toast("تم الحفظ"); renderOwner();
     } catch (e) { btn.disabled = false; toast(errText(e)); }
   });
+
+  loadStaffList($("#staffList"), tok);
+  wireGen("#sPass", "#sGen", main);
+  $("#staffForm").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const name = $("#sName").value.trim(), r = $("#sRole").value;
+    const email = $("#sEmail").value.trim().toLowerCase(), pass = $("#sPass").value.trim();
+    if (!name) return toast("اكتب اسم الموظف.");
+    if (!isValidEmail(email)) return toast("صيغة الإيميل غير صحيحة.");
+    const pe = pwError(pass); if (pe) return toast(pe);
+    const btn = $("#sSave"); btn.disabled = true;
+    try {
+      const uid = await createAuthUser(email, pass);
+      await setDoc(doc(db, "users", uid), {
+        name, role: r, active: true, gymId: G.gymId, gymName: G.gym.name || "",
+        email, createdAt: serverTimestamp(), createdBy: G.uid
+      });
+      S.cred = loginCredDescriptor("settings", `بيانات دخول ${name} (${ROLE_LABEL[r]})`, name, email, pass);
+      renderOwner();
+    } catch (e) { btn.disabled = false; toast(errText(e)); }
+  });
+
+  const purge = $("#purgeBtn");
+  if (purge) purge.addEventListener("click", async () => {
+    if (!confirm("حذف كلمات المرور القديمة المخزنة لجميع الأعضاء؟ لن يعمل الدخول القديم بها.")) return;
+    purge.disabled = true;
+    try {
+      for (let i = 0; i < legacy.length; i += 400) {
+        const batch = writeBatch(db);
+        legacy.slice(i, i + 400).forEach(m => batch.update(ref("members", m.id), { password: deleteField() }));
+        await batch.commit();
+      }
+      legacy.forEach(m => { delete m.password; });
+      toast("تم حذف كلمات المرور القديمة");
+      renderOwner();
+    } catch (e) { purge.disabled = false; toast(errText(e)); }
+  });
 }
 
 const SCREENS = {
-  home: screenHome, members: screenMembers, checkin: screenCheckin,
-  captains: screenCaptains, store: screenStore, broadcast: screenBroadcast,
-  money: screenMoney, settings: screenSettings
+  home: screenHome, members: screenMembers, checkin: screenCheckin, captains: screenCaptains,
+  store: screenStore, broadcast: screenBroadcast, money: screenMoney, settings: screenSettings
 };
 const SUBS = { member: subMember, newMember: subNewMember, renew: subRenew, edit: subEdit, card: subCard };
 
-async function startOwner(uid, profile, gym, gymId) {
-  G = { uid, profile, gym, gymId };
-  S.tab = profile.role === "accountant" ? "money" : "home";
-  S.sub = null; S.filter = "all"; S.q = ""; S.editPlan = null;
+async function startStaff(uid, profile, gym, gymId) {
+  let pub = {};
+  try {
+    const s = await withTimeout(getDoc(doc(db, "gyms", gymId, "meta", "public")));
+    if (s.exists()) pub = s.data();
+  } catch {}
+  G = { uid, profile, gym: { ...gym, ...pub }, gymId };
+  const r = profile.role;
+  S.tab = r === "accountant" ? "money" : (r === "reception" ? "members" : "home");
+  S.sub = null; S.filter = "all"; S.q = ""; S.editPlan = null; S.cred = null;
   S.storeTab = "pos"; S.storeCat = "all"; S.cart = []; S.editProd = null;
   root.innerHTML = `<div class="loading">جاري تحميل بيانات الجيم…</div>`;
   try {
-    await withTimeout(Promise.all([loadMembers(), loadPlans(), loadProducts(), loadCaptains()]), 20000);
+    const jobs = [];
+    if (r === "owner" || r === "reception") jobs.push(loadMembers(), loadPlans(), loadProducts());
+    if (r === "owner") jobs.push(loadCaptains());
+    await withTimeout(Promise.all(jobs), 20000);
   } catch (e) {
     return viewBlocked("تعذر تحميل بيانات الجيم", errText(e), true);
   }
@@ -2275,88 +2535,151 @@ async function startOwner(uid, profile, gym, gymId) {
 }
 
 /* =====================================================================
-   SUPER ADMIN (Shows Gyms + Gym Logo + Staff Account Creation)
+   CAPTAIN APP (sees only his own punch page)
+   ===================================================================== */
+async function startCaptain(uid, profile, gym) {
+  let pub = {};
+  try {
+    const s = await withTimeout(getDoc(doc(db, "gyms", profile.gymId, "meta", "public")));
+    if (s.exists()) pub = s.data();
+  } catch {}
+  G = { uid, profile, gym: { ...gym, ...pub }, gymId: profile.gymId };
+  renderCaptain();
+}
+
+async function renderCaptain() {
+  root.innerHTML = `<div class="loading">جاري التحميل…</div>`;
+  const cid = G.profile.captainId;
+  let cap, punches;
+  try {
+    const [cSnap, hSnap] = await withTimeout(Promise.all([
+      getDoc(ref("captains", cid)),
+      getDocs(query(col("captain_attendance"), where("captainId", "==", cid)))
+    ]), 20000);
+    if (!cSnap.exists()) return viewBlocked("لا توجد بيانات", "لم نجد ملفك كابتن في هذا الجيم. تواصل مع المدير.");
+    cap = { id: cSnap.id, ...cSnap.data() };
+    punches = hSnap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
+  } catch (e) { return viewBlocked("تعذر التحميل", errText(e), true); }
+
+  const todayIn = cap.lastDate === todayStr() && cap.status === "in";
+  const gymLat = Number(G.gym.lat), gymLng = Number(G.gym.lng);
+  const hasLoc = G.gym.lat !== undefined && G.gym.lat !== "" && G.gym.lng !== undefined && G.gym.lng !== "" && !isNaN(gymLat) && !isNaN(gymLng);
+  const maxRadius = Number(G.gym.gpsRadius) || 250;
+
+  root.innerHTML = `
+  <div class="shell notabs">
+    <header class="oh"><div class="in">
+      <div class="brand-box">${gymLogoHtml(G.gym)}<div><div class="gname">${esc(G.gym.name || "الجيم")}</div><div class="gsub">${esc(cap.name)} · كابتن</div></div></div>
+      <button class="btn ghost sm" id="cOut">${ico("logout", "sm")} خروج</button>
+    </div></header>
+    <main class="wrap">
+      <h2>${ico("mapPin")} بصمة الحضور والانصراف</h2>
+      <div class="panel">
+        <div class="top" style="margin-bottom:8px">
+          <div class="who"><h1 style="font-size:18px">${esc(cap.name)}</h1><div class="sub">${esc(cap.role || "كابتن")}</div></div>
+          <span class="tag ${todayIn ? "active" : "none"}">${todayIn ? "حاضر الآن" : "غير مسجل حضور"}</span>
+        </div>
+        <div class="stat"><span>آخر بصمة</span><b>${esc(fmtDateTime(toDate(cap.lastAt)))}</b></div>
+        ${hasLoc ? "" : `<p class="msg err" style="margin-top:10px">${ico("alert", "sm")} لم يحدد المدير موقع الجيم بعد، لذلك لن يتم التحقق من النطاق.</p>`}
+        <button class="btn punch-btn" id="punchBtn" style="margin-top:12px">${ico("mapPin")} ${todayIn ? "بصمة انصراف" : "بصمة حضور"}</button>
+        <div class="hint" style="margin-top:8px">يتم تحديد موقعك عبر GPS. اسمح للمتصفح باستخدام الموقع.</div>
+      </div>
+
+      <h2>${ico("clock")} آخر بصماتي</h2>
+      <div class="rows">${punches.length ? punches.slice(0, 20).map(p => `
+        <div class="row"><div class="name"><span class="tag ${p.type === "in" ? "active" : "soon"}">${p.type === "in" ? "حضور" : "انصراف"}</span> ${esc(fmtDateTime(toDate(p.ts)))}</div>
+        <div class="meta">${p.distanceMeters != null ? esc(p.distanceMeters) + " متر من الجيم" : ""}</div></div>`).join("")
+        : `<div class="empty">لا توجد بصمات بعد.</div>`}</div>
+
+      ${pwPanelHtml()}
+    </main>
+  </div>`;
+
+  $("#cOut").addEventListener("click", () => signOut(auth));
+  wirePwForm();
+  $("#punchBtn").addEventListener("click", async ev => {
+    const btn = ev.currentTarget; btn.disabled = true;
+    const type = todayIn ? "out" : "in";
+    try {
+      const loc = await getCurrentGps();
+      let dist = null;
+      if (hasLoc) {
+        dist = Math.round(haversineMeters(loc.lat, loc.lng, gymLat, gymLng));
+        if (dist > maxRadius) { btn.disabled = false; return toast(`أنت خارج نطاق الجيم (${dist} متر من أصل ${maxRadius} متر).`); }
+      }
+      await addDoc(col("captain_attendance"), {
+        captainId: cid, captainName: cap.name, type, date: todayStr(),
+        lat: loc.lat, lng: loc.lng, distanceMeters: dist, ts: serverTimestamp(), by: G.uid
+      });
+      await updateDoc(ref("captains", cid), { status: type, lastDate: todayStr(), lastAt: serverTimestamp(), lastDist: dist });
+      toast(type === "in" ? "تم تسجيل حضورك" : "تم تسجيل انصرافك");
+      renderCaptain();
+    } catch (e) { btn.disabled = false; toast(e.message || errText(e)); }
+  });
+}
+
+/* =====================================================================
+   SUPER ADMIN
    ===================================================================== */
 function viewAdmin(profile) {
   root.innerHTML = `
   <div class="wrap wide">
     <div class="top">
-      <div class="who">
-        <h1>لوحة الإدارة</h1>
-        <div class="sub">${esc(profile.name || "")}</div>
-      </div>
+      <div class="who"><h1>لوحة الإدارة</h1><div class="sub">${esc(profile.name || "")}</div></div>
       <button class="btn ghost" id="outBtn">${ico("logout", "sm")} خروج</button>
     </div>
 
-    <h2 style="margin-top:0">${ico("plus")} إضافة جيم ومدير</h2>
+    <h2 style="margin-top:0">${ico("building")} الجيمات المشتركة</h2>
+    <div id="gymList"><div class="rows"><div class="empty">جاري التحميل…</div></div></div>
+
+    <h2>${ico("plus")} إضافة جيم ومدير</h2>
     <div id="formMsg"></div>
     <form class="panel" id="gymForm" novalidate>
       <div class="grid2">
-        <div class="field"><label for="gName">اسم الجيم</label><input id="gName" required autocomplete="off"></div>
-        <div class="field"><label for="oName">اسم المدير</label><input id="oName" required autocomplete="off"></div>
-        <div class="field">
-          <label for="oEmail">إيميل المدير</label>
-          <input id="oEmail" type="email" dir="ltr" inputmode="email" required autocomplete="off" placeholder="manager@gym.com">
-        </div>
-        <div class="field">
-          <label for="oPass">كلمة مرور المدير</label>
-          <input id="oPass" type="text" dir="ltr" required autocomplete="off">
-        </div>
-        <div class="field">
-          <label for="gLogo">${ico("image", "sm")} شعار الجيم (رابط صورة)</label>
-          <input id="gLogo" dir="ltr" placeholder="https://...">
-        </div>
-        <div class="field">
-          <label for="gPlan">الباقة</label>
-          <select id="gPlan"><option value="basic">أساسية</option><option value="pro">متقدمة</option><option value="premium">خاصة</option></select>
-        </div>
-        <div class="field">
-          <label for="gMonths">مدة الاشتراك بالأشهر</label>
-          <input id="gMonths" type="number" min="1" max="36" value="1" inputmode="numeric" dir="ltr">
-        </div>
+        <div class="field"><label for="gName">اسم الجيم</label><input id="gName" maxlength="100" required autocomplete="off"></div>
+        <div class="field"><label for="oName">اسم المدير</label><input id="oName" maxlength="100" required autocomplete="off"></div>
+        <div class="field"><label for="oEmail">إيميل المدير</label><input id="oEmail" type="email" dir="ltr" inputmode="email" required autocomplete="off" placeholder="manager@gym.com"></div>
+        <div class="field"><label for="oPass">كلمة مرور المدير</label>
+          <div class="pwrow"><input id="oPass" type="text" dir="ltr" required autocomplete="off" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" id="oGen">${ico("refresh", "sm")} توليد</button></div></div>
+        <div class="field"><label for="gLogo">${ico("image", "sm")} شعار الجيم (رابط https)</label><input id="gLogo" dir="ltr" placeholder="https://..."></div>
+        <div class="field"><label for="gPlan">الباقة</label>
+          <select id="gPlan"><option value="basic">أساسية</option><option value="pro">متقدمة</option><option value="premium">خاصة</option></select></div>
+        <div class="field"><label for="gMonths">مدة الاشتراك بالأشهر</label><input id="gMonths" type="number" min="1" max="36" value="1" inputmode="numeric" dir="ltr"></div>
       </div>
       <button class="btn" type="submit" id="gymBtn">${ico("check")} إنشاء الجيم</button>
     </form>
-
-    <h2>${ico("building")} الجيمات المضافة</h2>
-    <div id="gymList"><div class="rows"><div class="empty">جاري التحميل…</div></div></div>
   </div>`;
 
   $("#outBtn").addEventListener("click", () => signOut(auth));
+  wireGen("#oPass", "#oGen");
   $("#gymForm").addEventListener("submit", onCreateGym);
   loadGyms();
 }
 
-function setFormMsg(text, kind = "err") {
+function setFormMsg(text, kind = "err", extraHtml = "") {
   const box = $("#formMsg");
-  box.innerHTML = text ? `<p class="msg ${kind}" role="${kind === "err" ? "alert" : "status"}">${ico(kind === "err" ? "alert" : "checkCircle", "sm")} ${esc(text)}</p>` : "";
+  box.innerHTML = text ? `<p class="msg ${kind}" role="${kind === "err" ? "alert" : "status"}">${ico(kind === "err" ? "alert" : "checkCircle", "sm")} ${esc(text)}</p>${extraHtml}` : "";
 }
 
 async function onCreateGym(ev) {
   ev.preventDefault();
-  const gName = $("#gName").value.trim();
-  const oName = $("#oName").value.trim();
-  const oEmail = $("#oEmail").value.trim().toLowerCase();
-  const oPass = $("#oPass").value;
-  const logoUrl = $("#gLogo").value.trim();
-  const plan = $("#gPlan").value;
+  const gName = $("#gName").value.trim(), oName = $("#oName").value.trim();
+  const oEmail = $("#oEmail").value.trim().toLowerCase(), oPass = $("#oPass").value.trim();
+  const logoUrl = safeHttps($("#gLogo").value), plan = $("#gPlan").value;
   const months = Math.max(1, Math.min(36, parseInt($("#gMonths").value, 10) || 1));
 
   if (!gName || !oName || !oEmail || !oPass) return setFormMsg("أكمل كل الخانات.");
   if (!isValidEmail(oEmail)) return setFormMsg("اكتب إيميلًا صحيحًا للمدير.");
-  if (oPass.length < 6) return setFormMsg("كلمة المرور لازم تكون 6 أحرف أو أرقام على الأقل.");
+  const pe = pwError(oPass); if (pe) return setFormMsg(pe);
 
   const btn = $("#gymBtn"); btn.disabled = true; btn.textContent = "جاري الإنشاء…";
   setFormMsg("");
-
+  let uid = null;
   try {
-    const cred = await createUserWithEmailAndPassword(auth2, oEmail, oPass);
-    const uid = cred.user.uid;
-    await signOut(auth2);
-
+    uid = await createAuthUser(oEmail, oPass);
     const gymRef = doc(collection(db, "gyms"));
     await setDoc(doc(db, "users", uid), {
-      name: oName, email: oEmail, role: "owner", active: true, gymId: gymRef.id,
+      name: oName, email: oEmail, role: "owner", active: true, gymId: gymRef.id, gymName: gName,
       createdAt: serverTimestamp()
     });
     await setDoc(gymRef, {
@@ -2365,13 +2688,22 @@ async function onCreateGym(ev) {
       subscriptionEnd: Timestamp.fromDate(new Date(Date.now() + months * 30 * DAY)),
       createdAt: serverTimestamp()
     });
+    await setDoc(doc(db, "gyms", gymRef.id, "meta", "public"), { name: gName, logoUrl }, { merge: true });
 
+    const c = {
+      title: `بيانات دخول مدير «${gName}»`, phone: "",
+      rows: [["الرابط", appLink()], ["الإيميل", oEmail], ["كلمة المرور", oPass]],
+      text: `أهلًا ${oName}، بيانات دخولك لنظام GymPro:\nالرابط: ${appLink()}\nالإيميل: ${oEmail}\nكلمة المرور: ${oPass}\nنوصيك بتغيير كلمة المرور بعد أول دخول.`
+    };
     $("#gymForm").reset();
-    $("#gMonths").value = 1;
-    setFormMsg(`تم إنشاء «${gName}» بنجاح.`, "ok");
+    $("#gMonths").value = 1; $("#oPass").value = genPassword();
+    setFormMsg(`تم إنشاء «${gName}» بنجاح.`, "ok", credHtml(c));
+    wireCred($("#formMsg"), c);
     loadGyms();
   } catch (e) {
-    setFormMsg(errText(e));
+    let t = errText(e);
+    if (uid) t += " تم إنشاء حساب المدير لكن لم يكتمل ربطه بالجيم.";
+    setFormMsg(t);
   } finally {
     btn.disabled = false; btn.innerHTML = `${ico("check")} إنشاء الجيم`;
   }
@@ -2380,99 +2712,112 @@ async function onCreateGym(ev) {
 async function loadGyms() {
   const box = $("#gymList");
   if (!box) return;
+  let gyms = [];
   try {
-    const [snap, usersSnap] = await Promise.all([
-      getDocs(collection(db, "gyms")),
-      getDocs(collection(db, "users"))
-    ]);
-    const usersMap = new Map();
-    usersSnap.docs.forEach(d => usersMap.set(d.id, d.data()));
-
-    const gyms = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    gyms.sort((a, b) => (toDate(b.createdAt)?.getTime() || 0) - (toDate(a.createdAt)?.getTime() || 0));
-
-    if (!gyms.length) {
-      box.innerHTML = `<div class="rows"><div class="empty">لا توجد جيمات بعد. أضف أول جيم من النموذج أعلاه.</div></div>`;
-      return;
-    }
-
-    box.innerHTML = `<div class="rows">${gyms.map(g => {
-      const end = toDate(g.subscriptionEnd);
-      const expired = end && end.getTime() < Date.now();
-      const status = g.status === "suspended" ? "suspended" : (expired ? "expired" : "active");
-      const label = { active: "الجيم نشط", suspended: "الجيم موقوف", expired: "منتهي" }[status];
-      const mgr = g.ownerUid ? usersMap.get(g.ownerUid) : null;
-      const mgrActive = mgr ? mgr.active !== false : true;
-      const emailValid = isValidEmail(g.ownerEmail || mgr?.email);
-
-      return `
-      <div class="row" data-id="${esc(g.id)}" data-uid="${esc(g.ownerUid || "")}">
-        <div class="name">
-          ${gymLogoHtml(g, "mini-logo")}
-          <span>${esc(g.name || g.id)}</span>
-          <span class="tag ${status}">${label}</span>
-          <span class="tag ${mgrActive ? "active" : "suspended"}">${mgrActive ? "المدير نشط" : "المدير موقوف"}</span>
-        </div>
-        <div class="meta">${esc(PLANS_LABEL[g.plan] || g.plan || "—")} · ينتهي ${fmtDate(end)}</div>
-        <div class="meta">المدير: <b>${esc(g.ownerName || mgr?.name || "—")}</b> · الإيميل: <b>${esc(g.ownerEmail || mgr?.email || "—")}</b> <span class="tag ${emailValid ? "active" : "suspended"}">${emailValid ? "إيميل صحيح" : "إيميل غير صحيح"}</span></div>
-        <div class="acts">
-          <button class="btn ghost sm" data-act="extend">${ico("refresh", "sm")} تمديد 30 يوم</button>
-          <button class="btn ghost sm" data-act="toggleGym">${g.status === "suspended" ? "تفعيل الجيم" : "إيقاف الجيم"}</button>
-          ${g.ownerUid ? `<button class="btn soft sm" data-act="toggleMgr">${mgrActive ? "إيقاف المدير" : "تنشيط المدير"}</button>` : ""}
-        </div>
-      </div>`;
-    }).join("")}</div>`;
-
-    $$("button[data-act]", box).forEach(b => {
-      b.addEventListener("click", async () => {
-        const row = b.closest(".row");
-        const id = row.dataset.id, uid = row.dataset.uid;
-        const g = gyms.find(x => x.id === id);
-        b.disabled = true;
-        try {
-          if (b.dataset.act === "toggleGym") {
-            await updateDoc(doc(db, "gyms", id), { status: g.status === "suspended" ? "active" : "suspended" });
-          } else if (b.dataset.act === "toggleMgr" && uid) {
-            const curMgr = usersMap.get(uid);
-            await updateDoc(doc(db, "users", uid), { active: curMgr ? curMgr.active === false : false });
-          } else {
-            const cur = toDate(g.subscriptionEnd);
-            const base = cur && cur.getTime() > Date.now() ? cur.getTime() : Date.now();
-            await updateDoc(doc(db, "gyms", id), { subscriptionEnd: Timestamp.fromDate(new Date(base + 30 * DAY)) });
-          }
-          loadGyms();
-        } catch (e) { b.disabled = false; setFormMsg(errText(e)); }
-      });
-    });
+    const snap = await getDocs(collection(db, "gyms"));
+    gyms = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch (e) {
-    box.innerHTML = `<div class="rows"><div class="empty">${esc(errText(e))}</div></div>`;
+    box.innerHTML = `<div class="rows"><div class="empty">${esc(errText(e))}<br>تأكد من نشر قواعد الأمان الجديدة.</div></div>`;
+    return;
   }
+  gyms.sort((a, b) => (toDate(b.createdAt)?.getTime() || 0) - (toDate(a.createdAt)?.getTime() || 0));
+  if (!gyms.length) {
+    box.innerHTML = `<div class="rows"><div class="empty">لا توجد جيمات بعد. أضف أول جيم من النموذج بالأسفل.</div></div>`;
+    return;
+  }
+
+  const usersMap = new Map();
+  try {
+    const us = await getDocs(query(collection(db, "users"), where("role", "==", "owner")));
+    us.docs.forEach(d => usersMap.set(d.id, d.data()));
+  } catch {}
+  const counts = await Promise.all(gyms.map(async g => {
+    try { return (await getCountFromServer(collection(db, "gyms", g.id, "members"))).data().count; }
+    catch { return null; }
+  }));
+
+  box.innerHTML = `<div class="rows">${gyms.map((g, i) => {
+    const end = toDate(g.subscriptionEnd);
+    const expired = end && end.getTime() < Date.now();
+    const status = g.status === "cancelled" ? "cancelled" : (g.status === "suspended" ? "suspended" : (expired ? "expired" : "active"));
+    const label = { active: "نشط", suspended: "موقوف", cancelled: "ملغي", expired: "منتهي" }[status];
+    const tagCls = status === "active" ? "active" : (status === "expired" ? "expired" : "suspended");
+    const mgr = g.ownerUid ? usersMap.get(g.ownerUid) : null;
+    const mgrActive = mgr ? mgr.active !== false : true;
+    const blocked = status !== "active";
+    return `
+    <div class="row" data-id="${esc(g.id)}" data-uid="${esc(g.ownerUid || "")}">
+      <div class="name">${gymLogoHtml(g, "mini-logo")}<span>${esc(g.name || g.id)}</span>
+        <span class="tag ${tagCls}">${label}</span>
+        <span class="tag ${mgrActive ? "active" : "suspended"}">${mgrActive ? "المدير نشط" : "المدير موقوف"}</span></div>
+      <div class="meta">${esc(PLANS_LABEL[g.plan] || g.plan || "—")} · ينتهي ${fmtDate(end)} · الأعضاء: <b>${counts[i] ?? "—"}</b></div>
+      <div class="meta">المدير: <b>${esc(g.ownerName || mgr?.name || "—")}</b> · ${esc(g.ownerEmail || mgr?.email || "—")}</div>
+      <div class="acts">
+        <button class="btn ghost sm" data-act="extend">${ico("refresh", "sm")} تمديد 30 يوم</button>
+        ${blocked ? `<button class="btn soft sm" data-act="activate">${ico("checkCircle", "sm")} تفعيل الجيم</button>`
+                  : `<button class="btn ghost sm" data-act="suspend">إيقاف مؤقت</button>
+                     <button class="btn danger sm" data-act="cancel">إلغاء الاشتراك</button>`}
+        ${g.ownerUid ? `<button class="btn ghost sm" data-act="toggleMgr">${mgrActive ? "إيقاف المدير" : "تنشيط المدير"}</button>` : ""}
+        ${g.ownerEmail ? `<button class="btn ghost sm" data-act="resetMgr">${ico("lock", "sm")} رابط كلمة المرور للمدير</button>` : ""}
+        <button class="btn ghost sm" data-act="copyLink">${ico("copy", "sm")} رابط دخول الأعضاء</button>
+      </div>
+    </div>`;
+  }).join("")}</div>`;
+
+  $$("button[data-act]", box).forEach(b => b.addEventListener("click", async () => {
+    const row = b.closest(".row"), id = row.dataset.id, uid = row.dataset.uid;
+    const g = gyms.find(x => x.id === id);
+    const act = b.dataset.act;
+    if (act === "copyLink") return copyText(`${appLink()}?g=${encodeURIComponent(id)}`);
+    if (act === "cancel" && !confirm(`إلغاء اشتراك «${g.name}»؟ سيتوقف دخول كل مستخدميه فورًا. يمكنك تفعيله لاحقًا.`)) return;
+    b.disabled = true;
+    try {
+      if (act === "suspend") await updateDoc(doc(db, "gyms", id), { status: "suspended" });
+      else if (act === "activate") await updateDoc(doc(db, "gyms", id), { status: "active" });
+      else if (act === "cancel") await updateDoc(doc(db, "gyms", id), { status: "cancelled", subscriptionEnd: Timestamp.now() });
+      else if (act === "toggleMgr" && uid) {
+        const cur = usersMap.get(uid);
+        await updateDoc(doc(db, "users", uid), { active: cur ? cur.active === false : false });
+      } else if (act === "resetMgr") {
+        await sendPasswordResetEmail(auth, g.ownerEmail);
+        toast("تم إرسال رابط تغيير كلمة المرور لإيميل المدير");
+        b.disabled = false; return;
+      } else if (act === "extend") {
+        const cur = toDate(g.subscriptionEnd);
+        const base = cur && cur.getTime() > Date.now() ? cur.getTime() : Date.now();
+        await updateDoc(doc(db, "gyms", id), { subscriptionEnd: Timestamp.fromDate(new Date(base + 30 * DAY)) });
+      }
+      loadGyms();
+    } catch (e) { b.disabled = false; toast(errText(e)); }
+  }));
 }
 
-/* ---------- Session Routing ---------- */
+/* ---------- Session routing ---------- */
 onAuthStateChanged(auth, async user => {
-  stopScanner();
-  destroyCharts();
-  if (!user) {
-    G = null;
-    if (loginMode === "member") return;
-    return viewLogin();
-  }
+  stopScanner(); destroyCharts(); stopIdle();
+  if (!user) { G = null; return viewLogin(); }
   root.innerHTML = `<div class="loading">جاري التحميل…</div>`;
   try {
     const uSnap = await withTimeout(getDoc(doc(db, "users", user.uid)));
-    if (!uSnap.exists()) return viewBlocked("الحساب غير مربوط", "هذا الحساب غير مربوط بأي جيم.");
+    if (!uSnap.exists()) return viewBlocked("الحساب غير مضاف", "هذا الإيميل غير مضاف في أي جيم. اطلب من مدير الجيم إضافتك بنفس الإيميل، أو سجّل الخروج.");
     const profile = uSnap.data();
-    if (profile.active !== true) return viewBlocked("الحساب موقوف", "تم إيقاف هذا الحساب.");
+    if (profile.active !== true) return viewBlocked("الحساب موقوف", "تم إيقاف هذا الحساب. تواصل مع إدارة الجيم.");
+    startIdle();
     if (profile.role === "superadmin") return viewAdmin(profile);
+    if (profile.role === "member") return await startMember(user.uid, profile);
+    if (!["owner", "accountant", "reception", "captain"].includes(profile.role)) {
+      return viewBlocked("صلاحية غير معروفة", "تواصل مع الإدارة.");
+    }
 
     const gSnap = await withTimeout(getDoc(doc(db, "gyms", profile.gymId)));
     if (!gSnap.exists()) return viewBlocked("الجيم غير موجود", "لم نجد بيانات الجيم المرتبط بحسابك.");
     const gym = gSnap.data();
     const end = toDate(gym.subscriptionEnd);
-    if (gym.status === "suspended") return viewBlocked("الجيم موقوف", "تم إيقاف اشتراك هذا الجيم.");
+    if (gym.status === "cancelled") return viewBlocked("تم إلغاء الاشتراك", "تم إلغاء اشتراك هذا الجيم في GymPro. تواصل مع الإدارة لإعادة التفعيل.");
+    if (gym.status === "suspended") return viewBlocked("الجيم موقوف", "تم إيقاف اشتراك هذا الجيم مؤقتًا. تواصل مع إدارة GymPro.");
     if (end && end.getTime() < Date.now()) return viewBlocked("انتهى اشتراك الجيم", "انتهى اشتراك الجيم. جدّد الاشتراك للاستمرار.");
-    await startOwner(user.uid, profile, gym, profile.gymId);
+    if (profile.role === "captain") return await startCaptain(user.uid, profile, gym);
+    await startStaff(user.uid, profile, gym, profile.gymId);
   } catch (e) {
     viewBlocked("تعذر تحميل الحساب", errText(e), true);
   }
