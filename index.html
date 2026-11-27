@@ -287,6 +287,48 @@
     font-size: 13.5px; font-weight: 600; max-width: 90vw; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.25);
   }
   .back { margin-bottom: 14px; }
+
+  /* ---- Responsive layout + support mode ---- */
+  .body { display: block; }
+  .support-bar { background: #7C2D12; color: #fff; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; flex-wrap: wrap; }
+  .support-bar span { display: inline-flex; align-items: center; gap: 6px; }
+  .support-bar button { background: #fff; color: #7C2D12; border: 0; border-radius: 8px; padding: 5px 12px; font-weight: 700; font-size: 12.5px; }
+  .cols2 { display: grid; gap: 14px; grid-template-columns: 1fr; margin-top: 4px; }
+  .kpi-grid.four { grid-template-columns: 1fr 1fr; }
+  .gym-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  .gym-card .name { font-weight: 700; font-size: 16px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+  .gym-card .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .stat b.mono { font-size: 13px; text-align: left; }
+
+  @media (min-width: 640px) {
+    .wrap { max-width: 760px; }
+    .prod-grid { grid-template-columns: repeat(3, 1fr); }
+    .kpi-grid.four { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .shell { padding-bottom: 0; }
+    .oh .in { max-width: 1280px; padding: 12px 24px; }
+    .body { display: flex; align-items: flex-start; max-width: 1280px; margin: 0 auto; }
+    .tabs {
+      position: sticky; top: 64px; left: auto; right: auto; bottom: auto;
+      flex-direction: column; width: 232px; flex: none; height: calc(100vh - 64px);
+      border-top: 0; border-inline-end: 1px solid var(--line); box-shadow: none;
+      padding: 14px 10px; overflow-y: auto; overflow-x: hidden; background: transparent; gap: 2px;
+    }
+    .tabs button {
+      flex: none; width: 100%; flex-direction: row; justify-content: flex-start; gap: 12px;
+      min-height: 46px; padding: 0 14px; font-size: 14.5px; border-radius: 12px;
+    }
+    .tabs button svg { width: 20px; height: 20px; }
+    .tabs button[aria-current="page"] { background: var(--brand-soft); }
+    .tabs button[aria-current="page"]::before { display: none; }
+    .body .wrap { flex: 1; min-width: 0; max-width: 1000px; margin: 0; padding: 24px 28px 48px; }
+    .cols2 { grid-template-columns: 1fr 1fr; align-items: start; gap: 18px; }
+    .prod-grid { grid-template-columns: repeat(4, 1fr); }
+    .wrap.wide { max-width: 1100px; }
+    .gym-grid { grid-template-columns: 1fr 1fr; }
+    .toast { bottom: 28px; }
+  }
 </style>
 </head>
 <body>
@@ -332,7 +374,18 @@ const DAY = 86400000;
 const PLANS_LABEL = { basic: "أساسية", pro: "متقدمة", premium: "خاصة" };
 const MEMBER_EMAIL_DOMAIN = "gympro-86c9a.web.app";
 const GYM_CODE_RE = /^[A-Za-z0-9_-]{6,40}$/;
-const ROLE_LABEL = { owner: "مدير الجيم", accountant: "محاسب", reception: "استقبال", captain: "كابتن", member: "عضو", superadmin: "مسؤول النظام" };
+const ROLE_LABEL = { owner: "مدير الجيم", accountant: "محاسب", reception: "استقبال", captain: "كابتن", employee: "موظف", member: "عضو", superadmin: "مسؤول النظام" };
+const JOBS = [
+  { key: "captain", label: "كابتن", role: "employee" },
+  { key: "reception", label: "استقبال", role: "reception" },
+  { key: "accountant", label: "محاسب", role: "accountant" },
+  { key: "cleaner", label: "عامل نظافة", role: "employee" },
+  { key: "buffet", label: "عامل بوفيه", role: "employee" },
+  { key: "security", label: "أمن وحراسة", role: "employee" },
+  { key: "maintenance", label: "صيانة", role: "employee" },
+  { key: "storekeeper", label: "عامل مخازن", role: "employee" },
+  { key: "other", label: "موظف آخر", role: "employee" }
+];
 
 const ICONS = {
   home: `<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>`,
@@ -583,7 +636,7 @@ function exportRevenueExcel(rows, filename) {
   for (const r of rows) {
     const amt = Number(r.amount) || 0;
     total += amt;
-    const typeLabel = r.type === "store" ? "ستور وكافتيريا" : (r.type === "balance" ? "سداد متبقي" : "اشتراك");
+    const typeLabel = r.type === "store" ? "ستور وكافتيريا" : (r.type === "balance" ? "سداد متبقي" : (r.type === "adjustment" ? "تصحيح" : "اشتراك"));
     const cells = [csvSafe(r.date), typeLabel, csvSafe(r.memberName), csvSafe(r.note), amt]
       .map(v => `"${String(v ?? "").replace(/"/g, '""')}"`);
     lines.push(cells.join(","));
@@ -606,6 +659,7 @@ function credHtml(c) {
     <p class="hint">${ico("alert", "sm")} كلمة المرور تظهر هنا مرة واحدة فقط ولا يتم حفظها في أي مكان. انسخها أو أرسلها الآن.</p>
     <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
       <button class="btn sm" type="button" data-copycred>${ico("copy", "sm")} نسخ البيانات</button>
+      ${c.card ? `<button class="btn soft sm" type="button" data-cardpdf>${ico("download", "sm")} تحميل كارت PDF بالبيانات</button>` : ""}
       ${c.phone ? `<a class="btn soft sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(c.phone, c.text))}">${ico("send", "sm")} إرسال واتساب</a>` : ""}
     </div>
   </div>`;
@@ -613,6 +667,13 @@ function credHtml(c) {
 function wireCred(scope, c) {
   const b = $("[data-copycred]", scope);
   if (b && c) b.addEventListener("click", () => copyText(c.text));
+  const pb = $("[data-cardpdf]", scope);
+  if (pb && c && c.card) pb.addEventListener("click", async () => {
+    pb.disabled = true;
+    try { await downloadMemberIdPdf(G.gym, c.card.member, G.gymId, c.card.pass); toast("تم إنشاء الكارت"); }
+    catch (e) { toast(errText(e)); }
+    pb.disabled = false;
+  });
 }
 
 /* ---------- Change-password panel (all roles) ---------- */
@@ -640,67 +701,143 @@ function wirePwForm(scope = document) {
   });
 }
 
-/* ---------- Two-sided PDF ID card (QR holds only the member code) ---------- */
-async function downloadMemberIdPdf(gym, member, gymId) {
-  const { jsPDF } = await import("https://esm.sh/jspdf@2.5.1");
-  const mod = await import("https://esm.sh/qrcode@1.5.4");
-  const QR = mod.default || mod;
-  const st = calcMemberState(member);
-  const subText = fmtLeftText(st);
+/* ---------- High-quality two-sided PDF ID card (login name + password) ---------- */
+function loadImg(url, ms = 5000) {
+  return new Promise(res => {
+    const im = new Image();
+    im.crossOrigin = "anonymous";
+    const t = setTimeout(() => res(null), ms);
+    im.onload = () => { clearTimeout(t); res(im); };
+    im.onerror = () => { clearTimeout(t); res(null); };
+    im.src = url;
+  });
+}
+function rrect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function fitSize(ctx, text, maxW, startSize, weight, family) {
+  let size = startSize;
+  for (; size > 2.2; size -= 0.2) {
+    ctx.font = `${weight} ${size}px ${family}`;
+    if (ctx.measureText(text).width <= maxW) break;
+  }
+  return size;
+}
 
-  const wMm = 85.6, hMm = 54, scale = 4;
-  const makeFace = fn => {
+async function downloadMemberIdPdf(gym, member, gymId, password = "") {
+  const [pdfMod, qrMod] = await Promise.all([
+    import("https://esm.sh/jspdf@2.5.1"),
+    import("https://esm.sh/qrcode@1.5.4")
+  ]);
+  const jsPDF = pdfMod.jsPDF || pdfMod.default?.jsPDF || pdfMod.default;
+  const QR = qrMod.default || qrMod;
+  const FAM = "'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif";
+  try { await Promise.all([document.fonts.load(`700 20px ${FAM}`), document.fonts.load(`400 20px ${FAM}`)]); } catch {}
+
+  const st = calcMemberState(member);
+  const W = 85.6, H = 54, PX = 14;                       // 14 px per mm ≈ 355 dpi
+  const logoUrl = safeHttps(gym?.logoUrl);
+  const logo = logoUrl ? await loadImg(logoUrl) : null;
+  const loginLink = `${appLink()}?g=${encodeURIComponent(gymId)}`;
+  const qrOpts = { margin: 0, width: 720, errorCorrectionLevel: "M", color: { dark: "#0F172A", light: "#FFFFFF" } };
+  const qrEntry = await loadImg(await QR.toDataURL(`GYMPRO|${gymId}|${member.code || member.id}`, qrOpts));
+  const qrLogin = await loadImg(await QR.toDataURL(loginLink, qrOpts));
+
+  const face = draw => {
     const c = document.createElement("canvas");
-    c.width = Math.round(wMm * scale); c.height = Math.round(hMm * scale);
+    c.width = Math.round(W * PX); c.height = Math.round(H * PX);
     const ctx = c.getContext("2d");
-    ctx.scale(scale, scale);
-    fn(ctx, wMm, hMm);
-    return c.toDataURL("image/png", 1.0);
+    ctx.scale(PX, PX);
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
+    draw(ctx);
+    return c.toDataURL("image/png");
+  };
+  const T = (ctx, text, x, y, o = {}) => {
+    const { size = 3.6, color = "#0F172A", weight = 400, align = "right", maxW = 0, dir = "rtl" } = o;
+    const txt = String(text ?? "");
+    ctx.direction = dir; ctx.textAlign = align; ctx.fillStyle = color; ctx.textBaseline = "alphabetic";
+    const s = maxW ? fitSize(ctx, txt, maxW, size, weight, FAM) : size;
+    ctx.font = `${weight} ${s}px ${FAM}`;
+    ctx.fillText(txt, x, y);
+  };
+  const crisp = (ctx, img, x, y, w, h) => {
+    if (!img) return;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(img, x, y, w, h);
+    ctx.imageSmoothingEnabled = true;
   };
 
-  const frontImg = makeFace((ctx, w, h) => {
-    ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = "#EA580C"; ctx.fillRect(0, 0, w, 13);
-    ctx.fillStyle = "#FFF7ED"; ctx.beginPath(); ctx.arc(14, 38, 17, 0, Math.PI * 2); ctx.fill();
-    ctx.direction = "rtl"; ctx.textAlign = "right"; ctx.fillStyle = "#FFFFFF";
-    ctx.font = "bold 4.3px 'IBM Plex Sans Arabic', sans-serif";
-    ctx.fillText(gym?.name || "GymPro", w - 5, 8.2);
-    ctx.textAlign = "left"; ctx.fillStyle = "#FFEDD5"; ctx.font = "bold 3.3px sans-serif";
-    ctx.fillText(`#${member.code || ""}`, 5, 8);
-    ctx.direction = "rtl"; ctx.textAlign = "right"; ctx.fillStyle = "#0F172A";
-    ctx.font = "bold 5.8px 'IBM Plex Sans Arabic', sans-serif";
-    ctx.fillText(member.name || "عضو", w - 5, 22.5);
-    ctx.fillStyle = "#EA580C"; ctx.font = "bold 3.9px 'IBM Plex Sans Arabic', sans-serif";
-    ctx.fillText(`الباقة: ${member.planName || "—"} · ${sessionsText(member)}`, w - 5, 30.5);
-    ctx.fillStyle = "#475569"; ctx.font = "3.8px 'IBM Plex Sans Arabic', sans-serif";
-    ctx.fillText(`الاشتراك: ${subText}`, w - 5, 37.5);
-    if (member.phone) {
-      ctx.fillStyle = "#64748B"; ctx.font = "3.5px sans-serif";
-      ctx.fillText(`الموبايل: ${member.phone}`, w - 5, 44.5);
+  const front = face(ctx => {
+    ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, W, H);
+    const g = ctx.createLinearGradient(0, 0, W, 0);
+    g.addColorStop(0, "#F97316"); g.addColorStop(1, "#EA580C");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, 16);
+    ctx.fillStyle = "rgba(255,255,255,0.13)";
+    ctx.beginPath(); ctx.arc(W - 3, 1, 15, 0, Math.PI * 2); ctx.fill();
+
+    if (logo) {
+      ctx.fillStyle = "#FFFFFF"; rrect(ctx, 4, 2.5, 11, 11, 2.2); ctx.fill();
+      ctx.save(); rrect(ctx, 4.6, 3.1, 9.8, 9.8, 1.8); ctx.clip();
+      const k = Math.min(9.8 / logo.width, 9.8 / logo.height);
+      ctx.drawImage(logo, 4.6 + (9.8 - logo.width * k) / 2, 3.1 + (9.8 - logo.height * k) / 2, logo.width * k, logo.height * k);
+      ctx.restore();
     }
-    ctx.fillStyle = "#F97316"; ctx.fillRect(0, h - 2.5, w, 2.5);
+    T(ctx, gym?.name || "GymPro", W - 5, 9, { size: 5.2, color: "#FFFFFF", weight: 700, maxW: logo ? 62 : 72 });
+    T(ctx, "بطاقة عضوية", W - 5, 13.6, { size: 2.9, color: "#FFEDD5" });
+
+    ctx.fillStyle = "#FFFFFF"; rrect(ctx, 4.5, 19.5, 25, 25, 2); ctx.fill();
+    ctx.strokeStyle = "#FED7AA"; ctx.lineWidth = 0.3; ctx.stroke();
+    crisp(ctx, qrEntry, 6.5, 21.5, 21, 21);
+    T(ctx, `كود ${member.code || ""}`, 17, 48.8, { size: 3.4, color: "#EA580C", weight: 700, align: "center" });
+
+    const xr = W - 5, mw = 48;
+    T(ctx, member.name || "عضو", xr, 26.5, { size: 6.4, weight: 700, maxW: mw });
+    T(ctx, `الباقة: ${member.planName || "—"}`, xr, 33, { size: 3.8, color: "#EA580C", weight: 700, maxW: mw });
+    T(ctx, `التمارين: ${sessionsText(member)}`, xr, 38.6, { size: 3.5, color: "#334155", maxW: mw });
+    T(ctx, `الاشتراك: ${fmtLeftText(st)}`, xr, 43.8, { size: 3.5, color: "#475569", maxW: mw });
+    if (member.phone) T(ctx, `الموبايل: ${member.phone}`, xr, 49, { size: 3.3, color: "#64748B", maxW: mw });
+    ctx.fillStyle = "#EA580C"; ctx.fillRect(0, H - 2, W, 2);
   });
 
-  const qrUrl = await QR.toDataURL(`GYMPRO|${gymId}|${member.code || member.id}`, { margin: 1, width: 320, color: { dark: "#0F172A", light: "#FFFFFF" } });
-  const qrEl = await new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = qrUrl; });
+  const back = face(ctx => {
+    ctx.fillStyle = "#FFF7ED"; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#FFFFFF"; rrect(ctx, 2.5, 2.5, W - 5, H - 5, 3); ctx.fill();
+    ctx.strokeStyle = "#FDBA74"; ctx.lineWidth = 0.25; ctx.stroke();
 
-  const backImg = makeFace((ctx, w, h) => {
-    ctx.fillStyle = "#FFF7ED"; ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = "#FFFFFF"; ctx.fillRect(3.5, 3.5, w - 7, h - 7);
-    const sz = 25;
-    ctx.drawImage(qrEl, (w - sz) / 2, 6, sz, sz);
-    ctx.direction = "rtl"; ctx.textAlign = "center";
-    ctx.fillStyle = "#EA580C"; ctx.font = "bold 5.2px sans-serif";
-    ctx.fillText(`كود العضوية ${member.code || ""}`, w / 2, 38);
-    ctx.fillStyle = "#64748B"; ctx.font = "3px 'IBM Plex Sans Arabic', sans-serif";
-    ctx.fillText("اعرض الكود عند الدخول. للدخول لحسابك استخدم رقم موبايلك وكلمة المرور", w / 2, 44);
-    ctx.fillText("التي سلّمها لك الاستقبال.", w / 2, 48.2);
+    const xr = W - 6;
+    T(ctx, "بيانات الدخول إلى حسابك", xr, 10.5, { size: 4.4, color: "#EA580C", weight: 700 });
+    T(ctx, "اسم الدخول (رقم الموبايل)", xr, 17.5, { size: 2.9, color: "#64748B" });
+    T(ctx, member.phone || "—", xr, 23.4, { size: 5, weight: 700, maxW: 47, dir: "ltr", align: "right" });
+    T(ctx, "كلمة المرور", xr, 30.2, { size: 2.9, color: "#64748B" });
+    if (password) {
+      ctx.fillStyle = "#FFEDD5"; rrect(ctx, 31, 31.6, xr - 31, 8.6, 1.6); ctx.fill();
+      ctx.strokeStyle = "#FDBA74"; ctx.lineWidth = 0.2; ctx.stroke();
+      T(ctx, password, (31 + xr) / 2, 37.6, { size: 5.4, weight: 700, maxW: 44, dir: "ltr", align: "center" });
+    } else {
+      T(ctx, "تُسلَّم لك من الاستقبال", xr, 37, { size: 3.6, color: "#B45309", weight: 700 });
+    }
+
+    ctx.fillStyle = "#FFFFFF"; rrect(ctx, 5.5, 12.5, 21, 21, 1.8); ctx.fill();
+    ctx.strokeStyle = "#FED7AA"; ctx.lineWidth = 0.25; ctx.stroke();
+    crisp(ctx, qrLogin, 6.8, 13.8, 18.4, 18.4);
+    T(ctx, "امسح للدخول", 16, 37, { size: 2.7, color: "#64748B", align: "center" });
+
+    T(ctx, "غيّر كلمة المرور بعد أول دخول ولا تشاركها مع أحد.", W / 2, 46.2, { size: 2.7, color: "#94A3B8", align: "center" });
+    let host = "";
+    try { host = new URL(appLink()).host; } catch {}
+    T(ctx, host, W / 2, 50.2, { size: 2.5, color: "#94A3B8", align: "center", dir: "ltr" });
   });
 
-  const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: [wMm, hMm] });
-  pdf.addImage(frontImg, "PNG", 0, 0, wMm, hMm);
-  pdf.addPage([wMm, hMm], "landscape");
-  pdf.addImage(backImg, "PNG", 0, 0, wMm, hMm);
+  const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: [W, H], compress: true });
+  pdf.addImage(front, "PNG", 0, 0, W, H, undefined, "FAST");
+  pdf.addPage([W, H], "landscape");
+  pdf.addImage(back, "PNG", 0, 0, W, H, undefined, "FAST");
   const safeName = String(member.name || "member").replace(/[^\w\u0600-\u06FF-]+/g, "_");
   pdf.save(`ID_${safeName}_${member.code || "card"}.pdf`);
 }
@@ -1028,10 +1165,11 @@ const S = {
   broadcastTarget: "all", broadcastMsg: "", broadcastIdx: 0
 };
 let G = null;
+let SUPER = null;
 let MEMBERS = [];
 let PLANS = [];
 let PRODUCTS = [];
-let CAPTAINS = [];
+let EMPLOYEES = [];
 let RT = 0;
 let scanner = null;
 let charts = [];
@@ -1048,7 +1186,7 @@ function destroyCharts() { charts.forEach(c => { try { c.destroy(); } catch {} }
 async function loadMembers() { const s = await getDocs(col("members")); MEMBERS = s.docs.map(d => ({ id: d.id, ...d.data() })); }
 async function loadPlans() { const s = await getDocs(col("plans")); PLANS = s.docs.map(d => ({ id: d.id, ...d.data() })); PLANS.sort((a, b) => (a.days || 0) - (b.days || 0)); }
 async function loadProducts() { const s = await getDocs(col("products")); PRODUCTS = s.docs.map(d => ({ id: d.id, ...d.data() })); PRODUCTS.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar")); }
-async function loadCaptains() { const s = await getDocs(col("captains")); CAPTAINS = s.docs.map(d => ({ id: d.id, ...d.data() })); }
+async function loadEmployees() { const s = await getDocs(col("employees")); EMPLOYEES = s.docs.map(d => ({ id: d.id, ...d.data() })); EMPLOYEES.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar")); }
 
 function reminderText(m) {
   const st = calcMemberState(m);
@@ -1072,11 +1210,11 @@ function nav(tab, sub = null) {
 
 function tabsForRole() {
   const r = role();
-  if (r === "accountant") return [["money", "المالية", "chart"], ["settings", "حسابي", "settings"]];
-  if (r === "reception") return [["members", "الأعضاء", "users"], ["checkin", "الحضور", "qr"], ["store", "الستور", "store"], ["settings", "حسابي", "settings"]];
+  if (r === "accountant") return [["money", "المالية", "chart"], ["punch", "بصمتي", "mapPin"], ["settings", "حسابي", "settings"]];
+  if (r === "reception") return [["members", "الأعضاء", "users"], ["checkin", "الحضور", "qr"], ["store", "الستور", "store"], ["punch", "بصمتي", "mapPin"], ["settings", "حسابي", "settings"]];
   return [
     ["home", "الرئيسية", "home"], ["members", "الأعضاء", "users"], ["checkin", "الحضور", "qr"],
-    ["captains", "الكباتن", "mapPin"], ["store", "الستور", "store"], ["broadcast", "التغذية", "send"],
+    ["staff", "الموظفون", "mapPin"], ["store", "الستور", "store"], ["broadcast", "التغذية", "send"],
     ["money", "المالية", "chart"], ["settings", "الإعدادات", "settings"]
   ];
 }
@@ -1089,23 +1227,28 @@ function renderOwner() {
   const end = toDate(G.gym.subscriptionEnd);
 
   root.innerHTML = `
+  ${G.support ? `<div class="support-bar"><span>${ico("shield", "sm")} وضع الدعم — أنت داخل «${esc(G.gym.name || "")}» كمسؤول النظام</span><button type="button" id="exitSupport">رجوع للوحة الإدارة</button></div>` : ""}
   <div class="shell">
     <header class="oh"><div class="in">
       <div class="brand-box">
         ${gymLogoHtml(G.gym)}
         <div>
           <div class="gname">${esc(G.gym.name || "الجيم")}</div>
-          <div class="gsub">${esc(G.profile.name || "")} · ${esc(ROLE_LABEL[role()] || "")}</div>
+          <div class="gsub">${esc(G.profile.name || "")} · ${esc(G.support ? "مسؤول النظام" : (ROLE_LABEL[role()] || ""))}</div>
         </div>
       </div>
       ${end && isOwner() ? `<div class="sub-pill">حتى ${fmtDate(end)}</div>` : ""}
     </div></header>
-    <main id="main" class="wrap"></main>
-    <nav class="tabs" aria-label="التنقل">
-      ${tabs.map(([k, l, ic]) => `<button data-t="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${ico(ic)}<span>${l}</span></button>`).join("")}
-    </nav>
+    <div class="body">
+      <nav class="tabs" aria-label="التنقل">
+        ${tabs.map(([k, l, ic]) => `<button data-t="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${ico(ic)}<span>${l}</span></button>`).join("")}
+      </nav>
+      <main id="main" class="wrap"></main>
+    </div>
   </div>`;
   $$(".tabs button").forEach(b => b.addEventListener("click", () => nav(b.dataset.t, null)));
+  const ex = $("#exitSupport");
+  if (ex) ex.addEventListener("click", () => { stopScanner(); destroyCharts(); const p = SUPER?.profile; G = null; if (p) viewAdmin(p); });
   const main = $("#main");
   if (S.sub) return SUBS[S.sub.type](main, tok);
   return SCREENS[S.tab](main, tok);
@@ -1161,30 +1304,30 @@ async function screenHome(main, tok) {
 
   main.innerHTML = `
   <h2>${ico("trendingUp")} ملخص اليوم</h2>
-  <div class="kpi-grid">
+  <div class="kpi-grid four">
     <div class="kpi accent"><div class="kl">${ico("wallet", "sm")} إيراد اليوم</div><div class="kv">${money(todayRev)}</div></div>
     <div class="kpi"><div class="kl">${ico("qr", "sm")} حضور اليوم</div><div class="kv">${att.size}</div></div>
+    <div class="kpi"><div class="kl">${ico("checkCircle", "sm")} اشتراك ساري</div><div class="kv">${active}</div></div>
+    <div class="kpi"><div class="kl">${ico("xCircle", "sm")} منتهي</div><div class="kv">${expired}</div></div>
   </div>
 
-  <h2>${ico("users")} الأعضاء</h2>
-  <div class="panel">
-    <div class="stat"><span>${ico("checkCircle", "sm")} اشتراك ساري</span><b>${active}</b></div>
-    <div class="stat"><span>${ico("xCircle", "sm")} منتهي</span><b>${expired}</b></div>
-    <div class="stat"><span>${ico("users", "sm")} إجمالي الأعضاء</span><b>${MEMBERS.length}</b></div>
-  </div>
-
-  <h2>${ico("chart")} هذا الشهر</h2>
+  <h2>${ico("chart")} هذا الشهر · إجمالي الأعضاء ${MEMBERS.length}</h2>
   <div class="panel">
     <div class="stat"><span>${ico("trendingUp", "sm")} الإيرادات</span><b>${money(monthRev)}</b></div>
     <div class="stat"><span>${ico("trendingDown", "sm")} المصروفات</span><b>${money(monthExp)}</b></div>
     <div class="stat big"><span>${ico("wallet", "sm")} الصافي</span><b>${money(monthRev - monthExp)}</b></div>
   </div>
 
-  <h2>${ico("clock")} ينتهي اشتراكهم خلال 7 أيام</h2>
-  <div class="rows">${soon.length ? soon.slice(0, 10).map(m => memberRowHtml(m, { wa: true })).join("") : `<div class="empty">لا يوجد أحد قريب الانتهاء.</div>`}</div>
-
-  <h2>${ico("alert")} مبالغ متبقية على الأعضاء</h2>
-  <div class="rows">${owing.length ? owing.slice(0, 10).map(m => memberRowHtml(m, { wa: true })).join("") : `<div class="empty">لا توجد مبالغ متبقية.</div>`}</div>`;
+  <div class="cols2">
+    <div>
+      <h2>${ico("clock")} ينتهي اشتراكهم خلال 7 أيام</h2>
+      <div class="rows">${soon.length ? soon.slice(0, 10).map(m => memberRowHtml(m, { wa: true })).join("") : `<div class="empty">لا يوجد أحد قريب الانتهاء.</div>`}</div>
+    </div>
+    <div>
+      <h2>${ico("alert")} مبالغ متبقية على الأعضاء</h2>
+      <div class="rows">${owing.length ? owing.slice(0, 10).map(m => memberRowHtml(m, { wa: true })).join("") : `<div class="empty">لا توجد مبالغ متبقية.</div>`}</div>
+    </div>
+  </div>`;
   wireOpen(main);
 }
 
@@ -1301,7 +1444,7 @@ function memberCredDescriptor(m, pass) {
   const text = `أهلًا ${m.name}، بيانات دخولك لبوابة ${G.gym.name || "الجيم"}:\nالرابط: ${link}\nرقم الموبايل: ${phone10}\nكلمة المرور: ${pass}\nنوصيك بتغيير كلمة المرور بعد أول دخول.`;
   return {
     scope: `member:${m.id}`, title: `بيانات دخول ${m.name}`, phone: m.phone, text,
-    rows: [["الرابط", link], ["رقم الموبايل", phone10], ["كلمة المرور", pass]]
+    rows: [["الرابط", link], ["رقم الموبايل", phone10], ["كلمة المرور", pass]], card: { member: m, pass }
   };
 }
 
@@ -1436,6 +1579,7 @@ async function subMember(main, tok) {
   </div>
   <div id="payBox"></div>
   <div id="loginBox"></div>
+  ${G.support ? supportToolsHtml(m) : ""}
   <h2>${ico("refresh")} سجل الاشتراكات</h2>
   <div class="rows" id="subHist"><div class="empty">جاري التحميل…</div></div>
   ${isOwner() ? `<h2>${ico("wallet")} سجل الدفعات</h2><div class="rows" id="payHist"><div class="empty">جاري التحميل…</div></div>` : ""}`;
@@ -1443,6 +1587,7 @@ async function subMember(main, tok) {
   wireCred(main, cred);
   $("#back").addEventListener("click", () => nav("members", null));
   $("#renew").addEventListener("click", () => nav(null, { type: "renew", id: m.id }));
+  if (G.support) wireSupportTools(main, m);
   $("#cardBtn").addEventListener("click", () => nav(null, { type: "card", id: m.id }));
   $("#editBtn").addEventListener("click", () => nav(null, { type: "edit", id: m.id }));
 
@@ -1620,6 +1765,67 @@ function subEdit(main) {
   });
 }
 
+/* ---------- Support tools (super admin only) ---------- */
+function supportToolsHtml(m) {
+  const end = toDate(m.endDate);
+  return `
+  <h2>${ico("shield")} أدوات الدعم (مسؤول النظام فقط)</h2>
+  <form class="panel" id="fixForm" novalidate>
+    <div style="font-weight:700;margin-bottom:8px">تصحيح الاشتراك</div>
+    <div class="two">
+      <div class="field"><label for="fxEnd">تاريخ انتهاء الاشتراك</label><input id="fxEnd" type="date" dir="ltr" value="${end ? ymd(end) : ""}"></div>
+      <div class="field"><label for="fxBal">المبلغ المتبقي على العضو</label><input id="fxBal" type="number" step="any" dir="ltr" value="${esc(Number(m.balance) || 0)}"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label for="fxLeft">التمارين المتبقية</label><input id="fxLeft" type="number" min="0" dir="ltr" value="${esc(m.sessionsLeft ?? 0)}"></div>
+      <div class="field"><label for="fxTot">إجمالي تمارين الباقة</label><input id="fxTot" type="number" min="0" dir="ltr" value="${esc(m.sessionsTotal ?? 0)}"></div>
+    </div>
+    <button class="btn" type="submit" id="fxSave">${ico("check")} حفظ التصحيح</button>
+  </form>
+  <form class="panel" id="adjForm" style="margin-top:12px" novalidate>
+    <div style="font-weight:700;margin-bottom:8px">تسوية مالية (قيد تصحيح في سجل المدفوعات)</div>
+    <div class="two">
+      <div class="field"><label for="adAmt">المبلغ (سالب لإلغاء دفعة خاطئة)</label><input id="adAmt" type="number" step="any" dir="ltr"></div>
+      <div class="field"><label for="adNote">السبب</label><input id="adNote" maxlength="120"></div>
+    </div>
+    <button class="btn" type="submit" id="adSave">${ico("check")} إضافة قيد التصحيح</button>
+  </form>`;
+}
+function wireSupportTools(main, m) {
+  $("#fixForm", main).addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const endStr = $("#fxEnd").value;
+    const balance = Number($("#fxBal").value);
+    const sessionsLeft = Math.max(0, Math.round(Number($("#fxLeft").value) || 0));
+    const sessionsTotal = Math.max(0, Math.round(Number($("#fxTot").value) || 0));
+    if (isNaN(balance)) return toast("المبلغ غير صحيح.");
+    const upd = { balance, sessionsLeft, sessionsTotal };
+    if (endStr) upd.endDate = Timestamp.fromDate(endOfDay(endStr));
+    const btn = $("#fxSave"); btn.disabled = true;
+    try {
+      await updateDoc(ref("members", m.id), upd);
+      Object.assign(m, upd);
+      toast("تم حفظ التصحيح");
+      nav(null, { type: "member", id: m.id });
+    } catch (e) { btn.disabled = false; toast(errText(e)); }
+  });
+  $("#adjForm", main).addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const amount = Number($("#adAmt").value), note = $("#adNote").value.trim();
+    if (!amount || isNaN(amount)) return toast("اكتب مبلغًا غير صفري.");
+    if (!note) return toast("اكتب سبب التصحيح.");
+    const btn = $("#adSave"); btn.disabled = true;
+    try {
+      await addDoc(col("payments"), {
+        memberId: m.id, memberName: m.name, amount, date: todayStr(),
+        type: "adjustment", note: "تصحيح: " + note, ts: serverTimestamp(), by: G.uid
+      });
+      toast("تمت إضافة قيد التصحيح");
+      nav(null, { type: "member", id: m.id });
+    } catch (e) { btn.disabled = false; toast(errText(e)); }
+  });
+}
+
 /* ---------- Member card ---------- */
 async function subCard(main) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
@@ -1632,13 +1838,31 @@ async function subCard(main) {
     <div id="qr" style="margin:14px 0"><p class="muted">جاري إنشاء الكود…</p></div>
     <div class="bigcode">${esc(m.code)}</div>
     <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px">
-      <button class="btn sm" type="button" id="pdfBtn">${ico("download", "sm")} تحميل كارت PDF</button>
+      <button class="btn sm" type="button" id="pdfBtn">${ico("download", "sm")} كارت PDF (بدون كلمة المرور)</button>
+      <button class="btn soft sm" type="button" id="pdfPassBtn">${ico("lock", "sm")} كلمة مرور جديدة + كارت PDF بالبيانات</button>
     </div>
+    <p class="hint" style="margin-top:10px">كلمة المرور لا تُحفظ في أي مكان، لذلك تُطبع على البطاقة فقط لحظة إنشائها.</p>
   </div>`;
   $("#back").addEventListener("click", () => nav(null, { type: "member", id: m.id }));
-  $("#pdfBtn").addEventListener("click", async () => {
+  $("#pdfBtn").addEventListener("click", async ev => {
+    const b = ev.currentTarget; b.disabled = true;
     try { await downloadMemberIdPdf(G.gym, m, G.gymId); toast("تم إنشاء كارت العضو PDF"); }
     catch (e) { toast(errText(e)); }
+    b.disabled = false;
+  });
+  $("#pdfPassBtn").addEventListener("click", async ev => {
+    const b = ev.currentTarget;
+    if (normPhone(m.phone).length < 9) return toast("أضف رقم موبايل صحيحًا للعضو أولًا من «تعديل».");
+    if (m.loginUid && !confirm("سيتوقف الدخول القديم للعضو ويُنشأ دخول جديد بكلمة مرور جديدة. متابعة؟")) return;
+    b.disabled = true;
+    const pass = genPassword();
+    try {
+      await provisionMemberLogin(m, pass);
+      S.cred = memberCredDescriptor(m, pass);
+      await downloadMemberIdPdf(G.gym, m, G.gymId, pass);
+      toast("تم إنشاء الدخول والكارت");
+      nav(null, { type: "member", id: m.id });
+    } catch (e) { b.disabled = false; toast(errText(e)); }
   });
   try {
     const mod = await import("https://esm.sh/qrcode@1.5.4");
@@ -1772,18 +1996,6 @@ async function loadToday(tok) {
   }
 }
 
-/* ---------- Captains (owner): manage + create logins + see punches ---------- */
-async function provisionCaptainLogin(cap, email, password) {
-  const uid = await createAuthUser(email, password);
-  const batch = writeBatch(db);
-  batch.set(doc(db, "users", uid), {
-    name: cap.name, role: "captain", active: true, gymId: G.gymId, gymName: G.gym.name || "",
-    captainId: cap.id, email, createdAt: serverTimestamp(), createdBy: G.uid
-  });
-  batch.update(ref("captains", cap.id), { loginUid: uid, loginEmail: email });
-  await batch.commit();
-  cap.loginUid = uid; cap.loginEmail = email;
-}
 function loginCredDescriptor(scope, title, name, email, pass) {
   const link = appLink();
   return {
@@ -1792,69 +2004,116 @@ function loginCredDescriptor(scope, title, name, email, pass) {
   };
 }
 
-async function screenCaptains(main, tok) {
+/* ---------- Employees & GPS attendance (owner) ---------- */
+async function createEmployee({ name, jobKey, jobCustom, email, password }) {
+  const job = JOBS.find(j => j.key === jobKey) || JOBS[JOBS.length - 1];
+  const jobLabel = job.key === "other" && jobCustom ? jobCustom : job.label;
+  const uid = await createAuthUser(email, password);
+  const batch = writeBatch(db);
+  batch.set(doc(db, "users", uid), {
+    name, role: job.role, active: true, gymId: G.gymId, gymName: G.gym.name || "",
+    email, createdAt: serverTimestamp(), createdBy: G.uid
+  });
+  batch.set(ref("employees", uid), {
+    name, jobTitle: job.key, jobLabel, role: job.role, email, active: true, createdAt: serverTimestamp()
+  });
+  await batch.commit();
+  return { uid, jobLabel };
+}
+
+async function loadPunchLog(box, dateStr, tok) {
+  box.innerHTML = `<div class="empty">جاري التحميل…</div>`;
+  try {
+    const snap = await getDocs(query(col("staff_attendance"), where("date", "==", dateStr)));
+    if (tok !== RT) return;
+    const rows = snap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
+    box.innerHTML = rows.length ? rows.map(r => `
+      <div class="row">
+        <div class="name">${esc(r.employeeName)}
+          <span class="tag cat">${esc(r.jobLabel || r.jobTitle || "")}</span>
+          <span class="tag ${r.type === "in" ? "active" : "soon"}">${r.type === "in" ? "حضور" : "انصراف"}</span></div>
+        <div class="meta">${esc(fmtDateTime(toDate(r.ts)))}${r.distanceMeters != null ? ` · ${esc(r.distanceMeters)} متر من الجيم` : ""}</div>
+      </div>`).join("") : `<div class="empty">لا توجد بصمات في هذا اليوم.</div>`;
+  } catch (e) {
+    if (tok === RT) box.innerHTML = `<div class="empty">${esc(errText(e))}</div>`;
+  }
+}
+
+async function screenStaff(main, tok) {
   const gymLat = Number(G.gym.lat), gymLng = Number(G.gym.lng);
   const hasLoc = G.gym.lat !== undefined && G.gym.lat !== "" && G.gym.lng !== undefined && G.gym.lng !== "" && !isNaN(gymLat) && !isNaN(gymLng);
-  const cred = S.cred && S.cred.scope === "captains" ? S.cred : null;
+  const cred = S.cred && S.cred.scope === "staff" ? S.cred : null;
   if (cred) S.cred = null;
+  const jobOptions = JOBS.map(j => `<option value="${esc(j.key)}">${esc(j.label)}</option>`).join("");
+  const present = EMPLOYEES.filter(e => e.lastDate === todayStr() && e.status === "in").length;
 
   main.innerHTML = `
-  <h2>${ico("mapPin")} الكباتن والبصمة (GPS)</h2>
+  <h2>${ico("mapPin")} الموظفون وبصمة الحضور (GPS)</h2>
   ${cred ? credHtml(cred) : ""}
-  <div class="panel" style="margin-bottom:14px">
-    <div style="font-weight:700;font-size:14px">موقع الجيم الجغرافي</div>
-    <div class="hint">يُستخدم للتحقق من وجود الكابتن داخل نطاق الجيم عند البصمة. ${hasLoc ? "" : "لم يُحدد الموقع بعد."}</div>
-    <div class="two" style="margin-top:10px">
-      <div class="field"><label for="gLat">خط العرض</label><input id="gLat" dir="ltr" value="${esc(G.gym.lat ?? "")}" placeholder="30.0444"></div>
-      <div class="field"><label for="gLng">خط الطول</label><input id="gLng" dir="ltr" value="${esc(G.gym.lng ?? "")}" placeholder="31.2357"></div>
+  ${G.support ? "" : `<div id="myPunch" style="margin-bottom:14px"></div>`}
+
+  <div class="cols2">
+    <div class="panel">
+      <div style="font-weight:700;font-size:14px">موقع الجيم الجغرافي</div>
+      <div class="hint">للتحقق من وجود الموظف داخل نطاق الجيم عند البصمة. ${hasLoc ? "" : "لم يُحدد الموقع بعد."}</div>
+      <div class="two" style="margin-top:10px">
+        <div class="field"><label for="gLat">خط العرض</label><input id="gLat" dir="ltr" value="${esc(G.gym.lat ?? "")}" placeholder="30.0444"></div>
+        <div class="field"><label for="gLng">خط الطول</label><input id="gLng" dir="ltr" value="${esc(G.gym.lng ?? "")}" placeholder="31.2357"></div>
+      </div>
+      <div class="two">
+        <div class="field"><label for="gRad">النطاق المسموح (متر)</label><input id="gRad" type="number" dir="ltr" value="${esc(Number(G.gym.gpsRadius) || 250)}"></div>
+        <div class="field" style="display:flex;align-items:flex-end"><button class="btn soft" type="button" id="useCurLocBtn">${ico("mapPin", "sm")} موقعي الحالي</button></div>
+      </div>
+      <button class="btn" type="button" id="saveLocBtn">${ico("check")} حفظ موقع الجيم</button>
     </div>
-    <div class="two">
-      <div class="field"><label for="gRad">النطاق المسموح (متر)</label><input id="gRad" type="number" dir="ltr" value="${esc(Number(G.gym.gpsRadius) || 250)}"></div>
-      <div class="field" style="display:flex;align-items:flex-end"><button class="btn soft" type="button" id="useCurLocBtn">${ico("mapPin", "sm")} موقعي الحالي</button></div>
-    </div>
-    <button class="btn" type="button" id="saveLocBtn">${ico("check")} حفظ موقع الجيم</button>
+
+    <form class="panel" id="empForm" novalidate>
+      <div style="font-weight:700;font-size:14px;margin-bottom:8px">${ico("plus", "sm")} إضافة موظف (له حساب خاص)</div>
+      <div class="two">
+        <div class="field"><label for="eName">الاسم</label><input id="eName" maxlength="100"></div>
+        <div class="field"><label for="eJob">الوظيفة</label><select id="eJob">${jobOptions}</select></div>
+      </div>
+      <div class="field" id="eJobCustomBox" style="display:none"><label for="eJobCustom">اكتب الوظيفة</label><input id="eJobCustom" maxlength="40" placeholder="مثال: مدرب سباحة"></div>
+      <div class="field"><label for="eEmail">إيميل الموظف (يفضّل Gmail للدخول بجوجل)</label><input id="eEmail" type="email" dir="ltr" autocomplete="off"></div>
+      <div class="field"><label for="ePass">كلمة المرور</label>
+        <div class="pwrow"><input id="ePass" type="text" dir="ltr" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" id="eGen">${ico("refresh", "sm")} توليد</button></div>
+        <div class="hint">الاستقبال: الأعضاء والحضور والستور. المحاسب: المالية. باقي الوظائف: صفحة البصمة فقط.</div></div>
+      <button class="btn" type="submit" id="eSave">${ico("check")} إنشاء الحساب</button>
+    </form>
   </div>
 
-  <h2>${ico("plus")} إضافة كابتن</h2>
-  <form class="panel" id="capForm" novalidate>
-    <div class="two">
-      <div class="field"><label for="cName">اسم الكابتن</label><input id="cName" maxlength="100" placeholder="كابتن كريم"></div>
-      <div class="field"><label for="cRole">التخصص</label><input id="cRole" maxlength="60" placeholder="حديد / لياقة"></div>
-    </div>
-    <div class="field"><label for="cEmail">إيميل دخول الكابتن (اختياري)</label><input id="cEmail" type="email" dir="ltr" autocomplete="off" placeholder="captain@email.com"></div>
-    <div class="field"><label for="cPass">كلمة المرور</label>
-      <div class="pwrow"><input id="cPass" type="text" dir="ltr" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" id="cGen">${ico("refresh", "sm")} توليد</button></div>
-      <div class="hint">يدخل الكابتن بالإيميل ويرى صفحة البصمة الخاصة به فقط.</div></div>
-    <button class="btn" type="submit" id="capSave">${ico("check")} إضافة الكابتن</button>
-  </form>
-
-  <h2>${ico("users")} الكباتن (${CAPTAINS.length})</h2>
-  <div class="rows" id="capList">
-    ${CAPTAINS.length ? CAPTAINS.map(c => {
-      const todayIn = c.lastDate === todayStr() && c.status === "in";
-      const todayOut = c.lastDate === todayStr() && c.status === "out";
+  <h2>${ico("users")} الموظفون (${EMPLOYEES.length}) · حاضرون الآن: ${present}</h2>
+  <div class="rows" id="empList">
+    ${EMPLOYEES.length ? EMPLOYEES.map(e => {
+      const todayIn = e.lastDate === todayStr() && e.status === "in";
+      const todayOut = e.lastDate === todayStr() && e.status === "out";
+      const act = e.active !== false;
       return `
-      <div class="row" data-cid="${esc(c.id)}">
-        <div class="name">${esc(c.name)}
-          <span class="tag ${todayIn ? "active" : (todayOut ? "soon" : "none")}">${todayIn ? "حاضر الآن" : (todayOut ? "انصرف اليوم" : "لم يسجل اليوم")}</span>
-          <span class="tag ${c.loginUid ? "active" : "none"}">${c.loginUid ? "له دخول" : "بدون دخول"}</span>
-        </div>
-        <div class="meta">${esc(c.role || "كابتن")} · آخر بصمة: ${esc(fmtDateTime(toDate(c.lastAt)))}${c.loginEmail ? " · " + esc(c.loginEmail) : ""}</div>
-        <div class="acts">
-          ${c.loginUid ? `<button class="btn ghost sm" data-ctog="${esc(c.id)}">${ico("shield", "sm")} إيقاف / تفعيل الدخول</button>`
-            : `<button class="btn soft sm" data-cnew="${esc(c.id)}">${ico("lock", "sm")} إنشاء دخول</button>`}
-          <button class="btn danger sm" data-delc="${esc(c.id)}">${ico("trash", "sm")} حذف</button>
-        </div>
-        <div data-cbox="${esc(c.id)}"></div>
+      <div class="row" data-eid="${esc(e.id)}">
+        <div class="name">${esc(e.name)} <span class="tag cat">${esc(e.jobLabel || e.jobTitle || "")}</span>
+          <span class="tag ${act ? "active" : "suspended"}">${act ? "حساب نشط" : "حساب موقوف"}</span>
+          <span class="tag ${todayIn ? "active" : (todayOut ? "soon" : "none")}">${todayIn ? "حاضر الآن" : (todayOut ? "انصرف اليوم" : "لم يسجل اليوم")}</span></div>
+        <div class="meta">${esc(e.email || "")} · آخر بصمة: ${esc(fmtDateTime(toDate(e.lastAt)))}</div>
+        ${e.id === G.uid ? "" : `<div class="acts">
+          <button class="btn ghost sm" data-etog="${esc(e.id)}">${ico("shield", "sm")} ${act ? "إيقاف الحساب" : "تفعيل الحساب"}</button>
+          ${e.email ? `<button class="btn ghost sm" data-ereset="${esc(e.id)}">${ico("lock", "sm")} رابط تغيير كلمة المرور</button>` : ""}
+          <button class="btn danger sm" data-edel="${esc(e.id)}">${ico("trash", "sm")} حذف</button>
+        </div>`}
       </div>`;
-    }).join("") : `<div class="empty">لا يوجد كباتن مضافون بعد.</div>`}
+    }).join("") : `<div class="empty">لا يوجد موظفون بعد. أضف أول موظف من النموذج بالأعلى.</div>`}
   </div>
 
-  <h2>${ico("clock")} بصمات اليوم</h2>
-  <div class="rows" id="punchList"><div class="empty">جاري التحميل…</div></div>`;
+  <h2>${ico("clock")} سجل البصمات (الوظيفة بجانب الاسم)</h2>
+  <div class="toolbar"><input id="punchDate" type="date" dir="ltr" value="${todayStr()}"></div>
+  <div class="rows" id="punchList"></div>`;
 
   wireCred(main, cred);
-  wireGen("#cPass", "#cGen", main);
+  wireGen("#ePass", "#eGen", main);
+  if (!G.support) renderPunchPanel($("#myPunch", main), tok);
+  loadPunchLog($("#punchList", main), todayStr(), tok);
+  $("#punchDate").addEventListener("change", e => { if (e.target.value) loadPunchLog($("#punchList", main), e.target.value, RT); });
+
+  $("#eJob").addEventListener("change", e => { $("#eJobCustomBox").style.display = e.target.value === "other" ? "block" : "none"; });
 
   $("#useCurLocBtn").addEventListener("click", async () => {
     try {
@@ -1875,90 +2134,135 @@ async function screenCaptains(main, tok) {
     } catch (e) { toast(errText(e)); }
   });
 
-  $("#capForm").addEventListener("submit", async ev => {
+  $("#empForm").addEventListener("submit", async ev => {
     ev.preventDefault();
-    const name = $("#cName").value.trim(), spec = $("#cRole").value.trim();
-    const email = $("#cEmail").value.trim().toLowerCase(), pass = $("#cPass").value.trim();
-    if (!name) return toast("اكتب اسم الكابتن.");
-    if (email) {
-      if (!isValidEmail(email)) return toast("صيغة الإيميل غير صحيحة.");
-      const pe = pwError(pass); if (pe) return toast(pe);
-    }
-    const btn = $("#capSave"); btn.disabled = true;
+    const name = $("#eName").value.trim(), jobKey = $("#eJob").value, jobCustom = $("#eJobCustom").value.trim();
+    const email = $("#eEmail").value.trim().toLowerCase(), pass = $("#ePass").value.trim();
+    if (!name) return toast("اكتب اسم الموظف.");
+    if (jobKey === "other" && !jobCustom) return toast("اكتب اسم الوظيفة.");
+    if (!isValidEmail(email)) return toast("صيغة الإيميل غير صحيحة.");
+    const pe = pwError(pass); if (pe) return toast(pe);
+    const btn = $("#eSave"); btn.disabled = true;
     try {
-      const dRef = await addDoc(col("captains"), { name, role: spec || "كابتن", createdAt: serverTimestamp() });
-      const cap = { id: dRef.id, name, role: spec || "كابتن" };
-      CAPTAINS.push(cap);
-      if (email) {
-        try {
-          await provisionCaptainLogin(cap, email, pass);
-          S.cred = loginCredDescriptor("captains", `بيانات دخول ${name}`, name, email, pass);
-        } catch (e) { toast("تمت إضافة الكابتن لكن تعذر إنشاء الدخول: " + errText(e)); }
-      } else toast("تمت إضافة الكابتن");
+      const r = await createEmployee({ name, jobKey, jobCustom, email, password: pass });
+      S.cred = loginCredDescriptor("staff", `بيانات دخول ${name} (${r.jobLabel})`, name, email, pass);
+      await loadEmployees();
       renderOwner();
     } catch (e) { btn.disabled = false; toast(errText(e)); }
   });
 
-  $$("[data-cnew]", main).forEach(b => b.addEventListener("click", () => {
-    const cap = CAPTAINS.find(x => x.id === b.dataset.cnew);
-    const box = $(`[data-cbox="${b.dataset.cnew}"]`, main);
-    box.innerHTML = `
-    <form class="panel" style="margin-top:10px" novalidate>
-      <div class="field"><label>إيميل الكابتن</label><input type="email" dir="ltr" data-f="email" autocomplete="off"></div>
-      <div class="field"><label>كلمة المرور</label><div class="pwrow"><input type="text" dir="ltr" data-f="pass" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" data-f="gen">${ico("refresh", "sm")} توليد</button></div></div>
-      <button class="btn" type="submit">${ico("check")} إنشاء الدخول</button>
-    </form>`;
-    $("[data-f='gen']", box).addEventListener("click", () => { $("[data-f='pass']", box).value = genPassword(); });
-    $("form", box).addEventListener("submit", async ev => {
-      ev.preventDefault();
-      const email = $("[data-f='email']", box).value.trim().toLowerCase(), pass = $("[data-f='pass']", box).value.trim();
-      if (!isValidEmail(email)) return toast("صيغة الإيميل غير صحيحة.");
-      const pe = pwError(pass); if (pe) return toast(pe);
-      try {
-        await provisionCaptainLogin(cap, email, pass);
-        S.cred = loginCredDescriptor("captains", `بيانات دخول ${cap.name}`, cap.name, email, pass);
-        renderOwner();
-      } catch (e) { toast(errText(e)); }
-    });
-  }));
-
-  $$("[data-ctog]", main).forEach(b => b.addEventListener("click", async () => {
-    const cap = CAPTAINS.find(x => x.id === b.dataset.ctog);
+  $$("[data-etog]", main).forEach(b => b.addEventListener("click", async () => {
+    const id = b.dataset.etog, e = EMPLOYEES.find(x => x.id === id);
+    const next = e.active === false;
     b.disabled = true;
     try {
-      const uRef = doc(db, "users", cap.loginUid);
-      const s = await getDoc(uRef);
-      const next = !(s.exists() && s.data().active === true);
-      await updateDoc(uRef, { active: next });
-      toast(next ? "تم تفعيل دخول الكابتن" : "تم إيقاف دخول الكابتن");
-    } catch (e) { toast(errText(e)); }
-    b.disabled = false;
+      const batch = writeBatch(db);
+      batch.update(ref("employees", id), { active: next });
+      batch.update(doc(db, "users", id), { active: next });
+      await batch.commit();
+      e.active = next;
+      toast(next ? "تم تفعيل الحساب" : "تم إيقاف الحساب");
+      renderOwner();
+    } catch (err) { b.disabled = false; toast(errText(err)); }
   }));
-
-  $$("[data-delc]", main).forEach(b => b.addEventListener("click", async () => {
-    if (!confirm("حذف هذا الكابتن؟ سيتوقف دخوله أيضًا.")) return;
-    const cap = CAPTAINS.find(x => x.id === b.dataset.delc);
+  $$("[data-ereset]", main).forEach(b => b.addEventListener("click", async () => {
+    const e = EMPLOYEES.find(x => x.id === b.dataset.ereset);
+    try { await sendPasswordResetEmail(auth, e.email); toast("تم إرسال رابط تغيير كلمة المرور للإيميل"); }
+    catch (err) { toast(errText(err)); }
+  }));
+  $$("[data-edel]", main).forEach(b => b.addEventListener("click", async () => {
+    if (!confirm("حذف الموظف من القائمة؟ سيتوقف دخوله. سجل بصماته القديم يبقى محفوظًا.")) return;
+    const id = b.dataset.edel;
     try {
       const batch = writeBatch(db);
-      if (cap?.loginUid) batch.update(doc(db, "users", cap.loginUid), { active: false });
-      batch.delete(ref("captains", b.dataset.delc));
+      batch.delete(ref("employees", id));
+      batch.update(doc(db, "users", id), { active: false });
       await batch.commit();
-      CAPTAINS = CAPTAINS.filter(x => x.id !== b.dataset.delc);
+      EMPLOYEES = EMPLOYEES.filter(x => x.id !== id);
       renderOwner();
-    } catch (e) { toast(errText(e)); }
+    } catch (err) { toast(errText(err)); }
   }));
+}
 
+/* ---------- Shared GPS punch panel (every employee, incl. owner / reception / accountant) ---------- */
+async function renderPunchPanel(box, tok) {
+  if (!box) return;
+  box.innerHTML = `<div class="panel"><p class="muted">جاري التحميل…</p></div>`;
+  const uid = G.uid;
+  let emp = null, punches = [];
   try {
-    const snap = await getDocs(query(col("captain_attendance"), where("date", "==", todayStr())));
-    if (tok !== RT) return;
-    const rows = snap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
-    $("#punchList").innerHTML = rows.length ? rows.map(r => `
-      <div class="row"><div class="name">${esc(r.captainName)} <span class="tag ${r.type === "in" ? "active" : "soon"}">${r.type === "in" ? "حضور" : "انصراف"}</span></div>
-      <div class="meta">${esc(fmtDateTime(toDate(r.ts)))}${r.distanceMeters != null ? ` · ${esc(r.distanceMeters)} متر من الجيم` : ""}</div></div>`).join("")
-      : `<div class="empty">لا توجد بصمات اليوم.</div>`;
+    const eSnap = await getDoc(ref("employees", uid));
+    if (eSnap.exists()) emp = { id: eSnap.id, ...eSnap.data() };
+    else if (role() === "owner" && !G.support) {
+      const data = {
+        name: G.profile.name || "المدير", jobTitle: "manager", jobLabel: "مدير الجيم", role: "owner",
+        email: auth.currentUser?.email || "", active: true, createdAt: serverTimestamp()
+      };
+      await setDoc(ref("employees", uid), data);
+      emp = { id: uid, ...data };
+    }
+    if (emp) {
+      const hSnap = await getDocs(query(col("staff_attendance"), where("employeeId", "==", uid)));
+      punches = hSnap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
+    }
   } catch (e) {
-    if (tok === RT) $("#punchList").innerHTML = `<div class="empty">${esc(errText(e))}</div>`;
+    if (tok !== RT) return;
+    box.innerHTML = `<div class="panel"><p class="msg err">${ico("alert", "sm")} ${esc(errText(e))}</p></div>`;
+    return;
   }
+  if (tok !== RT) return;
+  if (!emp) {
+    box.innerHTML = `<div class="panel"><p class="msg err">${ico("alert", "sm")} لم تُضَف كموظف في قائمة الجيم بعد. اطلب من المدير إضافتك لتظهر لك البصمة.</p></div>`;
+    return;
+  }
+
+  const todayIn = emp.lastDate === todayStr() && emp.status === "in";
+  const gymLat = Number(G.gym.lat), gymLng = Number(G.gym.lng);
+  const hasLoc = G.gym.lat !== undefined && G.gym.lat !== "" && G.gym.lng !== undefined && G.gym.lng !== "" && !isNaN(gymLat) && !isNaN(gymLng);
+  const maxRadius = Number(G.gym.gpsRadius) || 250;
+
+  box.innerHTML = `
+  <div class="panel">
+    <div class="top" style="margin-bottom:8px">
+      <div class="who"><h1 style="font-size:18px">${esc(emp.name)}</h1><div class="sub">${esc(emp.jobLabel || "")}</div></div>
+      <span class="tag ${todayIn ? "active" : "none"}">${todayIn ? "حاضر الآن" : "غير مسجل حضور"}</span>
+    </div>
+    <div class="stat"><span>آخر بصمة</span><b>${esc(fmtDateTime(toDate(emp.lastAt)))}</b></div>
+    ${hasLoc ? "" : `<p class="msg err" style="margin-top:10px">${ico("alert", "sm")} لم يحدد المدير موقع الجيم بعد، لذلك لن يتم التحقق من النطاق.</p>`}
+    <button class="btn punch-btn" id="punchBtn" style="margin-top:12px">${ico("mapPin")} ${todayIn ? "بصمة انصراف" : "بصمة حضور"}</button>
+    <div class="hint" style="margin-top:8px">يتم تحديد موقعك عبر GPS. اسمح للمتصفح باستخدام الموقع.</div>
+  </div>
+  <h2>${ico("clock")} آخر بصماتي</h2>
+  <div class="rows">${punches.length ? punches.slice(0, 15).map(p => `
+    <div class="row"><div class="name"><span class="tag ${p.type === "in" ? "active" : "soon"}">${p.type === "in" ? "حضور" : "انصراف"}</span> ${esc(fmtDateTime(toDate(p.ts)))}</div>
+    <div class="meta">${p.distanceMeters != null ? esc(p.distanceMeters) + " متر من الجيم" : ""}</div></div>`).join("")
+    : `<div class="empty">لا توجد بصمات بعد.</div>`}</div>`;
+
+  $("#punchBtn", box).addEventListener("click", async ev => {
+    const btn = ev.currentTarget; btn.disabled = true;
+    const type = todayIn ? "out" : "in";
+    try {
+      const loc = await getCurrentGps();
+      let dist = null;
+      if (hasLoc) {
+        dist = Math.round(haversineMeters(loc.lat, loc.lng, gymLat, gymLng));
+        if (dist > maxRadius) { btn.disabled = false; return toast(`أنت خارج نطاق الجيم (${dist} متر من أصل ${maxRadius} متر).`); }
+      }
+      await addDoc(col("staff_attendance"), {
+        employeeId: uid, employeeName: emp.name, jobTitle: emp.jobTitle || "", jobLabel: emp.jobLabel || "",
+        type, date: todayStr(), lat: loc.lat, lng: loc.lng, distanceMeters: dist, acc: loc.acc,
+        ts: serverTimestamp(), by: uid
+      });
+      await updateDoc(ref("employees", uid), { status: type, lastDate: todayStr(), lastAt: serverTimestamp(), lastDist: dist });
+      toast(type === "in" ? "تم تسجيل حضورك" : "تم تسجيل انصرافك");
+      renderPunchPanel(box, RT);
+    } catch (e) { btn.disabled = false; toast(e.message || errText(e)); }
+  });
+}
+
+function screenPunch(main, tok) {
+  main.innerHTML = `<h2>${ico("mapPin")} بصمة الحضور والانصراف</h2><div id="myPunch"></div>`;
+  renderPunchPanel($("#myPunch", main), tok);
 }
 
 /* ---------- Store & Cafeteria ---------- */
@@ -2314,31 +2618,6 @@ async function screenMoney(main, tok) {
 }
 
 /* ---------- Settings ---------- */
-async function loadStaffList(box, tok) {
-  try {
-    const [a, b] = await Promise.all([
-      getDocs(query(collection(db, "users"), where("gymId", "==", G.gymId), where("role", "==", "reception"))),
-      getDocs(query(collection(db, "users"), where("gymId", "==", G.gymId), where("role", "==", "accountant")))
-    ]);
-    if (tok !== RT) return;
-    const list = [...a.docs, ...b.docs].map(d => ({ id: d.id, ...d.data() }));
-    box.innerHTML = list.length ? list.map(u => `
-      <div class="row">
-        <div class="name">${esc(u.name)} <span class="tag cat">${esc(ROLE_LABEL[u.role] || u.role)}</span>
-          <span class="tag ${u.active === true ? "active" : "suspended"}">${u.active === true ? "نشط" : "موقوف"}</span></div>
-        <div class="meta">${esc(u.email || "")}</div>
-        <div class="acts"><button class="btn ghost sm" data-stog="${esc(u.id)}" data-sact="${u.active === true ? "1" : "0"}">${ico("shield", "sm")} ${u.active === true ? "إيقاف الحساب" : "تفعيل الحساب"}</button></div>
-      </div>`).join("") : `<div class="empty">لا توجد حسابات موظفين بعد.</div>`;
-    $$("[data-stog]", box).forEach(btn => btn.addEventListener("click", async () => {
-      btn.disabled = true;
-      try { await updateDoc(doc(db, "users", btn.dataset.stog), { active: btn.dataset.sact !== "1" }); toast("تم التحديث"); loadStaffList(box, tok); }
-      catch (e) { btn.disabled = false; toast(errText(e)); }
-    }));
-  } catch (e) {
-    if (tok === RT) box.innerHTML = `<div class="empty">${esc(errText(e))}</div>`;
-  }
-}
-
 function screenSettings(main, tok) {
   const owner = isOwner();
   const cred = S.cred && S.cred.scope === "settings" ? S.cred : null;
@@ -2387,22 +2666,6 @@ function screenSettings(main, tok) {
     <div class="field"><label for="psess">عدد التمارين</label><input id="psess" type="number" inputmode="numeric" min="1" dir="ltr" value="${esc(editing?.sessions ?? 30)}"></div>
     <button class="btn" type="submit" id="psave">${ico("check")} ${editing ? "حفظ التعديل" : "إضافة الباقة"}</button>
     ${editing ? `<button class="linkbtn" type="button" id="pcancel">إلغاء التعديل</button>` : ""}
-  </form>
-
-  <h2>${ico("users")} حسابات الموظفين (استقبال / محاسب)</h2>
-  <div class="rows" id="staffList"><div class="empty">جاري التحميل…</div></div>
-  <h2>${ico("plus")} إضافة موظف</h2>
-  <form class="panel" id="staffForm" novalidate>
-    <div class="two">
-      <div class="field"><label for="sName">الاسم</label><input id="sName" maxlength="100"></div>
-      <div class="field"><label for="sRole">الصلاحية</label>
-        <select id="sRole"><option value="reception">استقبال</option><option value="accountant">محاسب</option></select></div>
-    </div>
-    <div class="field"><label for="sEmail">الإيميل</label><input id="sEmail" type="email" dir="ltr" autocomplete="off"></div>
-    <div class="field"><label for="sPass">كلمة المرور</label>
-      <div class="pwrow"><input id="sPass" type="text" dir="ltr" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" id="sGen">${ico("refresh", "sm")} توليد</button></div>
-      <div class="hint">الاستقبال: الأعضاء والحضور والستور فقط. المحاسب: المالية فقط.</div></div>
-    <button class="btn" type="submit" id="sSave">${ico("check")} إنشاء الحساب</button>
   </form>
 
   <h2>${ico("shield")} الأمان</h2>
@@ -2467,27 +2730,6 @@ function screenSettings(main, tok) {
     } catch (e) { btn.disabled = false; toast(errText(e)); }
   });
 
-  loadStaffList($("#staffList"), tok);
-  wireGen("#sPass", "#sGen", main);
-  $("#staffForm").addEventListener("submit", async ev => {
-    ev.preventDefault();
-    const name = $("#sName").value.trim(), r = $("#sRole").value;
-    const email = $("#sEmail").value.trim().toLowerCase(), pass = $("#sPass").value.trim();
-    if (!name) return toast("اكتب اسم الموظف.");
-    if (!isValidEmail(email)) return toast("صيغة الإيميل غير صحيحة.");
-    const pe = pwError(pass); if (pe) return toast(pe);
-    const btn = $("#sSave"); btn.disabled = true;
-    try {
-      const uid = await createAuthUser(email, pass);
-      await setDoc(doc(db, "users", uid), {
-        name, role: r, active: true, gymId: G.gymId, gymName: G.gym.name || "",
-        email, createdAt: serverTimestamp(), createdBy: G.uid
-      });
-      S.cred = loginCredDescriptor("settings", `بيانات دخول ${name} (${ROLE_LABEL[r]})`, name, email, pass);
-      renderOwner();
-    } catch (e) { btn.disabled = false; toast(errText(e)); }
-  });
-
   const purge = $("#purgeBtn");
   if (purge) purge.addEventListener("click", async () => {
     if (!confirm("حذف كلمات المرور القديمة المخزنة لجميع الأعضاء؟ لن يعمل الدخول القديم بها.")) return;
@@ -2506,18 +2748,18 @@ function screenSettings(main, tok) {
 }
 
 const SCREENS = {
-  home: screenHome, members: screenMembers, checkin: screenCheckin, captains: screenCaptains,
+  home: screenHome, members: screenMembers, checkin: screenCheckin, staff: screenStaff, punch: screenPunch,
   store: screenStore, broadcast: screenBroadcast, money: screenMoney, settings: screenSettings
 };
 const SUBS = { member: subMember, newMember: subNewMember, renew: subRenew, edit: subEdit, card: subCard };
 
-async function startStaff(uid, profile, gym, gymId) {
+async function startStaff(uid, profile, gym, gymId, support = false) {
   let pub = {};
   try {
     const s = await withTimeout(getDoc(doc(db, "gyms", gymId, "meta", "public")));
     if (s.exists()) pub = s.data();
   } catch {}
-  G = { uid, profile, gym: { ...gym, ...pub }, gymId };
+  G = { uid, profile, gym: { ...gym, ...pub }, gymId, support };
   const r = profile.role;
   S.tab = r === "accountant" ? "money" : (r === "reception" ? "members" : "home");
   S.sub = null; S.filter = "all"; S.q = ""; S.editPlan = null; S.cred = null;
@@ -2526,7 +2768,7 @@ async function startStaff(uid, profile, gym, gymId) {
   try {
     const jobs = [];
     if (r === "owner" || r === "reception") jobs.push(loadMembers(), loadPlans(), loadProducts());
-    if (r === "owner") jobs.push(loadCaptains());
+    if (r === "owner") jobs.push(loadEmployees());
     await withTimeout(Promise.all(jobs), 20000);
   } catch (e) {
     return viewBlocked("تعذر تحميل بيانات الجيم", errText(e), true);
@@ -2535,101 +2777,49 @@ async function startStaff(uid, profile, gym, gymId) {
 }
 
 /* =====================================================================
-   CAPTAIN APP (sees only his own punch page)
+   EMPLOYEE APP (cleaner, buffet, security, captain, ... : punch page only)
    ===================================================================== */
-async function startCaptain(uid, profile, gym) {
+async function startEmployee(uid, profile, gym) {
   let pub = {};
   try {
     const s = await withTimeout(getDoc(doc(db, "gyms", profile.gymId, "meta", "public")));
     if (s.exists()) pub = s.data();
   } catch {}
-  G = { uid, profile, gym: { ...gym, ...pub }, gymId: profile.gymId };
-  renderCaptain();
-}
-
-async function renderCaptain() {
-  root.innerHTML = `<div class="loading">جاري التحميل…</div>`;
-  const cid = G.profile.captainId;
-  let cap, punches;
-  try {
-    const [cSnap, hSnap] = await withTimeout(Promise.all([
-      getDoc(ref("captains", cid)),
-      getDocs(query(col("captain_attendance"), where("captainId", "==", cid)))
-    ]), 20000);
-    if (!cSnap.exists()) return viewBlocked("لا توجد بيانات", "لم نجد ملفك كابتن في هذا الجيم. تواصل مع المدير.");
-    cap = { id: cSnap.id, ...cSnap.data() };
-    punches = hSnap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
-  } catch (e) { return viewBlocked("تعذر التحميل", errText(e), true); }
-
-  const todayIn = cap.lastDate === todayStr() && cap.status === "in";
-  const gymLat = Number(G.gym.lat), gymLng = Number(G.gym.lng);
-  const hasLoc = G.gym.lat !== undefined && G.gym.lat !== "" && G.gym.lng !== undefined && G.gym.lng !== "" && !isNaN(gymLat) && !isNaN(gymLng);
-  const maxRadius = Number(G.gym.gpsRadius) || 250;
-
+  G = { uid, profile, gym: { ...gym, ...pub }, gymId: profile.gymId, support: false };
+  RT++;
+  const tok = RT;
   root.innerHTML = `
   <div class="shell notabs">
     <header class="oh"><div class="in">
-      <div class="brand-box">${gymLogoHtml(G.gym)}<div><div class="gname">${esc(G.gym.name || "الجيم")}</div><div class="gsub">${esc(cap.name)} · كابتن</div></div></div>
-      <button class="btn ghost sm" id="cOut">${ico("logout", "sm")} خروج</button>
+      <div class="brand-box">${gymLogoHtml(G.gym)}<div><div class="gname">${esc(G.gym.name || "الجيم")}</div><div class="gsub">${esc(profile.name || "")}</div></div></div>
+      <button class="btn ghost sm" id="eOut">${ico("logout", "sm")} خروج</button>
     </div></header>
     <main class="wrap">
       <h2>${ico("mapPin")} بصمة الحضور والانصراف</h2>
-      <div class="panel">
-        <div class="top" style="margin-bottom:8px">
-          <div class="who"><h1 style="font-size:18px">${esc(cap.name)}</h1><div class="sub">${esc(cap.role || "كابتن")}</div></div>
-          <span class="tag ${todayIn ? "active" : "none"}">${todayIn ? "حاضر الآن" : "غير مسجل حضور"}</span>
-        </div>
-        <div class="stat"><span>آخر بصمة</span><b>${esc(fmtDateTime(toDate(cap.lastAt)))}</b></div>
-        ${hasLoc ? "" : `<p class="msg err" style="margin-top:10px">${ico("alert", "sm")} لم يحدد المدير موقع الجيم بعد، لذلك لن يتم التحقق من النطاق.</p>`}
-        <button class="btn punch-btn" id="punchBtn" style="margin-top:12px">${ico("mapPin")} ${todayIn ? "بصمة انصراف" : "بصمة حضور"}</button>
-        <div class="hint" style="margin-top:8px">يتم تحديد موقعك عبر GPS. اسمح للمتصفح باستخدام الموقع.</div>
-      </div>
-
-      <h2>${ico("clock")} آخر بصماتي</h2>
-      <div class="rows">${punches.length ? punches.slice(0, 20).map(p => `
-        <div class="row"><div class="name"><span class="tag ${p.type === "in" ? "active" : "soon"}">${p.type === "in" ? "حضور" : "انصراف"}</span> ${esc(fmtDateTime(toDate(p.ts)))}</div>
-        <div class="meta">${p.distanceMeters != null ? esc(p.distanceMeters) + " متر من الجيم" : ""}</div></div>`).join("")
-        : `<div class="empty">لا توجد بصمات بعد.</div>`}</div>
-
+      <div id="myPunch"></div>
       ${pwPanelHtml()}
     </main>
   </div>`;
-
-  $("#cOut").addEventListener("click", () => signOut(auth));
+  $("#eOut").addEventListener("click", () => signOut(auth));
   wirePwForm();
-  $("#punchBtn").addEventListener("click", async ev => {
-    const btn = ev.currentTarget; btn.disabled = true;
-    const type = todayIn ? "out" : "in";
-    try {
-      const loc = await getCurrentGps();
-      let dist = null;
-      if (hasLoc) {
-        dist = Math.round(haversineMeters(loc.lat, loc.lng, gymLat, gymLng));
-        if (dist > maxRadius) { btn.disabled = false; return toast(`أنت خارج نطاق الجيم (${dist} متر من أصل ${maxRadius} متر).`); }
-      }
-      await addDoc(col("captain_attendance"), {
-        captainId: cid, captainName: cap.name, type, date: todayStr(),
-        lat: loc.lat, lng: loc.lng, distanceMeters: dist, ts: serverTimestamp(), by: G.uid
-      });
-      await updateDoc(ref("captains", cid), { status: type, lastDate: todayStr(), lastAt: serverTimestamp(), lastDist: dist });
-      toast(type === "in" ? "تم تسجيل حضورك" : "تم تسجيل انصرافك");
-      renderCaptain();
-    } catch (e) { btn.disabled = false; toast(e.message || errText(e)); }
-  });
+  renderPunchPanel($("#myPunch"), tok);
 }
 
 /* =====================================================================
-   SUPER ADMIN
+   SUPER ADMIN  (platform owner: sees every gym, can enter any gym in support mode)
    ===================================================================== */
 function viewAdmin(profile) {
   root.innerHTML = `
   <div class="wrap wide">
     <div class="top">
-      <div class="who"><h1>لوحة الإدارة</h1><div class="sub">${esc(profile.name || "")}</div></div>
+      <div class="who"><h1>لوحة الإدارة</h1><div class="sub">${esc(profile.name || "")} · مسؤول النظام</div></div>
       <button class="btn ghost" id="outBtn">${ico("logout", "sm")} خروج</button>
     </div>
 
-    <h2 style="margin-top:0">${ico("building")} الجيمات المشتركة</h2>
+    <div id="adminCred"></div>
+    <div class="kpi-grid four" id="adminKpis"></div>
+
+    <h2>${ico("building")} الجيمات المشتركة ومديروها</h2>
     <div id="gymList"><div class="rows"><div class="empty">جاري التحميل…</div></div></div>
 
     <h2>${ico("plus")} إضافة جيم ومدير</h2>
@@ -2659,6 +2849,13 @@ function viewAdmin(profile) {
 function setFormMsg(text, kind = "err", extraHtml = "") {
   const box = $("#formMsg");
   box.innerHTML = text ? `<p class="msg ${kind}" role="${kind === "err" ? "alert" : "status"}">${ico(kind === "err" ? "alert" : "checkCircle", "sm")} ${esc(text)}</p>${extraHtml}` : "";
+}
+function showAdminCred(c) {
+  const box = $("#adminCred");
+  if (!box) return;
+  box.innerHTML = credHtml(c);
+  wireCred(box, c);
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 async function onCreateGym(ev) {
@@ -2697,8 +2894,8 @@ async function onCreateGym(ev) {
     };
     $("#gymForm").reset();
     $("#gMonths").value = 1; $("#oPass").value = genPassword();
-    setFormMsg(`تم إنشاء «${gName}» بنجاح.`, "ok", credHtml(c));
-    wireCred($("#formMsg"), c);
+    setFormMsg(`تم إنشاء «${gName}» بنجاح.`, "ok");
+    showAdminCred(c);
     loadGyms();
   } catch (e) {
     let t = errText(e);
@@ -2706,6 +2903,19 @@ async function onCreateGym(ev) {
     setFormMsg(t);
   } finally {
     btn.disabled = false; btn.innerHTML = `${ico("check")} إنشاء الجيم`;
+  }
+}
+
+async function enterGymSupport(gymId) {
+  if (!SUPER) return;
+  root.innerHTML = `<div class="loading">جاري فتح الجيم…</div>`;
+  try {
+    const gSnap = await withTimeout(getDoc(doc(db, "gyms", gymId)));
+    if (!gSnap.exists()) throw { code: "not-found", message: "الجيم غير موجود." };
+    await startStaff(SUPER.uid, { name: SUPER.profile.name || "مسؤول النظام", role: "owner", active: true }, gSnap.data(), gymId, true);
+  } catch (e) {
+    toast(errText(e));
+    viewAdmin(SUPER.profile);
   }
 }
 
@@ -2722,6 +2932,7 @@ async function loadGyms() {
   }
   gyms.sort((a, b) => (toDate(b.createdAt)?.getTime() || 0) - (toDate(a.createdAt)?.getTime() || 0));
   if (!gyms.length) {
+    $("#adminKpis").innerHTML = "";
     box.innerHTML = `<div class="rows"><div class="empty">لا توجد جيمات بعد. أضف أول جيم من النموذج بالأسفل.</div></div>`;
     return;
   }
@@ -2736,39 +2947,62 @@ async function loadGyms() {
     catch { return null; }
   }));
 
-  box.innerHTML = `<div class="rows">${gyms.map((g, i) => {
+  const statusOf = g => {
     const end = toDate(g.subscriptionEnd);
-    const expired = end && end.getTime() < Date.now();
-    const status = g.status === "cancelled" ? "cancelled" : (g.status === "suspended" ? "suspended" : (expired ? "expired" : "active"));
+    if (g.status === "cancelled") return "cancelled";
+    if (g.status === "suspended") return "suspended";
+    return end && end.getTime() < Date.now() ? "expired" : "active";
+  };
+  const activeN = gyms.filter(g => statusOf(g) === "active").length;
+  const totalMembers = counts.reduce((a, c) => a + (c || 0), 0);
+  $("#adminKpis").innerHTML = `
+    <div class="kpi accent"><div class="kl">${ico("building", "sm")} عدد الجيمات</div><div class="kv">${gyms.length}</div></div>
+    <div class="kpi"><div class="kl">${ico("checkCircle", "sm")} جيمات نشطة</div><div class="kv">${activeN}</div></div>
+    <div class="kpi"><div class="kl">${ico("xCircle", "sm")} موقوفة / منتهية</div><div class="kv">${gyms.length - activeN}</div></div>
+    <div class="kpi"><div class="kl">${ico("users", "sm")} إجمالي الأعضاء</div><div class="kv">${totalMembers}</div></div>`;
+
+  box.innerHTML = `<div class="gym-grid">${gyms.map((g, i) => {
+    const end = toDate(g.subscriptionEnd);
+    const status = statusOf(g);
     const label = { active: "نشط", suspended: "موقوف", cancelled: "ملغي", expired: "منتهي" }[status];
     const tagCls = status === "active" ? "active" : (status === "expired" ? "expired" : "suspended");
     const mgr = g.ownerUid ? usersMap.get(g.ownerUid) : null;
     const mgrActive = mgr ? mgr.active !== false : true;
     const blocked = status !== "active";
     return `
-    <div class="row" data-id="${esc(g.id)}" data-uid="${esc(g.ownerUid || "")}">
+    <div class="panel gym-card" data-id="${esc(g.id)}" data-uid="${esc(g.ownerUid || "")}">
       <div class="name">${gymLogoHtml(g, "mini-logo")}<span>${esc(g.name || g.id)}</span>
         <span class="tag ${tagCls}">${label}</span>
         <span class="tag ${mgrActive ? "active" : "suspended"}">${mgrActive ? "المدير نشط" : "المدير موقوف"}</span></div>
-      <div class="meta">${esc(PLANS_LABEL[g.plan] || g.plan || "—")} · ينتهي ${fmtDate(end)} · الأعضاء: <b>${counts[i] ?? "—"}</b></div>
-      <div class="meta">المدير: <b>${esc(g.ownerName || mgr?.name || "—")}</b> · ${esc(g.ownerEmail || mgr?.email || "—")}</div>
+      <div class="stat"><span>مدير الجيم</span><b>${esc(g.ownerName || mgr?.name || "—")}</b></div>
+      <div class="stat"><span>إيميل المدير</span><b class="mono">${esc(g.ownerEmail || mgr?.email || "—")}</b></div>
+      <div class="stat"><span>عدد الأعضاء</span><b>${counts[i] ?? "—"}</b></div>
+      <div class="stat"><span>الباقة</span><b>${esc(PLANS_LABEL[g.plan] || g.plan || "—")}</b></div>
+      <div class="stat"><span>ينتهي الاشتراك</span><b>${esc(fmtDate(end))}</b></div>
       <div class="acts">
+        <button class="btn sm" data-act="enter">${ico("arrowRight", "sm")} دخول للجيم (وضع الدعم)</button>
         <button class="btn ghost sm" data-act="extend">${ico("refresh", "sm")} تمديد 30 يوم</button>
         ${blocked ? `<button class="btn soft sm" data-act="activate">${ico("checkCircle", "sm")} تفعيل الجيم</button>`
                   : `<button class="btn ghost sm" data-act="suspend">إيقاف مؤقت</button>
                      <button class="btn danger sm" data-act="cancel">إلغاء الاشتراك</button>`}
+      </div>
+      <div class="acts">
+        <button class="btn ghost sm" data-act="edit">${ico("edit", "sm")} تعديل بيانات الجيم والمدير</button>
         ${g.ownerUid ? `<button class="btn ghost sm" data-act="toggleMgr">${mgrActive ? "إيقاف المدير" : "تنشيط المدير"}</button>` : ""}
         ${g.ownerEmail ? `<button class="btn ghost sm" data-act="resetMgr">${ico("lock", "sm")} رابط كلمة المرور للمدير</button>` : ""}
         <button class="btn ghost sm" data-act="copyLink">${ico("copy", "sm")} رابط دخول الأعضاء</button>
       </div>
+      <div data-editbox></div>
     </div>`;
   }).join("")}</div>`;
 
   $$("button[data-act]", box).forEach(b => b.addEventListener("click", async () => {
-    const row = b.closest(".row"), id = row.dataset.id, uid = row.dataset.uid;
+    const card = b.closest(".gym-card"), id = card.dataset.id, uid = card.dataset.uid;
     const g = gyms.find(x => x.id === id);
     const act = b.dataset.act;
+    if (act === "enter") return enterGymSupport(id);
     if (act === "copyLink") return copyText(`${appLink()}?g=${encodeURIComponent(id)}`);
+    if (act === "edit") return openGymEditor(card, g, uid);
     if (act === "cancel" && !confirm(`إلغاء اشتراك «${g.name}»؟ سيتوقف دخول كل مستخدميه فورًا. يمكنك تفعيله لاحقًا.`)) return;
     b.disabled = true;
     try {
@@ -2792,10 +3026,60 @@ async function loadGyms() {
   }));
 }
 
+function openGymEditor(card, g, oldUid) {
+  const box = $("[data-editbox]", card);
+  box.innerHTML = `
+  <form class="panel" style="margin-top:12px" novalidate>
+    <div style="font-weight:700;margin-bottom:8px">تعديل بيانات الجيم والمدير</div>
+    <div class="field"><label>اسم الجيم</label><input data-f="gname" maxlength="100" value="${esc(g.name || "")}"></div>
+    <div class="field"><label>اسم المدير</label><input data-f="oname" maxlength="100" value="${esc(g.ownerName || "")}"></div>
+    <div class="field"><label>إيميل جديد للمدير (اتركه فارغًا بدون تغيير)</label><input data-f="email" type="email" dir="ltr" autocomplete="off" placeholder="new@email.com"></div>
+    <div class="field"><label>كلمة مرور جديدة (مطلوبة مع الإيميل الجديد)</label>
+      <div class="pwrow"><input data-f="pass" type="text" dir="ltr" maxlength="64" value="${esc(genPassword())}"><button type="button" class="btn soft sm" data-f="gen">${ico("refresh", "sm")} توليد</button></div></div>
+    <div class="hint">تغيير الإيميل ينشئ حساب دخول جديد للمدير ويوقف القديم. أما تغيير كلمة المرور لنفس الإيميل فمن زر «رابط كلمة المرور للمدير».</div>
+    <button class="btn" type="submit" style="margin-top:10px">${ico("check")} حفظ</button>
+  </form>`;
+  const f = n => $(`[data-f="${n}"]`, box);
+  f("gen").addEventListener("click", () => { f("pass").value = genPassword(); });
+  $("form", box).addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const gname = f("gname").value.trim(), oname = f("oname").value.trim();
+    const email = f("email").value.trim().toLowerCase(), pass = f("pass").value.trim();
+    if (!gname || !oname) return toast("اكتب اسم الجيم واسم المدير.");
+    if (email) {
+      if (!isValidEmail(email)) return toast("صيغة الإيميل غير صحيحة.");
+      const pe = pwError(pass); if (pe) return toast(pe);
+    }
+    const btn = $("button[type=submit], form > button.btn", box); if (btn) btn.disabled = true;
+    try {
+      const batch = writeBatch(db);
+      if (email) {
+        const uid2 = await createAuthUser(email, pass);
+        batch.set(doc(db, "users", uid2), { name: oname, email, role: "owner", active: true, gymId: g.id, gymName: gname, createdAt: serverTimestamp() });
+        batch.update(doc(db, "gyms", g.id), { name: gname, ownerName: oname, ownerUid: uid2, ownerEmail: email });
+        if (oldUid) batch.update(doc(db, "users", oldUid), { active: false });
+      } else {
+        batch.update(doc(db, "gyms", g.id), { name: gname, ownerName: oname });
+        if (oldUid) batch.update(doc(db, "users", oldUid), { name: oname, gymName: gname });
+      }
+      batch.set(doc(db, "gyms", g.id, "meta", "public"), { name: gname }, { merge: true });
+      await batch.commit();
+      if (email) {
+        showAdminCred({
+          title: `بيانات دخول مدير «${gname}» الجديدة`, phone: "",
+          rows: [["الرابط", appLink()], ["الإيميل", email], ["كلمة المرور", pass]],
+          text: `أهلًا ${oname}، بيانات دخولك الجديدة لنظام GymPro:\nالرابط: ${appLink()}\nالإيميل: ${email}\nكلمة المرور: ${pass}\nنوصيك بتغيير كلمة المرور بعد أول دخول.`
+        });
+      } else toast("تم الحفظ");
+      loadGyms();
+    } catch (e) { if (btn) btn.disabled = false; toast(errText(e)); }
+  });
+}
+
 /* ---------- Session routing ---------- */
 onAuthStateChanged(auth, async user => {
   stopScanner(); destroyCharts(); stopIdle();
-  if (!user) { G = null; return viewLogin(); }
+  if (!user) { G = null; SUPER = null; return viewLogin(); }
   root.innerHTML = `<div class="loading">جاري التحميل…</div>`;
   try {
     const uSnap = await withTimeout(getDoc(doc(db, "users", user.uid)));
@@ -2803,9 +3087,9 @@ onAuthStateChanged(auth, async user => {
     const profile = uSnap.data();
     if (profile.active !== true) return viewBlocked("الحساب موقوف", "تم إيقاف هذا الحساب. تواصل مع إدارة الجيم.");
     startIdle();
-    if (profile.role === "superadmin") return viewAdmin(profile);
+    if (profile.role === "superadmin") { SUPER = { uid: user.uid, profile }; return viewAdmin(profile); }
     if (profile.role === "member") return await startMember(user.uid, profile);
-    if (!["owner", "accountant", "reception", "captain"].includes(profile.role)) {
+    if (!["owner", "accountant", "reception", "captain", "employee"].includes(profile.role)) {
       return viewBlocked("صلاحية غير معروفة", "تواصل مع الإدارة.");
     }
 
@@ -2816,7 +3100,7 @@ onAuthStateChanged(auth, async user => {
     if (gym.status === "cancelled") return viewBlocked("تم إلغاء الاشتراك", "تم إلغاء اشتراك هذا الجيم في GymPro. تواصل مع الإدارة لإعادة التفعيل.");
     if (gym.status === "suspended") return viewBlocked("الجيم موقوف", "تم إيقاف اشتراك هذا الجيم مؤقتًا. تواصل مع إدارة GymPro.");
     if (end && end.getTime() < Date.now()) return viewBlocked("انتهى اشتراك الجيم", "انتهى اشتراك الجيم. جدّد الاشتراك للاستمرار.");
-    if (profile.role === "captain") return await startCaptain(user.uid, profile, gym);
+    if (profile.role === "captain" || profile.role === "employee") return await startEmployee(user.uid, profile, gym);
     await startStaff(user.uid, profile, gym, profile.gymId);
   } catch (e) {
     viewBlocked("تعذر تحميل الحساب", errText(e), true);
