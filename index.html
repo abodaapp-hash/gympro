@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#EA580C">
+<script>try{if(localStorage.getItem("gp_theme")==="dark"){document.documentElement.setAttribute("data-theme","dark");}}catch(e){}</script>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js">
 <title>GymPro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
     --bg: #F8FAFC;
     --surface: #FFFFFF;
     --ink: #0F172A;
@@ -31,8 +35,8 @@
     --warn-bg: #FFFBEB;
     --shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
+  :root[data-theme="dark"] {
+      color-scheme: dark;
       --bg: #0B0F17;
       --surface: #131A26;
       --ink: #F1F5F9;
@@ -50,7 +54,6 @@
       --bad-bg: #2C1215;
       --warn-bg: #291E09;
       --shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-    }
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
@@ -329,6 +332,84 @@
     .gym-grid { grid-template-columns: 1fr 1fr; }
     .toast { bottom: 28px; }
   }
+
+  /* ---- v4: utilities, modal, pickers, switches, check-in, tabs ---- */
+  [hidden] { display: none !important; }
+  .vh { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; clip: rect(0 0 0 0); }
+  .hdr-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+  .sup-mini { display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; min-height: 36px; border-radius: 10px; background: #25D366; color: #fff; font-weight: 700; font-size: 12.5px; text-decoration: none; white-space: nowrap; }
+  .sup-mini .ico { width: 18px; height: 18px; }
+  .sup-mini span { display: none; }
+  @media (min-width: 480px) { .sup-mini span { display: inline; } }
+  .btn.support-btn { background: #25D366; color: #fff; box-shadow: none; }
+  .btn.support-btn:hover:not([disabled]) { background: #1EBE5A; }
+  .oh .sub-pill { display: none; }
+  @media (min-width: 560px) { .oh .sub-pill { display: inline-block; } }
+
+  .modal-ov { position: fixed; inset: 0; background: rgba(15, 23, 42, .55); z-index: 60; display: flex; align-items: flex-end; justify-content: center; }
+  .modal { background: var(--surface); color: var(--ink); width: 100%; max-width: 520px; max-height: 92vh; overflow: auto; border-radius: 20px 20px 0 0; padding: 18px 18px calc(18px + env(safe-area-inset-bottom)); box-shadow: 0 -10px 40px rgba(0, 0, 0, .3); }
+  .modal-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 17px; }
+  @media (min-width: 640px) { .modal-ov { align-items: center; } .modal { border-radius: 20px; } }
+  details.more { margin: 4px 0 8px; }
+  details.more summary { cursor: pointer; font-weight: 600; font-size: 14px; color: var(--brand); padding: 6px 0; }
+
+  .imgpick-box { display: grid; place-items: center; width: 150px; height: 150px; margin: 0 auto; border: 2px dashed var(--brand-border); border-radius: 18px; background: var(--brand-soft); color: var(--brand); cursor: pointer; overflow: hidden; position: relative; font-weight: 600; }
+  .imgpick-box.round { border-radius: 50%; }
+  .imgpick-box.drag { border-color: var(--brand); background: var(--surface); }
+  .imgpick-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .imgpick-plus { display: grid; justify-items: center; gap: 4px; font-size: 12.5px; }
+  .imgpick-plus svg { width: 32px; height: 32px; }
+
+  .avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: var(--brand-soft); color: var(--brand); display: grid; place-items: center; font-weight: 700; border: 1px solid var(--brand-border); flex: none; }
+  .avatar.lg { width: 76px; height: 76px; font-size: 30px; }
+
+  .res-row { display: flex; align-items: center; gap: 14px; }
+  .res-info { min-width: 0; }
+  .res-line { color: var(--ink); font-size: 14px; }
+  .ck-state { font-size: 12px; font-weight: 600; opacity: .8; margin-inline-start: 6px; }
+  .status-chip { display: inline-block; padding: 4px 18px; border-radius: 999px; font-weight: 700; font-size: 15px; margin-top: 8px; color: #fff; }
+  .chip-ok { background: var(--ok); }
+  .chip-bad { background: var(--danger); }
+  .result.bad { border-width: 2px; animation: gpShake .4s; }
+  @keyframes gpShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  @media (prefers-reduced-motion: reduce) { .result.bad { animation: none; } }
+
+  .switch-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); cursor: pointer; font-weight: 600; font-size: 14.5px; margin: 0; }
+  .switch-row:last-child { border-bottom: 0; }
+  input.switch { appearance: none; -webkit-appearance: none; width: 48px; min-height: 0; height: 28px; padding: 0; border-radius: 999px; background: var(--line); border: 0; position: relative; flex: none; cursor: pointer; transition: background .2s; }
+  input.switch::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: inset-inline-start .2s; }
+  input.switch:checked { background: var(--brand); }
+  input.switch:checked::after { inset-inline-start: 23px; }
+
+  .prod-card.static { cursor: default; }
+  .prod-thumb.ph { display: grid; place-items: center; color: var(--muted); }
+  .prod-thumb.ph .ico { width: 34px; height: 34px; }
+  .prod-grid.manage { grid-template-columns: 1fr 1fr; }
+
+  .sheet-list { display: grid; gap: 8px; }
+  .sheet-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-weight: 600; font-size: 15px; }
+  .sheet-item.on { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
+
+  /* Bottom bar: equal-width tabs, no sideways scrolling */
+  .tabs { overflow: visible; }
+  .tabs button { min-width: 0; padding: 6px 2px; font-size: 10.5px; }
+  .tabs button span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  .tabs .t-extra { display: none; }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .tabs .t-extra { display: flex; }
+    .tabs .t-more { display: none; }
+    .tabs button { font-size: 12.5px; min-height: 64px; }
+    .tabs button svg { width: 22px; height: 22px; }
+  }
+  @media (min-width: 1024px) {
+    .tabs .t-extra { display: flex; }
+    .tabs .t-more { display: none; }
+    .prod-grid.manage { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1280px) { .prod-grid.manage { grid-template-columns: repeat(4, 1fr); } }
+  .fab { position: fixed; inset-inline-start: 16px; bottom: calc(80px + env(safe-area-inset-bottom)); width: 56px; height: 56px; border-radius: 50%; border: 0; background: var(--brand); color: #fff; display: grid; place-items: center; box-shadow: 0 8px 22px rgba(234, 88, 12, .4); z-index: 12; }
+  .fab .ico { width: 26px; height: 26px; }
+  @media (min-width: 1024px) { .fab { bottom: 28px; } }
 </style>
 </head>
 <body>
@@ -350,7 +431,8 @@ import {
 import {
   initializeFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc, collection, getDocs,
   query, where, runTransaction, writeBatch, increment, serverTimestamp, Timestamp,
-  deleteField, getCountFromServer
+  deleteField, getCountFromServer, getDocsFromCache, persistentLocalCache, persistentMultipleTabManager,
+  terminate, clearIndexedDbPersistence
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -364,7 +446,24 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
+let db;
+let PERSIST = false;
+try {
+  db = initializeFirestore(app, {
+    localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+    experimentalAutoDetectLongPolling: true
+  });
+  PERSIST = true;
+} catch {
+  db = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
+}
+async function doSignOut() {
+  try { await signOut(auth); } catch {}
+  if (PERSIST) {
+    try { await terminate(db); await clearIndexedDbPersistence(db); } catch {}
+    location.reload();
+  }
+}
 // نسخة ثانوية لإنشاء حسابات الدخول بدون تسجيل خروج المستخدم الحالي
 const app2 = initializeApp(firebaseConfig, "secondary");
 const auth2 = getAuth(app2);
@@ -426,9 +525,15 @@ const ICONS = {
   image: `<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>`,
   lock: `<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
   copy: `<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>`,
-  shield: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`
+  shield: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`,
+  x: `<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>`,
+  menu: `<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>`,
+  whatsapp: `<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>`
 };
-const ico = (name, cls = "") => `<svg class="ico ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ""}</svg>`;
+const FILL_ICONS = new Set(["whatsapp"]);
+const ico = (name, cls = "") => FILL_ICONS.has(name)
+  ? `<svg class="ico ${cls}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${ICONS[name] || ""}</svg>`
+  : `<svg class="ico ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ""}</svg>`;
 
 /* ---------- Helpers ---------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -454,7 +559,7 @@ const toDate = t => {
   const d = new Date(t);
   return isNaN(d.getTime()) ? null : d;
 };
-const money = n => (Number(n) || 0).toLocaleString("en-US") + " ج";
+const money = n => (Number(n) || 0).toLocaleString("en-US") + " " + curSym();
 const sum = (arr, k = "amount") => arr.reduce((a, x) => a + (Number(x[k]) || 0), 0);
 const num = v => { const n = parseFloat(String(v).replace(/[^\d.]/g, "")); return isNaN(n) ? 0 : n; };
 const isValidEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(e || "").trim());
@@ -519,14 +624,14 @@ const logoSvg = `
 </svg>`;
 
 const gymLogoHtml = (gym, cls = "mini-logo") => {
-  const u = safeHttps(gym?.logoUrl);
+  const u = safeImg(gym?.logoUrl);
   return u
     ? `<div class="${cls}"><img src="${esc(u)}" alt="" referrerpolicy="no-referrer" onerror="this.style.display='none'"></div>`
     : `<div class="${cls}">${logoSvg}</div>`;
 };
 const imgTag = (url, cls, alt) => {
-  const u = safeHttps(url);
-  return u ? `<img class="${cls}" src="${esc(u)}" alt="${esc(alt || "")}" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : "";
+  const u = safeImg(url);
+  return u ? `<img class="${cls}" src="${esc(u)}" alt="${esc(alt || "")}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : "";
 };
 
 const arabicDigitsToEn = s => String(s || "").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
@@ -546,6 +651,242 @@ function waPhone(p) {
   return d;
 }
 const waRawLink = (phone, text) => `https://wa.me/${waPhone(phone)}?text=${encodeURIComponent(text)}`;
+
+/* ---------- Currency (gym-wide, for selling in other countries) ---------- */
+const CURRENCIES = {
+  EGP: { sym: "ج", name: "جنيه مصري" }, SAR: { sym: "ر.س", name: "ريال سعودي" }, AED: { sym: "د.إ", name: "درهم إماراتي" },
+  KWD: { sym: "د.ك", name: "دينار كويتي" }, QAR: { sym: "ر.ق", name: "ريال قطري" }, BHD: { sym: "د.ب", name: "دينار بحريني" },
+  OMR: { sym: "ر.ع", name: "ريال عماني" }, JOD: { sym: "د.أ", name: "دينار أردني" }, LYD: { sym: "د.ل", name: "دينار ليبي" },
+  MAD: { sym: "د.م", name: "درهم مغربي" }, USD: { sym: "$", name: "دولار أمريكي" }, EUR: { sym: "€", name: "يورو" }
+};
+let CUR = "EGP";
+const curSym = () => (CURRENCIES[CUR] || CURRENCIES.EGP).sym;
+const currencyOptions = sel => Object.entries(CURRENCIES)
+  .map(([k, v]) => `<option value="${k}" ${k === sel ? "selected" : ""}>${esc(v.name)} (${esc(v.sym)})</option>`).join("");
+
+/* ---------- Theme (Dark Mode is OFF by default, switch in settings) ---------- */
+const Theme = {
+  get() { try { return localStorage.getItem("gp_theme") === "dark" ? "dark" : "light"; } catch { return "light"; } },
+  set(v) {
+    try { localStorage.setItem("gp_theme", v); } catch {}
+    document.documentElement.setAttribute("data-theme", v === "dark" ? "dark" : "light");
+    const m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.content = v === "dark" ? "#0B0F17" : "#EA580C";
+  }
+};
+
+/* ---------- Sound (POS-style confirmation beeps) ---------- */
+const Sound = (() => {
+  let ctx = null;
+  let enabled = true;
+  try { enabled = localStorage.getItem("gp_sound") !== "0"; } catch {}
+  const ensure = () => {
+    try {
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      if (ctx.state === "suspended") ctx.resume();
+    } catch {}
+    return ctx;
+  };
+  const tone = (freq, start, dur, type = "sine", vol = 0.28) => {
+    if (!enabled) return;
+    const c = ensure(); if (!c) return;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.value = freq;
+    const t0 = c.currentTime + start;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(c.destination);
+    o.start(t0); o.stop(t0 + dur + 0.03);
+  };
+  const vib = p => { try { if (enabled) navigator.vibrate && navigator.vibrate(p); } catch {} };
+  return {
+    get enabled() { return enabled; },
+    set enabled(v) { enabled = !!v; try { localStorage.setItem("gp_sound", enabled ? "1" : "0"); } catch {} },
+    unlock: ensure,
+    ok() { tone(1046, 0, 0.1); tone(1568, 0.11, 0.22); vib(60); },
+    warn() { tone(660, 0, 0.1, "triangle"); tone(660, 0.17, 0.1, "triangle"); vib([40, 40, 40]); },
+    bad() { tone(220, 0, 0.3, "square", 0.22); tone(165, 0.32, 0.45, "square", 0.22); vib([140, 60, 140]); }
+  };
+})();
+
+function prefsHtml() {
+  return `
+  <h2>${ico("settings")} المظهر والصوت</h2>
+  <div class="panel">
+    <label class="switch-row"><span>الوضع الليلي (Dark Mode)</span><input type="checkbox" role="switch" class="switch" id="prefDark"></label>
+    <label class="switch-row"><span>صوت تأكيد قراءة الكود</span><input type="checkbox" role="switch" class="switch" id="prefSound"></label>
+  </div>`;
+}
+function wirePrefs(scope = document) {
+  const d = $("#prefDark", scope), s = $("#prefSound", scope);
+  if (d) { d.checked = Theme.get() === "dark"; d.addEventListener("change", () => Theme.set(d.checked ? "dark" : "light")); }
+  if (s) { s.checked = Sound.enabled; s.addEventListener("change", () => { Sound.enabled = s.checked; if (s.checked) Sound.ok(); }); }
+}
+
+/* ---------- Technical support on WhatsApp ---------- */
+const SUPPORT_WA = "201055573369";
+function supportHref() {
+  const who = (typeof G !== "undefined" && G && G.gym && G.gym.name) ? ` الجيم: ${G.gym.name}` : "";
+  return `https://wa.me/${SUPPORT_WA}?text=${encodeURIComponent("مرحبًا، أحتاج مساعدة في نظام GymPro." + who)}`;
+}
+const supportBtnHtml = (mini = false) => mini
+  ? `<a class="sup-mini" target="_blank" rel="noopener noreferrer" href="${esc(supportHref())}" aria-label="الدعم الفني">${ico("whatsapp")}<span>الدعم الفني</span></a>`
+  : `<a class="btn support-btn" target="_blank" rel="noopener noreferrer" href="${esc(supportHref())}">${ico("whatsapp")} الدعم الفني عبر واتساب</a>`;
+
+/* ---------- Images: validate, compress, upload ---------- */
+const safeImg = u => {
+  const s = String(u || "").trim();
+  return (/^https:\/\//i.test(s) || /^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(s)) ? s : "";
+};
+function blobToDataUrl(blob) {
+  return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(new Error("تعذر قراءة الصورة.")); r.readAsDataURL(blob); });
+}
+function compressImage(file, { max = 640, q = 0.8, alpha = false } = {}) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const k = Math.min(1, max / Math.max(img.width, img.height));
+      const w = Math.max(1, Math.round(img.width * k)), h = Math.max(1, Math.round(img.height * k));
+      const c = document.createElement("canvas"); c.width = w; c.height = h;
+      const ctx = c.getContext("2d");
+      ctx.imageSmoothingQuality = "high";
+      if (!alpha) { ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h); }
+      ctx.drawImage(img, 0, 0, w, h);
+      const jpeg = () => {
+        const c2 = document.createElement("canvas"); c2.width = w; c2.height = h;
+        const x2 = c2.getContext("2d"); x2.fillStyle = "#fff"; x2.fillRect(0, 0, w, h); x2.drawImage(c, 0, 0);
+        c2.toBlob(b => b ? resolve(b) : reject(new Error("تعذر ضغط الصورة.")), "image/jpeg", q);
+      };
+      if (alpha) c.toBlob(b => (b && b.size <= 140 * 1024) ? resolve(b) : jpeg(), "image/png");
+      else c.toBlob(b => b ? resolve(b) : reject(new Error("تعذر ضغط الصورة.")), "image/jpeg", q);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("تعذر قراءة الصورة. جرّب صورة أخرى.")); };
+    img.src = url;
+  });
+}
+// Tries Firebase Storage first; if Storage is not enabled / not allowed, falls back to a small inline image.
+async function uploadImage(file, path, opts = {}) {
+  const { max = 640, q = 0.8, inlineMax = 320, inlineQ = 0.7, alpha = false } = opts;
+  const blob = await compressImage(file, { max, q, alpha });
+  try {
+    const url = await withTimeout((async () => {
+      const st = await import("https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js");
+      const r = st.ref(st.getStorage(app), path);
+      await st.uploadBytes(r, blob, { contentType: blob.type || "image/jpeg", cacheControl: "public,max-age=31536000" });
+      return await st.getDownloadURL(r);
+    })(), 25000);
+    return { url, stored: "storage" };
+  } catch (e) {
+    const small = await compressImage(file, { max: inlineMax, q: inlineQ, alpha });
+    const data = await blobToDataUrl(small);
+    if (data.length > 140000) throw new Error("الصورة كبيرة. اختر صورة أصغر.");
+    return { url: data, stored: "inline" };
+  }
+}
+
+function imgPickerHtml(id, { label = "الصورة", current = "", round = false } = {}) {
+  const cur = safeImg(current);
+  return `
+  <div class="imgpick" data-pick="${esc(id)}">
+    <label class="imgpick-box ${round ? "round" : ""}" for="${esc(id)}-file" tabindex="0" aria-label="${esc(label)}">
+      <img class="imgpick-prev" alt="" ${cur ? `src="${esc(cur)}"` : "hidden"}>
+      <span class="imgpick-plus" ${cur ? "hidden" : ""}>${ico("plus")}<small>${esc(label)}</small></span>
+    </label>
+    <input class="vh" id="${esc(id)}-file" type="file" accept="image/*">
+    <div class="hint" style="text-align:center;margin-top:6px">اضغط للاختيار أو اسحب الصورة وأفلتها هنا</div>
+  </div>`;
+}
+function wireImgPicker(scope, id) {
+  const wrap = $(`[data-pick="${id}"]`, scope);
+  const input = $(".vh", wrap), box = $(".imgpick-box", wrap), prev = $(".imgpick-prev", wrap), plus = $(".imgpick-plus", wrap);
+  let file = null, objUrl = "";
+  const show = src => { prev.src = src; prev.hidden = false; plus.hidden = true; };
+  const setFile = f => {
+    if (!f) return;
+    if (!/^image\//.test(f.type)) return toast("اختر ملف صورة.");
+    if (f.size > 20 * 1024 * 1024) return toast("الصورة كبيرة جدًا.");
+    file = f;
+    if (objUrl) URL.revokeObjectURL(objUrl);
+    objUrl = URL.createObjectURL(f);
+    show(objUrl);
+  };
+  input.addEventListener("change", () => setFile(input.files && input.files[0]));
+  ["dragenter", "dragover"].forEach(ev => box.addEventListener(ev, e => { e.preventDefault(); box.classList.add("drag"); }));
+  ["dragleave", "drop"].forEach(ev => box.addEventListener(ev, e => { e.preventDefault(); box.classList.remove("drag"); }));
+  box.addEventListener("drop", e => setFile(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]));
+  box.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); } });
+  return { get file() { return file; }, setPreview(src) { if (!file && safeImg(src)) show(safeImg(src)); } };
+}
+
+/* ---------- Modal ---------- */
+function escClose(e) { if (e.key === "Escape") closeModal(); }
+function closeModal() {
+  const m = document.getElementById("modal");
+  if (m) m.remove();
+  document.body.style.overflow = "";
+  document.removeEventListener("keydown", escClose);
+}
+function openModal(html) {
+  closeModal();
+  const ov = document.createElement("div");
+  ov.className = "modal-ov"; ov.id = "modal";
+  ov.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
+  ov.addEventListener("click", e => { if (e.target === ov) closeModal(); });
+  document.body.appendChild(ov);
+  document.body.style.overflow = "hidden";
+  document.addEventListener("keydown", escClose);
+  return ov;
+}
+
+/* ---------- Member photos (small thumbnails, loaded on demand) ---------- */
+const PHOTOS = new Map();
+async function getMemberPhoto(id) {
+  if (PHOTOS.has(id)) return PHOTOS.get(id);
+  try {
+    const s = await getDoc(ref("photos", id));
+    const v = s.exists() ? (s.data().data || "") : "";
+    PHOTOS.set(id, v);
+    return v;
+  } catch { return ""; }
+}
+async function saveMemberPhoto(id, file) {
+  const blob = await compressImage(file, { max: 220, q: 0.72 });
+  const data = await blobToDataUrl(blob);
+  await setDoc(ref("photos", id), { data, ts: serverTimestamp(), by: G.uid });
+  PHOTOS.set(id, data);
+}
+const avatarHtml = (name, data, cls = "") => safeImg(data)
+  ? `<img class="avatar ${cls}" src="${esc(data)}" alt="" decoding="async">`
+  : `<div class="avatar ${cls}">${esc(String(name || "?").trim().charAt(0) || "?")}</div>`;
+
+/* ---------- Stale-while-revalidate loading for slow connections ---------- */
+let softTimer = null;
+function softRefresh() {
+  clearTimeout(softTimer);
+  softTimer = setTimeout(() => {
+    if (!G || S.sub) return;
+    const a = document.activeElement;
+    if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+    if (["home", "members", "checkin"].includes(S.tab)) renderOwner();
+  }, 350);
+}
+async function loadCol(name, apply) {
+  const c = col(name);
+  if (PERSIST) {
+    try {
+      const cached = await getDocsFromCache(c);
+      if (!cached.empty) {
+        apply(cached);
+        getDocs(c).then(fresh => { apply(fresh); softRefresh(); }).catch(() => {});
+        return;
+      }
+    } catch {}
+  }
+  apply(await getDocs(c));
+}
 
 /* ---------- Passwords ---------- */
 function pwError(p) {
@@ -584,7 +925,7 @@ let idleTimer = null;
 let flashMsg = "";
 const idleReset = () => {
   clearTimeout(idleTimer);
-  idleTimer = setTimeout(() => { flashMsg = "تم تسجيل الخروج تلقائيًا لعدم النشاط."; signOut(auth); }, IDLE_MS);
+  idleTimer = setTimeout(() => { flashMsg = "تم تسجيل الخروج تلقائيًا لعدم النشاط."; doSignOut(); }, IDLE_MS);
 };
 function startIdle() { stopIdle(); IDLE_EVENTS.forEach(ev => window.addEventListener(ev, idleReset, { passive: true })); idleReset(); }
 function stopIdle() { clearTimeout(idleTimer); IDLE_EVENTS.forEach(ev => window.removeEventListener(ev, idleReset)); }
@@ -630,7 +971,7 @@ function getCurrentGps() {
 }
 
 function exportRevenueExcel(rows, filename) {
-  const headers = ["التاريخ", "النوع", "العضو / المصدر", "البيان / الملاحظات", "المبلغ (جنيه)"];
+  const headers = ["التاريخ", "النوع", "العضو / المصدر", "البيان / الملاحظات", "المبلغ (" + curSym() + ")"];
   const lines = [headers.join(",")];
   let total = 0;
   for (const r of rows) {
@@ -660,7 +1001,7 @@ function credHtml(c) {
     <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
       <button class="btn sm" type="button" data-copycred>${ico("copy", "sm")} نسخ البيانات</button>
       ${c.card ? `<button class="btn soft sm" type="button" data-cardpdf>${ico("download", "sm")} تحميل كارت PDF بالبيانات</button>` : ""}
-      ${c.phone ? `<a class="btn soft sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(c.phone, c.text))}">${ico("send", "sm")} إرسال واتساب</a>` : ""}
+      ${c.phone ? `<a class="btn soft sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(c.phone, c.text))}">${ico("whatsapp", "sm")} إرسال واتساب</a>` : ""}
     </div>
   </div>`;
 }
@@ -742,7 +1083,7 @@ async function downloadMemberIdPdf(gym, member, gymId, password = "") {
 
   const st = calcMemberState(member);
   const W = 85.6, H = 54, PX = 14;                       // 14 px per mm ≈ 355 dpi
-  const logoUrl = safeHttps(gym?.logoUrl);
+  const logoUrl = safeImg(gym?.logoUrl);
   const logo = logoUrl ? await loadImg(logoUrl) : null;
   const loginLink = `${appLink()}?g=${encodeURIComponent(gymId)}`;
   const qrOpts = { margin: 0, width: 720, errorCorrectionLevel: "M", color: { dark: "#0F172A", light: "#FFFFFF" } };
@@ -928,8 +1269,11 @@ function viewLogin(message = "", okMessage = "") {
         <button class="btn" type="submit" id="mLoginBtn">${ico("user")} دخول العضو</button>
       </form>
     `}
+    <div style="margin-top:14px;display:grid;gap:10px">${supportBtnHtml(false)}
+      <button type="button" class="linkbtn" id="themeLogin" style="justify-content:center">الوضع الليلي: ${Theme.get() === "dark" ? "إيقافه" : "تشغيله"}</button></div>
   </div>`;
 
+  $("#themeLogin").addEventListener("click", () => { Theme.set(Theme.get() === "dark" ? "light" : "dark"); viewLogin(); });
   $("#modeStaff").addEventListener("click", () => { loginMode = "staff"; viewLogin(); });
   $("#modeMember").addEventListener("click", () => { loginMode = "member"; viewLogin(); });
 
@@ -997,7 +1341,7 @@ function viewBlocked(title, text, retry = false) {
       <button class="btn ghost" id="outBtn">${ico("logout")} تسجيل الخروج</button>
     </div>
   </div>`;
-  $("#outBtn").addEventListener("click", () => signOut(auth));
+  $("#outBtn").addEventListener("click", () => doSignOut());
   const rb = $("#retryBtn"); if (rb) rb.addEventListener("click", () => location.reload());
 }
 
@@ -1008,16 +1352,19 @@ async function startMember(uid, profile) {
   const gid = profile.gymId, mid = profile.memberId;
   root.innerHTML = `<div class="loading">جاري تحميل عضويتك…</div>`;
   try {
-    const [mSnap, pubSnap, attSnap, paySnap, prodsSnap] = await withTimeout(Promise.all([
+    const [mSnap, pubSnap, attSnap, paySnap, prodsSnap, photoSnap] = await withTimeout(Promise.all([
       getDoc(doc(db, "gyms", gid, "members", mid)),
       getDoc(doc(db, "gyms", gid, "meta", "public")),
       getDocs(query(collection(db, "gyms", gid, "attendance"), where("memberId", "==", mid))),
       getDocs(query(collection(db, "gyms", gid, "payments"), where("memberId", "==", mid))),
-      getDocs(collection(db, "gyms", gid, "products"))
+      getDocs(collection(db, "gyms", gid, "products")),
+      getDoc(doc(db, "gyms", gid, "photos", mid))
     ]), 20000);
     if (!mSnap.exists()) return viewBlocked("العضوية غير موجودة", "لم نجد بيانات عضويتك. تواصل مع الاستقبال.");
     const logs = attSnap.docs.map(d => d.data()).sort((a, b) => (toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
+    CUR = (pubSnap.exists() && pubSnap.data().currency) || "EGP";
     renderMemberPortal({
+      photo: photoSnap.exists() ? (photoSnap.data().data || "") : "",
       gymId: gid,
       pub: { name: profile.gymName || "الجيم", ...(pubSnap.exists() ? pubSnap.data() : {}) },
       member: { id: mSnap.id, ...mSnap.data() },
@@ -1031,7 +1378,7 @@ async function startMember(uid, profile) {
 }
 
 async function renderMemberPortal(ctx) {
-  const { gymId, pub, member, logs, paidTotal, products, tab } = ctx;
+  const { gymId, pub, member, logs, paidTotal, products, tab, photo } = ctx;
   const st = calcMemberState(member);
   let qrImgHtml = `<div class="bigcode">${esc(member.code)}</div>`;
   if (tab === "card") {
@@ -1062,7 +1409,7 @@ async function renderMemberPortal(ctx) {
           <div class="gsub">${esc(member.name)} · كود ${esc(member.code)}</div>
         </div>
       </div>
-      <button class="btn ghost sm" id="mOutBtn">${ico("logout", "sm")} خروج</button>
+      <div class="hdr-actions">${supportBtnHtml(true)}<button class="btn ghost sm" id="mOutBtn">${ico("logout", "sm")} خروج</button></div>
     </div></header>
 
     <main class="wrap">
@@ -1075,6 +1422,7 @@ async function renderMemberPortal(ctx) {
 
       ${tab === "card" ? `
         <div class="panel">
+          <div style="display:flex;justify-content:center;margin-bottom:10px">${avatarHtml(member.name, photo, "lg")}</div>
           <div class="top" style="margin-bottom:10px">
             <div class="who"><h1 style="font-size:18px">${esc(member.name)}</h1><div class="sub">الباقة: ${esc(member.planName || "—")}</div></div>
             <span class="tag ${st.key}">${st.label}</span>
@@ -1147,13 +1495,14 @@ async function renderMemberPortal(ctx) {
         </div>
       ` : ""}
 
-      ${tab === "acct" ? `${pwPanelHtml()}` : ""}
+      ${tab === "acct" ? `${pwPanelHtml()}${prefsHtml()}<div style="margin-top:14px">${supportBtnHtml(false)}</div>` : ""}
     </main>
   </div>`;
 
-  $("#mOutBtn").addEventListener("click", () => signOut(auth));
+  $("#mOutBtn").addEventListener("click", () => doSignOut());
   $$("[data-mpt]").forEach(b => b.addEventListener("click", () => renderMemberPortal({ ...ctx, tab: b.dataset.mpt })));
   wirePwForm();
+  wirePrefs();
 }
 
 /* =====================================================================
@@ -1183,10 +1532,10 @@ const isReception = () => role() === "reception";
 
 function destroyCharts() { charts.forEach(c => { try { c.destroy(); } catch {} }); charts = []; }
 
-async function loadMembers() { const s = await getDocs(col("members")); MEMBERS = s.docs.map(d => ({ id: d.id, ...d.data() })); }
-async function loadPlans() { const s = await getDocs(col("plans")); PLANS = s.docs.map(d => ({ id: d.id, ...d.data() })); PLANS.sort((a, b) => (a.days || 0) - (b.days || 0)); }
-async function loadProducts() { const s = await getDocs(col("products")); PRODUCTS = s.docs.map(d => ({ id: d.id, ...d.data() })); PRODUCTS.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar")); }
-async function loadEmployees() { const s = await getDocs(col("employees")); EMPLOYEES = s.docs.map(d => ({ id: d.id, ...d.data() })); EMPLOYEES.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar")); }
+async function loadMembers() { await loadCol("members", sn => { MEMBERS = sn.docs.map(d => ({ id: d.id, ...d.data() })); }); }
+async function loadPlans() { await loadCol("plans", sn => { PLANS = sn.docs.map(d => ({ id: d.id, ...d.data() })); PLANS.sort((x, y) => (x.days || 0) - (y.days || 0)); }); }
+async function loadProducts() { await loadCol("products", sn => { PRODUCTS = sn.docs.map(d => ({ id: d.id, ...d.data() })); PRODUCTS.sort((x, y) => (x.name || "").localeCompare(y.name || "", "ar")); }); }
+async function loadEmployees() { await loadCol("employees", sn => { EMPLOYEES = sn.docs.map(d => ({ id: d.id, ...d.data() })); EMPLOYEES.sort((x, y) => (x.name || "").localeCompare(y.name || "", "ar")); }); }
 
 function reminderText(m) {
   const st = calcMemberState(m);
@@ -1201,7 +1550,7 @@ function stopScanner() {
 }
 
 function nav(tab, sub = null) {
-  stopScanner(); destroyCharts();
+  closeModal(); stopScanner(); destroyCharts();
   if (tab) S.tab = tab;
   S.sub = sub;
   renderOwner();
@@ -1214,7 +1563,7 @@ function tabsForRole() {
   if (r === "reception") return [["members", "الأعضاء", "users"], ["checkin", "الحضور", "qr"], ["store", "الستور", "store"], ["punch", "بصمتي", "mapPin"], ["settings", "حسابي", "settings"]];
   return [
     ["home", "الرئيسية", "home"], ["members", "الأعضاء", "users"], ["checkin", "الحضور", "qr"],
-    ["staff", "الموظفون", "mapPin"], ["store", "الستور", "store"], ["broadcast", "التغذية", "send"],
+    ["staff", "الموظفون", "mapPin"], ["store", "الستور", "store"], ["broadcast", "التغذية", "whatsapp"],
     ["money", "المالية", "chart"], ["settings", "الإعدادات", "settings"]
   ];
 }
@@ -1225,6 +1574,11 @@ function renderOwner() {
   const tabs = tabsForRole();
   if (!tabs.some(t => t[0] === S.tab)) S.tab = tabs[0][0];
   const end = toDate(G.gym.subscriptionEnd);
+  const MAIN_N = 4;                       // on phones: 4 tabs + "More" when there are more than 5
+  const needMore = tabs.length > 5;
+  const extraActive = needMore && tabs.findIndex(t => t[0] === S.tab) >= MAIN_N;
+  const tabBtn = ([k, l, ic], i) =>
+    `<button data-t="${k}" class="${needMore && i >= MAIN_N ? "t-extra" : ""}" ${S.tab === k ? 'aria-current="page"' : ""}>${ico(ic)}<span>${l}</span></button>`;
 
   root.innerHTML = `
   ${G.support ? `<div class="support-bar"><span>${ico("shield", "sm")} وضع الدعم — أنت داخل «${esc(G.gym.name || "")}» كمسؤول النظام</span><button type="button" id="exitSupport">رجوع للوحة الإدارة</button></div>` : ""}
@@ -1237,16 +1591,28 @@ function renderOwner() {
           <div class="gsub">${esc(G.profile.name || "")} · ${esc(G.support ? "مسؤول النظام" : (ROLE_LABEL[role()] || ""))}</div>
         </div>
       </div>
-      ${end && isOwner() ? `<div class="sub-pill">حتى ${fmtDate(end)}</div>` : ""}
+      <div class="hdr-actions">${end && isOwner() ? `<div class="sub-pill">حتى ${fmtDate(end)}</div>` : ""}${supportBtnHtml(true)}</div>
     </div></header>
     <div class="body">
       <nav class="tabs" aria-label="التنقل">
-        ${tabs.map(([k, l, ic]) => `<button data-t="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${ico(ic)}<span>${l}</span></button>`).join("")}
+        ${tabs.map(tabBtn).join("")}
+        ${needMore ? `<button class="t-more" id="moreBtn" ${extraActive ? 'aria-current="page"' : ""}>${ico("menu")}<span>المزيد</span></button>` : ""}
       </nav>
       <main id="main" class="wrap"></main>
     </div>
   </div>`;
-  $$(".tabs button").forEach(b => b.addEventListener("click", () => nav(b.dataset.t, null)));
+
+  $$(".tabs button[data-t]").forEach(b => b.addEventListener("click", () => nav(b.dataset.t, null)));
+  const more = $("#moreBtn");
+  if (more) more.addEventListener("click", () => {
+    const extra = tabs.slice(MAIN_N);
+    const ov = openModal(`
+      <div class="modal-h"><b>المزيد</b><button class="btn ghost sm" type="button" id="mClose" aria-label="إغلاق">${ico("x", "sm")}</button></div>
+      <div class="sheet-list">${extra.map(([k, l, ic]) =>
+        `<button class="sheet-item ${S.tab === k ? "on" : ""}" data-sheet="${k}">${ico(ic)}<span>${l}</span></button>`).join("")}</div>`);
+    $("#mClose", ov).addEventListener("click", closeModal);
+    $$("[data-sheet]", ov).forEach(b => b.addEventListener("click", () => { closeModal(); nav(b.dataset.sheet, null); }));
+  });
   const ex = $("#exitSupport");
   if (ex) ex.addEventListener("click", () => { stopScanner(); destroyCharts(); const p = SUPER?.profile; G = null; if (p) viewAdmin(p); });
   const main = $("#main");
@@ -1259,7 +1625,7 @@ function memberRowHtml(m, opts = {}) {
   const st = calcMemberState(m);
   const due = Number(m.balance) > 0 ? `<span class="due"> · عليه ${money(m.balance)}</span>` : "";
   const wa = (opts.wa && m.phone)
-    ? `<a class="btn ghost sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
+    ? `<a class="btn ghost sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("whatsapp", "sm")} واتساب</a>` : "";
   return `
   <div class="mrow" data-id="${esc(m.id)}">
     <button class="mmain" data-open="${esc(m.id)}">
@@ -1448,13 +1814,14 @@ function memberCredDescriptor(m, pass) {
   };
 }
 
-/* ---------- New member ---------- */
+/* ---------- New member (with photo) ---------- */
 function subNewMember(main) {
   main.innerHTML = `
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
   <h2>${ico("userPlus")} عضو جديد</h2>
   <div id="fmsg"></div>
   <form class="panel" id="mform" novalidate>
+    <div class="field">${imgPickerHtml("mPhoto", { label: "صورة العضو", round: true })}</div>
     <div class="field"><label for="mname">الاسم</label><input id="mname" autocomplete="off" maxlength="100" required></div>
     <div class="field"><label for="mphone">رقم الموبايل (هو اسم الدخول)</label><input id="mphone" type="tel" dir="ltr" inputmode="tel" autocomplete="off" maxlength="20" placeholder="01012345678"></div>
     <div class="field">
@@ -1468,6 +1835,7 @@ function subNewMember(main) {
   $("#back").addEventListener("click", () => nav("members", null));
   wirePlanFields(main);
   wireGen("#mpass", "#genPw", main);
+  const photoPick = wireImgPicker(main, "mPhoto");
 
   $("#mform").addEventListener("submit", async ev => {
     ev.preventDefault();
@@ -1524,6 +1892,10 @@ function subNewMember(main) {
         sessionsTotal: f.sessions, sessionsLeft: f.sessions, balance: f.price - f.paid
       };
       MEMBERS.push(newM);
+      if (photoPick.file) {
+        try { await saveMemberPhoto(memberRef.id, photoPick.file); }
+        catch (e) { toast("تم حفظ العضو لكن تعذر حفظ الصورة: " + (e.message || errText(e))); }
+      }
       if (password) {
         try {
           await provisionMemberLogin(newM, password);
@@ -1552,10 +1924,10 @@ async function subMember(main, tok) {
 
   main.innerHTML = `
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
-  <div class="top"><div class="who">
+  <div class="top"><div style="display:flex;align-items:center;gap:12px;min-width:0"><div id="mAvatar">${avatarHtml(m.name, PHOTOS.get(m.id), "lg")}</div><div class="who">
     <h1>${esc(m.name)}</h1>
     <div class="sub">كود ${esc(m.code)}${m.phone ? " · " + esc(m.phone) : ""}</div>
-  </div><span class="tag ${st.key}">${st.label}</span></div>
+  </div></div><span class="tag ${st.key}">${st.label}</span></div>
   ${cred ? credHtml(cred) : ""}
   <div class="panel">
     <div class="stat"><span>الباقة</span><b>${esc(m.planName || "—")}</b></div>
@@ -1570,7 +1942,7 @@ async function subMember(main, tok) {
     <div class="acts" style="margin-top:0">
       <button class="btn sm" id="renew">${ico("refresh", "sm")} تجديد الاشتراك</button>
       ${Number(m.balance) > 0 ? `<button class="btn soft sm" id="payBtn">${ico("wallet", "sm")} تسجيل دفعة</button>` : ""}
-      ${m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : ""}
+      ${m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("whatsapp", "sm")} واتساب</a>` : ""}
       <button class="btn ghost sm" id="cardBtn">${ico("qr", "sm")} كارت PDF</button>
       <button class="btn ghost sm" id="editBtn">${ico("edit", "sm")} تعديل</button>
       <button class="btn soft sm" id="loginBtn">${ico("lock", "sm")} ${hasLogin ? "كلمة مرور جديدة / إعادة إنشاء الدخول" : "إنشاء دخول للعضو"}</button>
@@ -1588,6 +1960,7 @@ async function subMember(main, tok) {
   $("#back").addEventListener("click", () => nav("members", null));
   $("#renew").addEventListener("click", () => nav(null, { type: "renew", id: m.id }));
   if (G.support) wireSupportTools(main, m);
+  if (!PHOTOS.get(m.id)) getMemberPhoto(m.id).then(d => { const a = $("#mAvatar"); if (d && a) a.innerHTML = avatarHtml(m.name, d, "lg"); });
   $("#cardBtn").addEventListener("click", () => nav(null, { type: "card", id: m.id }));
   $("#editBtn").addEventListener("click", () => nav(null, { type: "edit", id: m.id }));
 
@@ -1735,7 +2108,7 @@ function subRenew(main) {
   });
 }
 
-/* ---------- Edit member ---------- */
+/* ---------- Edit member (with photo) ---------- */
 function subEdit(main) {
   const m = MEMBERS.find(x => x.id === S.sub.id);
   if (!m) return nav("members", null);
@@ -1743,6 +2116,7 @@ function subEdit(main) {
   <button class="btn ghost back" id="back">${ico("arrowRight", "sm")} رجوع</button>
   <h2>${ico("edit")} تعديل بيانات العضو</h2>
   <form class="panel" id="eform" novalidate>
+    <div class="field">${imgPickerHtml("ePhoto", { label: "صورة العضو", current: PHOTOS.get(m.id) || "", round: true })}</div>
     <div class="field"><label for="ename">الاسم</label><input id="ename" maxlength="100" value="${esc(m.name)}"></div>
     <div class="field"><label for="ephone">رقم الموبايل</label><input id="ephone" type="tel" dir="ltr" inputmode="tel" maxlength="20" value="${esc(m.phone || "")}">
       ${m.loginUid ? `<div class="hint">لو غيّرت الرقم، اضغط بعدها «كلمة مرور جديدة / إعادة إنشاء الدخول» ليعمل الدخول بالرقم الجديد.</div>` : ""}</div>
@@ -1750,6 +2124,9 @@ function subEdit(main) {
     <button class="btn" type="submit" id="esave">${ico("check")} حفظ التعديل</button>
   </form>`;
   $("#back").addEventListener("click", () => nav(null, { type: "member", id: m.id }));
+  const pick = wireImgPicker(main, "ePhoto");
+  if (!PHOTOS.get(m.id)) getMemberPhoto(m.id).then(d => { if (d) pick.setPreview(d); });
+
   $("#eform").addEventListener("submit", async ev => {
     ev.preventDefault();
     const name = $("#ename").value.trim(), phone = $("#ephone").value.trim();
@@ -1759,6 +2136,10 @@ function subEdit(main) {
     try {
       await updateDoc(ref("members", m.id), { name, phone, sessionsLeft });
       m.name = name; m.phone = phone; m.sessionsLeft = sessionsLeft;
+      if (pick.file) {
+        try { await saveMemberPhoto(m.id, pick.file); }
+        catch (e) { toast("تم الحفظ لكن تعذر حفظ الصورة: " + (e.message || errText(e))); }
+      }
       toast("تم الحفظ");
       nav(null, { type: "member", id: m.id });
     } catch (e) { btn.disabled = false; toast(errText(e)); }
@@ -1876,7 +2257,7 @@ async function subCard(main) {
   }
 }
 
-/* ---------- Check-in ---------- */
+/* ---------- Check-in (instant result + sound + member photo + continuous scan) ---------- */
 function findMemberFromScan(raw) {
   const txt = String(raw || "").trim();
   if (!txt) return null;
@@ -1897,7 +2278,7 @@ function screenCheckin(main, tok) {
   <form class="panel" id="cform" novalidate>
     <div class="field">
       <label for="ccode">كود العضو أو رقم الموبايل</label>
-      <input id="ccode" dir="ltr" autocomplete="off" placeholder="مثال: 1001 أو 010xxxxxxxx">
+      <input id="ccode" dir="ltr" autocomplete="off" inputmode="numeric" placeholder="مثال: 1001 أو 010xxxxxxxx">
     </div>
     <div class="two">
       <button class="btn" type="submit">${ico("check")} تسجيل</button>
@@ -1911,6 +2292,7 @@ function screenCheckin(main, tok) {
 
   $("#cform").addEventListener("submit", ev => {
     ev.preventDefault();
+    Sound.unlock();
     const v = $("#ccode").value; $("#ccode").value = "";
     doCheckin(v);
   });
@@ -1918,66 +2300,131 @@ function screenCheckin(main, tok) {
   loadToday(tok);
 }
 
+let scanBusy = false;
 async function startScan() {
-  if (scanner) return stopScanner();
+  const btn = $("#scanBtn");
+  if (scanner) {
+    stopScanner();
+    if (btn) btn.innerHTML = `${ico("camera")} مسح بالكاميرا`;
+    return;
+  }
+  Sound.unlock();
   const box = $("#result");
   try {
     const mod = await import("https://esm.sh/html5-qrcode@2.3.8");
-    const Html5Qrcode = mod.Html5Qrcode || mod.default?.Html5Qrcode;
-    const s = new Html5Qrcode("reader");
+    const H = mod.Html5Qrcode || (mod.default && mod.default.Html5Qrcode);
+    const FMT = mod.Html5QrcodeSupportedFormats || (mod.default && mod.default.Html5QrcodeSupportedFormats);
+    const cfg = { verbose: false, experimentalFeatures: { useBarCodeDetectorIfSupported: true } };
+    if (FMT) cfg.formatsToSupport = [FMT.QR_CODE];
+    const s = new H("reader", cfg);
     scanner = s;
-    await s.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 230, height: 230 } },
-      text => { stopScanner(); doCheckin(text); }, () => {});
+    if (btn) btn.innerHTML = `${ico("camera")} إيقاف الكاميرا`;
+    await s.start(
+      { facingMode: "environment" },
+      { fps: 12, qrbox: { width: 240, height: 240 }, aspectRatio: 1 },
+      text => {
+        if (scanBusy) return;
+        scanBusy = true;
+        doCheckin(text);
+        setTimeout(() => { scanBusy = false; }, 2200);
+      },
+      () => {}
+    );
   } catch {
     scanner = null;
+    if (btn) btn.innerHTML = `${ico("camera")} مسح بالكاميرا`;
     box.innerHTML = `<p class="msg err">${ico("alert", "sm")} تعذر تشغيل الكاميرا. اسمح للمتصفح باستخدامها أو اكتب الكود يدويًا.</p>`;
   }
 }
+
+const resultCard = (cls, m, st, title, chip, photo, extra = "") => `
+  <div class="result ${cls}" data-mid="${esc(m.id)}">
+    <div class="res-row">
+      <div id="resAvatar">${avatarHtml(m.name, photo, "lg")}</div>
+      <div class="res-info">
+        <div class="rt">${title}</div>
+        <div class="rn">${esc(m.name)}</div>
+        <div class="res-line">${esc(sessionsText(m))} · ${esc(fmtLeftText(st))}</div>
+        ${chip}
+      </div>
+    </div>${extra}
+  </div>`;
 
 async function doCheckin(raw) {
   const box = $("#result");
   if (!box) return;
   const m = findMemberFromScan(raw);
   if (!m) {
+    Sound.bad();
     box.innerHTML = `<div class="result bad"><div class="rt">${ico("xCircle", "sm")} غير موجود</div><div>لا يوجد عضو مطابق لهذا الكود أو الرقم.</div></div>`;
     return;
   }
   const st = calcMemberState(m);
-  const waBtn = m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("phone", "sm")} واتساب</a>` : "";
+  const photo = PHOTOS.get(m.id) || "";
+  const waBtn = m.phone ? `<a class="btn ghost sm" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, reminderText(m)))}">${ico("whatsapp", "sm")} واتساب</a>` : "";
+  const loadPhoto = () => {
+    if (photo) return;
+    getMemberPhoto(m.id).then(d => {
+      const a = $(`.result[data-mid="${m.id}"] #resAvatar`);
+      if (d && a) a.innerHTML = avatarHtml(m.name, d, "lg");
+    });
+  };
+
   if (st.key === "expired" || st.key === "none") {
-    box.innerHTML = `<div class="result bad">
-      <div class="rt">${ico("xCircle", "sm")} الدخول ممنوع — ${st.key === "none" ? "لا يوجد اشتراك" : "الاشتراك منتهي"}</div>
-      <div class="rn">${esc(m.name)}</div><div>${esc(fmtLeftText(st))}</div>
-      <div class="acts"><button class="btn sm" id="goRenew">${ico("refresh", "sm")} تجديد الاشتراك</button>${waBtn}</div></div>`;
+    Sound.bad();
+    box.innerHTML = resultCard("bad", m, st,
+      `${ico("xCircle", "sm")} الدخول ممنوع — ${st.key === "none" ? "لا يوجد اشتراك" : "الاشتراك منتهي"}`,
+      `<span class="status-chip chip-bad">منتهي</span>`, photo,
+      `<div class="acts"><button class="btn sm" id="goRenew">${ico("refresh", "sm")} تجديد الاشتراك</button>${waBtn}</div>`);
     $("#goRenew").addEventListener("click", () => nav("members", { type: "renew", id: m.id }));
+    loadPhoto();
     return;
   }
+
+  const last = toDate(m.lastCheckinAt);
+  if (last && ymd(last) === todayStr()) {
+    Sound.warn();
+    box.innerHTML = resultCard("warn", m, st,
+      `${ico("alert", "sm")} سُجّل حضوره اليوم بالفعل الساعة ${esc(fmtTime(last))}`,
+      `<span class="status-chip chip-ok">ساري</span>`, photo);
+    loadPhoto();
+    return;
+  }
+
+  // Valid subscription: show the result immediately, save in the background
+  Sound.ok();
+  const curSess = Number(m.sessionsLeft);
+  const nextSess = isNaN(curSess) ? null : Math.max(0, curSess - 1);
+  const dueLine = Number(m.balance) > 0 ? `<div class="due" style="margin-top:8px">عليه مبلغ متبقي ${money(m.balance)}</div>` : "";
+  box.innerHTML = resultCard("ok", m, st,
+    `${ico("checkCircle", "sm")} مرحبًا — الدخول مسموح <span class="ck-state" id="ckState">جاري التسجيل…</span>`,
+    `<span class="status-chip chip-ok">ساري</span>`, photo,
+    dueLine + (st.key === "soon" ? `<div class="acts">${waBtn}</div>` : ""));
+  loadPhoto();
+
   try {
-    const aRef = ref("attendance", `${todayStr()}_${m.id}`);
-    const exists = await getDoc(aRef);
-    if (exists.exists()) {
-      const at = toDate(exists.data().ts);
-      box.innerHTML = `<div class="result warn"><div class="rt">${ico("alert", "sm")} سُجّل حضوره اليوم بالفعل${at ? " الساعة " + fmtTime(at) : ""}</div>
-        <div class="rn">${esc(m.name)}</div><div>${esc(sessionsText(m))} · ${esc(fmtLeftText(st))}</div></div>`;
-      return;
-    }
-    const curSess = Number(m.sessionsLeft);
-    const nextSess = isNaN(curSess) ? null : Math.max(0, curSess - 1);
-    await setDoc(aRef, { memberId: m.id, memberName: m.name, code: m.code, date: todayStr(), ts: serverTimestamp(), by: G.uid });
+    const batch = writeBatch(db);
+    batch.set(ref("attendance", `${todayStr()}_${m.id}`), {
+      memberId: m.id, memberName: m.name, code: m.code, date: todayStr(), ts: serverTimestamp(), by: G.uid
+    });
     const upd = { lastCheckinAt: serverTimestamp() };
     if (nextSess !== null) upd.sessionsLeft = nextSess;
-    await updateDoc(ref("members", m.id), upd);
+    batch.update(ref("members", m.id), upd);
+    await batch.commit();
     if (nextSess !== null) m.sessionsLeft = nextSess;
     m.lastCheckinAt = { toDate: () => new Date() };
-
-    const dueLine = Number(m.balance) > 0 ? `<div class="due">عليه مبلغ متبقي ${money(m.balance)}</div>` : "";
-    box.innerHTML = `<div class="result ok"><div class="rt">${ico("checkCircle", "sm")} تم تسجيل الحضور (${esc(fmtDateTime(new Date()))})</div>
-      <div class="rn">${esc(m.name)}</div>
-      <div>${esc(sessionsText(m))} · ${esc(fmtLeftText(st))}</div>${dueLine}
-      ${st.key === "soon" ? `<div class="acts">${waBtn}</div>` : ""}</div>`;
+    const s = $("#ckState"); if (s) s.textContent = "تم التسجيل";
+    const line = $(`.result[data-mid="${m.id}"] .res-line`);
+    if (line) line.textContent = `${sessionsText(m)} · ${fmtLeftText(st)}`;
     loadToday(RT);
   } catch (e) {
-    box.innerHTML = `<p class="msg err">${esc(errText(e))}</p>`;
+    if (e && e.code === "permission-denied") {
+      m.lastCheckinAt = { toDate: () => new Date() };
+      Sound.warn();
+      box.innerHTML = resultCard("warn", m, st, `${ico("alert", "sm")} سُجّل حضوره اليوم بالفعل (من جهاز آخر)`, `<span class="status-chip chip-ok">ساري</span>`, photo);
+    } else {
+      box.innerHTML = `<p class="msg err">${esc(errText(e))}</p>`;
+    }
   }
 }
 
@@ -2277,6 +2724,12 @@ function screenStore(main) {
   <div id="storeBody"></div>`;
 
   $$(".seg button", main).forEach(b => b.addEventListener("click", () => { S.storeTab = b.dataset.st; S.editProd = null; screenStore(main); }));
+  if (isOwner()) {
+    const fab = document.createElement("button");
+    fab.type = "button"; fab.className = "fab"; fab.setAttribute("aria-label", "إضافة منتج جديد"); fab.innerHTML = ico("plus");
+    fab.addEventListener("click", () => openProductModal(null, main));
+    main.appendChild(fab);
+  }
   const body = $("#storeBody", main);
 
   if (S.storeTab === "pos") {
@@ -2399,59 +2852,93 @@ function screenStore(main) {
     return;
   }
 
-  const editing = S.editProd ? PRODUCTS.find(p => p.id === S.editProd) : null;
+  // ---- manage tab: product cards + "+" button ----
+  const CAT_LABEL = { gym: "منتجات الجيم", cafe: "الكافتيريا" };
   body.innerHTML = `
-  <h2>${ico(editing ? "edit" : "plus")} ${editing ? "تعديل منتج" : "إضافة منتج جديد"}</h2>
-  <form class="panel" id="prodForm" novalidate>
-    <div class="field"><label for="prName">اسم المنتج</label><input id="prName" maxlength="100" value="${esc(editing?.name || "")}" placeholder="مثال: بروتين واي، مياه"></div>
-    <div class="field"><label for="prCat">القسم</label>
-      <select id="prCat">
-        <option value="cafe" ${editing?.category === "cafe" ? "selected" : ""}>الكافتيريا والمشروبات</option>
-        <option value="gym" ${editing?.category === "gym" ? "selected" : ""}>منتجات ومكملات الجيم</option>
-      </select></div>
-    <div class="field"><label for="prImg">${ico("image", "sm")} رابط صورة المنتج (https فقط، اختياري)</label>
-      <input id="prImg" dir="ltr" value="${esc(editing?.imgUrl || "")}" placeholder="https://..."></div>
-    <div class="two">
-      <div class="field"><label for="prPrice">سعر البيع</label><input id="prPrice" type="number" inputmode="decimal" min="0" dir="ltr" value="${esc(editing?.price ?? "")}"></div>
-      <div class="field"><label for="prStock">الكمية بالمخزون</label><input id="prStock" type="number" inputmode="numeric" min="0" dir="ltr" value="${esc(editing?.stock ?? 10)}"></div>
-    </div>
-    <button class="btn" type="submit" id="prSave">${ico("check")} ${editing ? "حفظ التعديل" : "إضافة المنتج"}</button>
-    ${editing ? `<button class="linkbtn" type="button" id="prCancel">إلغاء التعديل</button>` : ""}
-  </form>
+  <div class="top" style="margin-bottom:12px">
+    <h2 style="margin:0">${ico("package")} المنتجات (${PRODUCTS.length})</h2>
+    <button class="btn sm" type="button" id="addProdBtn">${ico("plus", "sm")} منتج جديد</button>
+  </div>
+  ${PRODUCTS.length ? `<div class="prod-grid manage">${PRODUCTS.map(p => `
+    <div class="prod-card static">
+      ${imgTag(p.imgUrl, "prod-thumb", p.name) || `<div class="prod-thumb ph">${ico("package")}</div>`}
+      <div class="pname">${esc(p.name)}</div>
+      <div class="pprice">${money(p.price)}</div>
+      <div class="pstock">${esc(CAT_LABEL[p.category] || "")} · المتاح ${esc(p.stock ?? 0)}</div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn ghost sm" data-editpr="${esc(p.id)}">${ico("edit", "sm")} تعديل</button>
+        <button class="btn danger sm" data-delpr="${esc(p.id)}">${ico("trash", "sm")} حذف</button>
+      </div>
+    </div>`).join("")}</div>`
+    : `<div class="panel empty">لا توجد منتجات بعد. اضغط «منتج جديد» لإضافة أول منتج.</div>`}`;
 
-  <h2>${ico("package")} قائمة المنتجات (${PRODUCTS.length})</h2>
-  <div class="rows">
-    ${PRODUCTS.length ? PRODUCTS.map(p => `
-      <div class="row">
-        <div class="name">${esc(p.name)} <span class="tag cat">${esc(CATS[p.category] || "منتج")}</span></div>
-        <div class="meta">السعر: <b>${money(p.price)}</b> · المتاح: <b>${esc(p.stock ?? 0)}</b></div>
-        <div class="acts">
-          <button class="btn ghost sm" data-editpr="${esc(p.id)}">${ico("edit", "sm")} تعديل</button>
-          <button class="btn danger sm" data-delpr="${esc(p.id)}">${ico("trash", "sm")} حذف</button>
-        </div>
-      </div>`).join("") : `<div class="empty">لا توجد منتجات مضافة بعد.</div>`}
-  </div>`;
-
-  const prCancel = $("#prCancel", body);
-  if (prCancel) prCancel.addEventListener("click", () => { S.editProd = null; screenStore(main); });
-  $$("[data-editpr]", body).forEach(b => b.addEventListener("click", () => { S.editProd = b.dataset.editpr; screenStore(main); window.scrollTo(0, 0); }));
+  $("#addProdBtn", body).addEventListener("click", () => openProductModal(null, main));
+  $$("[data-editpr]", body).forEach(b => b.addEventListener("click", () => openProductModal(PRODUCTS.find(p => p.id === b.dataset.editpr), main)));
   $$("[data-delpr]", body).forEach(b => b.addEventListener("click", async () => {
     if (!confirm("حذف هذا المنتج نهائيًا؟")) return;
     try { await deleteDoc(ref("products", b.dataset.delpr)); await loadProducts(); toast("تم حذف المنتج"); screenStore(main); }
     catch (e) { toast(errText(e)); }
   }));
-  $("#prodForm", body).addEventListener("submit", async ev => {
+}
+
+/* ---------- Product modal: image (+), name, price + currency, save ---------- */
+function openProductModal(editing, main) {
+  const gymCur = G.gym.currency || "EGP";
+  const ov = openModal(`
+    <div class="modal-h"><b>${editing ? "تعديل منتج" : "منتج جديد"}</b>
+      <button class="btn ghost sm" type="button" id="mClose" aria-label="إغلاق">${ico("x", "sm")}</button></div>
+    <form id="prodForm" novalidate>
+      <div class="field">${imgPickerHtml("pImg", { label: "صورة المنتج", current: editing?.imgUrl || "" })}</div>
+      <div class="field"><label for="pName">اسم المنتج</label>
+        <input id="pName" maxlength="100" value="${esc(editing?.name || "")}" placeholder="مثال: بروتين واي، مياه"></div>
+      <div class="field"><label for="pPrice">السعر</label>
+        <div class="pwrow">
+          <input id="pPrice" type="number" inputmode="decimal" min="0" step="any" dir="ltr" value="${esc(editing?.price ?? "")}" placeholder="0">
+          <select id="pCur" style="width:auto;min-width:150px" aria-label="العملة">${currencyOptions(gymCur)}</select>
+        </div>
+        <div class="hint">الافتراضي بالجنيه. اختر عملة أخرى للبيع في دول أخرى، وتنطبق على كل أسعار الجيم.</div></div>
+      <details class="more"><summary>خيارات إضافية (القسم والكمية)</summary>
+        <div class="two" style="margin-top:10px">
+          <div class="field"><label for="pCat">القسم</label>
+            <select id="pCat"><option value="gym" ${editing?.category === "gym" ? "selected" : ""}>منتجات الجيم</option><option value="cafe" ${editing?.category === "cafe" ? "selected" : ""}>الكافتيريا</option></select></div>
+          <div class="field"><label for="pStock">الكمية بالمخزون</label>
+            <input id="pStock" type="number" inputmode="numeric" min="0" dir="ltr" value="${esc(editing?.stock ?? 100)}"></div>
+        </div>
+      </details>
+      <button class="btn" type="submit" id="pSave" style="margin-top:12px">${ico("check")} حفظ المنتج</button>
+    </form>`);
+  $("#mClose", ov).addEventListener("click", closeModal);
+  const pick = wireImgPicker(ov, "pImg");
+
+  $("#prodForm", ov).addEventListener("submit", async ev => {
     ev.preventDefault();
-    const name = $("#prName").value.trim(), category = $("#prCat").value;
-    const imgUrl = safeHttps($("#prImg").value);
-    const price = num($("#prPrice").value), stock = Math.max(0, Math.round(num($("#prStock").value)));
-    if (!name || price <= 0) return toast("اكتب اسم المنتج وسعرًا صحيحًا.");
-    const btn = $("#prSave"); btn.disabled = true;
+    const name = $("#pName").value.trim(), price = num($("#pPrice").value);
+    const category = $("#pCat").value, stock = Math.max(0, Math.round(num($("#pStock").value)));
+    const cur = $("#pCur").value;
+    if (!name) return toast("اكتب اسم المنتج.");
+    if (price <= 0) return toast("اكتب سعرًا صحيحًا.");
+    const btn = $("#pSave"); btn.disabled = true;
+    const label = btn.innerHTML;
     try {
+      let imgUrl = editing?.imgUrl || "";
+      if (pick.file) {
+        btn.textContent = "جاري رفع الصورة…";
+        const up = await uploadImage(pick.file, `gyms/${G.gymId}/products/${Date.now()}`, { max: 640, q: 0.8, inlineMax: 320, inlineQ: 0.7 });
+        imgUrl = up.url;
+        if (up.stored === "inline") toast("تم حفظ الصورة داخل قاعدة البيانات (Firebase Storage غير مفعّل).");
+      }
+      btn.textContent = "جاري الحفظ…";
+      if (cur !== gymCur) {
+        await setDoc(ref("meta", "public"), { currency: cur }, { merge: true });
+        G.gym.currency = cur; CUR = cur;
+      }
       if (editing) await updateDoc(ref("products", editing.id), { name, category, imgUrl, price, stock });
       else await addDoc(col("products"), { name, category, imgUrl, price, stock, createdAt: serverTimestamp() });
-      S.editProd = null; await loadProducts(); toast("تم حفظ المنتج"); screenStore(main);
-    } catch (e) { btn.disabled = false; toast(errText(e)); }
+      await loadProducts();
+      closeModal();
+      toast("تم حفظ المنتج");
+      screenStore(main);
+    } catch (e) { btn.disabled = false; btn.innerHTML = label; toast(e.message || errText(e)); }
   });
 }
 
@@ -2481,7 +2968,7 @@ function screenBroadcast(main) {
       <div style="font-size:12.5px;color:var(--brand);font-weight:700">الإرسال المتتابع (${S.broadcastIdx + 1} من ${targets.length})</div>
       <div style="font-weight:700;font-size:15.5px;margin:4px 0">${esc(cur.name)} · ${esc(cur.phone)}</div>
       <div class="acts" style="margin-top:8px;display:flex;gap:8px">
-        <a class="btn sm" id="curWa" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(cur.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("send", "sm")} إرسال واتساب</a>
+        <a class="btn sm" id="curWa" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(cur.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("whatsapp", "sm")} إرسال واتساب</a>
         <button class="btn ghost sm" type="button" id="nextWaBtn">التالي</button>
       </div></div>` : `<p class="hint">لا يوجد أعضاء بأرقام صالحة.</p>`}
   </div>
@@ -2489,7 +2976,7 @@ function screenBroadcast(main) {
   <h2>${ico("users")} قائمة الإرسال (${targets.length})</h2>
   <div class="rows">${targets.length ? targets.map((m, i) => `
     <div class="row"><div class="name">${i + 1}. ${esc(m.name)}</div><div class="meta">${esc(m.phone)}</div>
-    <div class="acts"><a class="btn ghost sm" data-wa="${esc(m.id)}" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("phone", "sm")} إرسال</a></div></div>`).join("")
+    <div class="acts"><a class="btn ghost sm" data-wa="${esc(m.id)}" target="_blank" rel="noopener noreferrer" href="${esc(waRawLink(m.phone, S.broadcastMsg || NUTRITION_TEMPLATES[0].text))}">${ico("whatsapp", "sm")} إرسال</a></div></div>`).join("")
     : `<div class="empty">لا يوجد أعضاء.</div>`}</div>`;
 
   $("#tplSel").addEventListener("change", e => { const t = NUTRITION_TEMPLATES[Number(e.target.value)]; if (t) { S.broadcastMsg = t.text; screenBroadcast(main); } });
@@ -2580,7 +3067,7 @@ async function screenMoney(main, tok) {
       revSeries.push(sum(payments.filter(p => p.date === ds)));
       expSeries.push(sum(expenses.filter(x => x.date === ds)));
     }
-    const isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
     const gridColor = isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.06)";
     const textColor = isDark ? "#94A3B8" : "#64748B";
     const ctx1 = $("#revExpChart")?.getContext("2d");
@@ -2631,7 +3118,8 @@ function screenSettings(main, tok) {
   ${owner ? `
   <h2>${ico("creditCard")} هوية الجيم وروابط الدفع</h2>
   <form class="panel" id="gymCfgForm" novalidate>
-    <div class="field"><label for="cfgLogo">${ico("image", "sm")} رابط شعار الجيم (https)</label><input id="cfgLogo" dir="ltr" value="${esc(G.gym.logoUrl || "")}" placeholder="https://..."></div>
+    <div class="field"><label>شعار الجيم</label>${imgPickerHtml("cfgLogoImg", { label: "شعار الجيم", current: G.gym.logoUrl })}</div>
+    <div class="field"><label for="cfgCur">عملة الجيم</label><select id="cfgCur">${currencyOptions(G.gym.currency || "EGP")}</select></div>
     <div class="field"><label for="cfgInsta">إنستا باي (رابط أو عنوان)</label><input id="cfgInsta" dir="ltr" maxlength="200" value="${esc(G.gym.instapay || "")}" placeholder="https://ipn.eg/... أو username@instapay"></div>
     <div class="two">
       <div class="field"><label for="cfgVoda">فودافون كاش</label><input id="cfgVoda" dir="ltr" maxlength="60" value="${esc(G.gym.vodafoneCash || "")}" placeholder="010xxxxxxxx"></div>
@@ -2677,6 +3165,9 @@ function screenSettings(main, tok) {
   </div>
   ` : ""}
 
+  ${prefsHtml()}
+  <h2>${ico("whatsapp")} الدعم الفني</h2>
+  <div class="panel"><p class="hint" style="margin:0 0 10px">لأي مشكلة أو استفسار تواصل مباشرة مع الدعم الفني عبر واتساب.</p>${supportBtnHtml(false)}</div>
   <h2>${ico("building")} الحساب</h2>
   <div class="panel">
     <div class="stat"><span>الجيم</span><b>${esc(G.gym.name || "")}</b></div>
@@ -2688,25 +3179,32 @@ function screenSettings(main, tok) {
 
   wireCred(main, cred);
   wirePwForm(main);
-  $("#outBtn").addEventListener("click", () => { stopScanner(); destroyCharts(); signOut(auth); });
+  wirePrefs(main);
+  $("#outBtn").addEventListener("click", () => { stopScanner(); destroyCharts(); doSignOut(); });
   if (!owner) return;
 
+  const logoPick = wireImgPicker(main, "cfgLogoImg");
   $("#gymCfgForm").addEventListener("submit", async ev => {
     ev.preventDefault();
-    const data = {
-      name: G.gym.name || "",
-      logoUrl: safeHttps($("#cfgLogo").value),
-      instapay: $("#cfgInsta").value.trim(),
-      vodafoneCash: $("#cfgVoda").value.trim(),
-      orangeCash: $("#cfgOrange").value.trim()
-    };
     const btn = $("#saveCfgBtn"); btn.disabled = true;
+    const label = btn.innerHTML;
     try {
+      let logoUrl = G.gym.logoUrl || "";
+      if (logoPick.file) {
+        btn.textContent = "جاري رفع الشعار…";
+        const up = await uploadImage(logoPick.file, `gyms/${G.gymId}/logo_${Date.now()}`, { max: 320, q: 0.85, inlineMax: 200, inlineQ: 0.8, alpha: true });
+        logoUrl = up.url;
+        if (up.stored === "inline") toast("تم حفظ الشعار داخل قاعدة البيانات (Firebase Storage غير مفعّل).");
+      }
+      const data = {
+        name: G.gym.name || "", logoUrl, currency: $("#cfgCur").value,
+        instapay: $("#cfgInsta").value.trim(), vodafoneCash: $("#cfgVoda").value.trim(), orangeCash: $("#cfgOrange").value.trim()
+      };
       await setDoc(ref("meta", "public"), data, { merge: true });
-      Object.assign(G.gym, data);
+      Object.assign(G.gym, data); CUR = data.currency;
       toast("تم حفظ إعدادات الجيم");
       renderOwner();
-    } catch (e) { btn.disabled = false; toast(errText(e)); }
+    } catch (e) { btn.disabled = false; btn.innerHTML = label; toast(e.message || errText(e)); }
   });
   $("#copyMemberLink").addEventListener("click", () => copyText(memberLink));
 
@@ -2760,6 +3258,7 @@ async function startStaff(uid, profile, gym, gymId, support = false) {
     if (s.exists()) pub = s.data();
   } catch {}
   G = { uid, profile, gym: { ...gym, ...pub }, gymId, support };
+  CUR = G.gym.currency || "EGP";
   const r = profile.role;
   S.tab = r === "accountant" ? "money" : (r === "reception" ? "members" : "home");
   S.sub = null; S.filter = "all"; S.q = ""; S.editPlan = null; S.cred = null;
@@ -2792,16 +3291,18 @@ async function startEmployee(uid, profile, gym) {
   <div class="shell notabs">
     <header class="oh"><div class="in">
       <div class="brand-box">${gymLogoHtml(G.gym)}<div><div class="gname">${esc(G.gym.name || "الجيم")}</div><div class="gsub">${esc(profile.name || "")}</div></div></div>
-      <button class="btn ghost sm" id="eOut">${ico("logout", "sm")} خروج</button>
+      <div class="hdr-actions">${supportBtnHtml(true)}<button class="btn ghost sm" id="eOut">${ico("logout", "sm")} خروج</button></div>
     </div></header>
     <main class="wrap">
       <h2>${ico("mapPin")} بصمة الحضور والانصراف</h2>
       <div id="myPunch"></div>
       ${pwPanelHtml()}
+      ${prefsHtml()}
     </main>
   </div>`;
-  $("#eOut").addEventListener("click", () => signOut(auth));
+  $("#eOut").addEventListener("click", () => doSignOut());
   wirePwForm();
+  wirePrefs();
   renderPunchPanel($("#myPunch"), tok);
 }
 
@@ -2840,7 +3341,7 @@ function viewAdmin(profile) {
     </form>
   </div>`;
 
-  $("#outBtn").addEventListener("click", () => signOut(auth));
+  $("#outBtn").addEventListener("click", () => doSignOut());
   wireGen("#oPass", "#oGen");
   $("#gymForm").addEventListener("submit", onCreateGym);
   loadGyms();
