@@ -410,6 +410,72 @@
   .fab { position: fixed; inset-inline-start: 16px; bottom: calc(80px + env(safe-area-inset-bottom)); width: 56px; height: 56px; border-radius: 50%; border: 0; background: var(--brand); color: #fff; display: grid; place-items: center; box-shadow: 0 8px 22px rgba(234, 88, 12, .4); z-index: 12; }
   .fab .ico { width: 26px; height: 26px; }
   @media (min-width: 1024px) { .fab { bottom: 28px; } }
+
+  .wrap.wide { max-width: 1180px; }
+  .finance-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin:4px 0 20px; flex-wrap:wrap; }
+  .finance-head h1 { margin:2px 0 3px; font-size:25px; display:flex; align-items:center; gap:9px; }
+  .finance-head h1 svg { color:var(--brand); }
+  .finance-head p { margin:0; font-size:13px; }
+  .eyebrow { color:var(--brand); font-size:10px; font-weight:800; letter-spacing:1.5px; }
+  .finance-tools { display:flex; align-items:end; gap:9px; flex-wrap:wrap; }
+  .month-picker { display:flex; flex-direction:column; gap:3px; min-width:150px; font-size:12px; color:var(--muted); }
+  .month-picker input { min-height:39px; padding:6px 10px; }
+  .finance-kpis { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-bottom:13px; }
+  .finance-kpis.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .finance-kpi { min-width:0; border:1px solid var(--line); border-radius:16px; padding:16px; background:var(--surface); box-shadow:var(--shadow); display:flex; flex-direction:column; gap:4px; }
+  .finance-kpi span { color:var(--muted); font-size:12px; font-weight:600; }
+  .finance-kpi b { font-size:clamp(17px,2vw,24px); line-height:1.3; overflow-wrap:anywhere; }
+  .finance-kpi small { color:var(--muted); font-size:11px; }
+  .finance-kpi.revenue { background:linear-gradient(135deg,#C2410C,#F97316); border:0; color:white; }
+  .finance-kpi.revenue span,.finance-kpi.revenue small { color:#FFEDD5; }
+  .finance-kpi.expense b,.finance-kpi.loss b { color:var(--danger); }
+  .finance-kpi.profit b { color:var(--ok); }
+  .finance-secondary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-bottom:16px; }
+  .finance-mini { padding:13px 16px; display:flex; flex-direction:column; gap:3px; }
+  .finance-mini span,.finance-mini small { color:var(--muted); font-size:11px; }
+  .finance-mini b { font-size:18px; }
+  .finance-grid { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(280px,.8fr); gap:14px; margin-bottom:16px; }
+  .finance-chart { min-width:0; }
+  .finance-chart h2 { margin:0; }
+  .section-title { display:flex; justify-content:space-between; align-items:center; margin:0 0 8px; }
+  .section-title h2 { margin:0; }
+  .section-title p { margin:0; color:var(--muted); font-size:11px; }
+  .finance-lists { align-items:start; }
+  .finance-lists > section { min-width:0; }
+  .expense-form { max-width:760px; }
+  .loading-panel { padding:28px 16px; text-align:center; color:var(--muted); background:var(--surface); border:1px solid var(--line); border-radius:16px; }
+  .spinner { display:inline-block; width:17px; height:17px; border:2px solid var(--line); border-top-color:var(--brand); border-radius:50%; vertical-align:middle; margin-inline-end:8px; animation:gpSpin .7s linear infinite; }
+  @keyframes gpSpin { to { transform:rotate(360deg); } }
+  .payroll-intro { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:15px 0; }
+  .payroll-intro p { margin:3px 0 0; color:var(--muted); font-size:12px; }
+  .payroll-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; }
+  .payroll-card { min-width:0; }
+  .payroll-card-head { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; padding-bottom:12px; border-bottom:1px solid var(--line); }
+  .payroll-card-head b { display:block; font-size:16px; }
+  .payroll-card-head small { display:block; color:var(--muted); font-size:11px; overflow-wrap:anywhere; }
+  .payroll-fields { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:13px 0; }
+  .payroll-fields label { margin:0; font-size:11px; color:var(--muted); }
+  .payroll-fields input { min-height:39px; margin-top:4px; font-size:14px; }
+  .payroll-totals { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:10px 12px; background:var(--brand-soft); border:1px solid var(--brand-border); border-radius:12px; }
+  .payroll-totals div { display:flex; flex-direction:column; gap:2px; }
+  .payroll-totals span { color:var(--muted); font-size:11px; }
+  .payroll-totals b { color:var(--brand); font-size:17px; }
+  .payroll-card .acts { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+  .salary-values { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:9px; font-size:12px; color:var(--muted); }
+  .salary-values b { color:var(--ink); }
+  .employee-salary-note { margin-bottom:12px; }
+  .employee-salary-note p { margin:2px 0 0; color:var(--muted); font-size:12px; }
+  .employee-tabs { display:flex; gap:8px; margin:8px 0 16px; border-bottom:1px solid var(--line); }
+  .employee-tabs button { border:0; background:transparent; padding:10px 14px; color:var(--muted); border-bottom:2px solid transparent; display:flex; align-items:center; gap:6px; }
+  .employee-tabs button.active { color:var(--brand); border-color:var(--brand); font-weight:700; }
+  .lang-switch { position:fixed; z-index:9999; left:14px; bottom:calc(14px + env(safe-area-inset-bottom)); border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:8px 13px; min-height:38px; font-size:12px; font-weight:800; box-shadow:0 5px 22px rgba(15,23,42,.16); }
+  html[dir="ltr"] body { font-family:Inter,"Segoe UI",Arial,sans-serif; }
+  html[dir="ltr"] .tabs { direction:ltr; }
+  html[dir="ltr"] .finance-head, html[dir="ltr"] .payroll-card-head { direction:ltr; }
+  html[dir="ltr"] .finance-tools { direction:ltr; }
+  @media(max-width:760px) { .finance-kpis { grid-template-columns:repeat(2,minmax(0,1fr)); } .finance-grid { grid-template-columns:1fr; } .payroll-list { grid-template-columns:1fr; } }
+  @media(max-width:480px) { .finance-head h1 { font-size:21px; } .finance-kpis { gap:8px; } .finance-kpi { padding:12px; } .finance-secondary { grid-template-columns:1fr; gap:8px; } .payroll-intro { align-items:flex-start; flex-direction:column; } .finance-tools { width:100%; } .month-picker { flex:1; } }
+
 </style>
 </head>
 <body>
@@ -468,7 +534,59 @@ async function doSignOut() {
 const app2 = initializeApp(firebaseConfig, "secondary");
 const auth2 = getAuth(app2);
 
+
 const root = document.getElementById("app");
+const GP_LANG_KEY = "gympro_language";
+let GP_LANG = (()=>{try{return localStorage.getItem(GP_LANG_KEY)==="en"?"en":"ar"}catch{return "ar"}})();
+const GP_EN = {
+  "لوحة الإدارة":"Admin Dashboard","مسؤول النظام":"Platform Administrator","الجيمات المشتركة ومديروها":"Gyms & Managers","إضافة جيم ومدير":"Add Gym & Manager","اسم الجيم":"Gym Name","اسم المدير":"Manager Name","إيميل المدير":"Manager Email","كلمة مرور المدير":"Manager Password","الباقة":"Plan","أساسية":"Basic","متقدمة":"Pro","خاصة":"Premium","مدة الاشتراك بالأشهر":"Subscription Duration (Months)","إنشاء الجيم":"Create Gym","الجيمات":"Gyms","مدير الجيم":"Gym Manager","عدد الأعضاء":"Members","ينتهي الاشتراك":"Subscription Ends","نشط":"Active","موقوف":"Suspended","منتهي":"Expired","إجمالي الأعضاء":"Total Members","جاري التحميل…":"Loading…","الرئيسية":"Home","الأعضاء":"Members","الحضور":"Attendance","الموظفون":"Staff","الستور":"Store","التغذية":"Broadcast","المالية":"Finance","الرواتب":"Payroll","الإعدادات":"Settings","حسابي":"My Account","بصمتي":"My Attendance","بصمة الحضور والانصراف":"Clock In / Out","ملخص الشهر":"Monthly Summary","لوحة الماليات":"Financial Dashboard","إجمالي الإيرادات":"Total Revenue","إيراد الاشتراكات":"Membership Revenue","إيراد الستور والكافتيريا":"Store & Cafe Revenue","إيراد المتجر":"Store Revenue","المصروفات":"Expenses","المصروفات التشغيلية":"Operating Expenses","الرواتب المدفوعة":"Payroll Paid","صافي التدفق":"Net Cash Flow","رواتب لم تُصرف بعد":"Unpaid Payroll","إجمالي المصروفات النقدية":"Total Cash Outflow","عدد عمليات التحصيل":"Collection Transactions","التحليل المالي للشهر":"Monthly Financial Analysis","حركة الإيرادات والمصروفات":"Revenue & Expenses","مصادر الإيرادات":"Revenue Sources","توزيع مصادر الإيرادات":"Revenue Breakdown","إضافة مصروف":"Add Expense","تسجيل مصروف جديد":"Record New Expense","بيان المصروف":"Expense Description","البند":"Item","المبلغ":"Amount","التاريخ":"Date","حفظ المصروف":"Save Expense","تصدير الإيرادات":"Export Revenue","سجل التحصيل":"Collections","لا توجد مصروفات في هذه الفترة.":"No expenses in this period.","لا توجد إيرادات في هذه الفترة.":"No revenue in this period.","إدارة الرواتب":"Payroll Management","إعداد المستحقات الشهرية ومتابعة الصرف لكل موظف.":"Prepare monthly salaries and track payments for each employee.","شهر الراتب":"Payroll Month","إجمالي المستحق":"Total Due","إجمالي المدفوع":"Total Paid","المتبقي للصرف":"Remaining to Pay","كشوف الموظفين":"Employee Payroll Records","الراتب الأساسي":"Basic Salary","البدلات":"Allowances","المكافآت":"Bonuses","الخصومات":"Deductions","السلف":"Advances","المبلغ المدفوع":"Paid Amount","صافي الراتب":"Net Salary","المتبقي":"Remaining","حفظ كشف الراتب":"Save Payroll","طباعة الكشف":"Print Statement","مسجل":"Recorded","لم يسجل":"Not Recorded","تمت التسوية":"Settled","متبقي مستحق":"Outstanding","مستحقات غير مسددة":"Unpaid balances","لا توجد كشوف رواتب مسجلة لحسابك حتى الآن.":"No payroll statements have been recorded for your account yet.","مستحقاتي المالية":"My Salary","تم حفظ المصروف":"Expense saved","تم حفظ كشف راتب":"Payroll saved","غير مصرح لك بعرض الرواتب.":"You are not authorized to view payroll.","المزيد":"More","خروج":"Sign Out","تسجيل الخروج":"Sign Out","إجمالي الإيرادات":"Total Revenue","إجمالي المصروفات":"Total Expenses","حفظ":"Save","إلغاء":"Cancel","بحث":"Search","تحديث":"Refresh","حالة الاشتراك":"Subscription Status","إيقاف مؤقت":"Suspend","تفعيل الجيم":"Activate Gym","دخول للجيم (وضع الدعم)":"Enter Gym (Support Mode)","تعديل بيانات الجيم والمدير":"Edit Gym & Manager","إيميل المدير":"Manager Email","مدير نشط":"Manager Active","مدير موقوف":"Manager Suspended","مستحقاتي":"My Salary","أعضاء":"Members","خطة الاشتراك":"Membership Plan","تجميد":"Freeze","تجديد":"Renew","إضافة عضو":"Add Member","إضافة موظف":"Add Employee","حفظ التغييرات":"Save Changes","إغلاق":"Close","تأكيد":"Confirm","الاسم":"Name","رقم الهاتف":"Phone Number","البريد الإلكتروني":"Email","كلمة المرور":"Password","الحالة":"Status","فعال":"Active","غير فعال":"Inactive","منتهي":"Expired","حاضر الآن":"Checked In","غير مسجل حضور":"Not Checked In","حضور":"Check In","انصراف":"Check Out","آخر بصمة":"Last Punch","آخر بصماتي":"My Recent Punches","لا توجد بصمات بعد.":"No punches yet.","صوت تأكيد قراءة الكود":"QR Scan Confirmation Sound","الوضع الليلي (Dark Mode)":"Dark Mode","جاري تجهيز لوحة الماليات…":"Preparing financial dashboard…","جاري تحميل كشوف الرواتب…":"Loading payroll records…","جاري تحميل مستحقاتك…":"Loading your salary records…","إعداد المستحقات الشهرية ومتابعة الصرف لكل موظف.":"Prepare monthly payroll and track payments for every employee.","أدخل الراتب والبدلات والمكافآت والخصومات والسلف، وسيتم حساب الصافي والمتبقي تلقائيًا.":"Enter salary, allowances, bonuses, deductions and advances. Net and remaining amounts are calculated automatically.","خاص بالإدارة والمحاسب":"Private to management and accounting","لا يوجد موظفون نشطون في هذا الجيم. أضف الموظفين أولًا من صفحة الموظفين.":"No active employees. Add employees from the Staff page first.","هذه البيانات خاصة بحسابك ولا يمكن للموظفين الآخرين الاطلاع عليها.":"This information is private to your account and cannot be viewed by other employees."
+};
+Object.assign(GP_EN, {
+  "إتمام عملية البيع":"Complete Sale","إرسال واتساب":"Send WhatsApp","إعادة المحاولة":"Retry","إيقاف / تفعيل الدخول":"Disable / Enable Login","إيقاف الكاميرا":"Stop Camera","الدخول ممنوع":"Access Denied","الدعم الفني عبر واتساب":"WhatsApp Support","تأكيد التجديد":"Confirm Renewal","تجديد الاشتراك":"Renew Membership","تحميل كارت PDF بالبيانات":"Download PDF Member Card","تسجيل دفعة":"Record Payment","تعذر تشغيل الكاميرا. اسمح للمتصفح باستخدامها أو اكتب الكود يدويًا.":"Could not start the camera. Allow browser access or enter the code manually.","حفظ العضو":"Save Member","رابط تغيير كلمة المرور":"Password Reset Link","رابط كلمة المرور للمدير":"Manager Password Reset Link","سجل الدفعات":"Payment History","لا يوجد عضو مطابق لهذا الكود أو الرقم.":"No member matches this code or number.","لا توجد باقات اشتراك. اطلب من المدير إضافة باقة من «الإعدادات».":"No membership plans are available. Ask the manager to add a plan in Settings.","لم تُضَف كموظف في قائمة الجيم بعد. اطلب من المدير إضافتك لتظهر لك البصمة.":"You have not been added to the gym staff yet. Ask the manager to add you.","مسح بالكاميرا":"Scan with Camera","منتجات الجيم":"Gym Products","آخر بصماتي":"My Recent Punches","أدخل خط العرض وخط الطول أولًا.":"Enter latitude and longitude first.","أضف رقم موبايل صحيحًا للعضو أولًا من «تعديل».":"Add a valid member mobile number from Edit first.","أكمل كل الخانات.":"Complete all fields.","أنت خارج نطاق الجيم":"You are outside the gym area","اختر العضو لإضافة المبلغ على حسابه.":"Select the member to add the amount to their account.","اختر باقة.":"Select a plan.","اختر تاريخ البداية.":"Select a start date.","اختر ملف صورة.":"Choose an image file.","اسم الدخول (رقم الموبايل)":"Login ID (Mobile Number)","اسمح بفتح نافذة الطباعة.":"Allow the print window to open.","اشتراك":"Membership","اشتراكات الجيم":"Gym Memberships","اكتب إيميلًا صحيحًا أولًا ثم اضغط «نسيت كلمة المرور».":"Enter a valid email first, then select Forgot Password.","اكتب إيميلًا صحيحًا للمدير.":"Enter a valid manager email.","اكتب اسم الباقة ومدتها بالأيام.":"Enter the plan name and duration in days.","اكتب اسم الجيم واسم المدير.":"Enter the gym and manager names.","اكتب اسم العضو.":"Enter the member name.","اكتب اسم المنتج.":"Enter the product name.","اكتب اسم الموظف.":"Enter the employee name.","اكتب اسم الوظيفة.":"Enter the job title.","اكتب الإرشادات أو نظام التغذية...":"Enter instructions or nutrition plan...","اكتب الإيميل وكلمة المرور.":"Enter email and password.","اكتب الاسم.":"Enter the name.","اكتب رقم الموبايل وكلمة المرور.":"Enter mobile number and password.","اكتب رقم موبايل صحيحًا لإنشاء الدخول، أو امسح كلمة المرور.":"Enter a valid mobile number to create login, or clear the password.","اكتب سبب التصحيح.":"Enter the adjustment reason.","اكتب سعرًا صحيحًا.":"Enter a valid price.","اكتب مبلغًا صحيحًا.":"Enter a valid amount.","اكتب مبلغًا غير صفري.":"Enter a non-zero amount.","الإجمالي":"Total","الإيرادات":"Revenue","الإيميل":"Email","الإيميل أو كلمة المرور غير صحيحة.":"Incorrect email or password.","الاتصال بطيء أو منقطع. تأكد من الإنترنت ثم أعد المحاولة.":"Connection is slow or unavailable. Check your internet and retry.","العضوية غير موجودة":"Membership Not Found","العملة":"Currency","الكافتيريا":"Cafeteria","المبلغ أكبر من المتبقي.":"Amount exceeds the remaining balance.","المبلغ غير صحيح.":"Invalid amount.","المتصفح لا يدعم تحديد الموقع GPS.":"This browser does not support GPS location.","المتصفح منع نافذة جوجل. اسمح بالنوافذ المنبثقة ثم أعد المحاولة.":"The browser blocked the Google window. Allow pop-ups and retry.","المدفوع":"Paid","المدفوع أكبر من السعر.":"Paid amount exceeds the price.","المدير":"Manager","النوع":"Type","امسح للدخول":"Scan to Enter","انتهى اشتراك الجيم":"Gym Subscription Expired","انتهى اشتراك الجيم. جدّد الاشتراك للاستمرار.":"The gym subscription has expired. Renew to continue.","بطاقة عضوية":"Membership Card","بيانات الدخول إلى حسابك":"Your Account Login Details","بيانات الدخول غير صحيحة.":"Invalid login details.","تسجيل الدخول بجوجل غير مفعّل في Firebase بعد.":"Google Sign-In is not enabled in Firebase yet.","تصفية":"Filter","تعديل باقة":"Edit Plan","تعديل منتج":"Edit Product","تعذر الاتصال بقاعدة البيانات. حاول مرة أخرى.":"Could not connect to the database. Please try again.","تعذر الحصول على موقع GPS. اسمح بصلاحية الموقع من المتصفح.":"Could not get GPS location. Allow location access in your browser.","تعذر النسخ":"Could not copy","تعذر تحميل الحساب":"Could not load account","تعذر تحميل بيانات الجيم":"Could not load gym data","تعذر تحميل بياناتك":"Could not load your data","تعذر قراءة الصورة.":"Could not read the image.","تعذر ضغط الصورة.":"Could not compress the image.","تم إرسال رابط تغيير كلمة المرور للإيميل":"Password reset link sent to the email","تم إنشاء الدخول والكارت":"Login and card created","تم إنشاء الكارت":"Card created","تم تسجيل الدفعة":"Payment recorded","تم تسجيل انصرافك":"Clock-out recorded","تم تسجيل حضورك":"Clock-in recorded","تم تغيير كلمة المرور":"Password changed","تم حذف المنتج":"Product deleted","تم حفظ التصحيح":"Adjustment saved","تم حفظ إعدادات الجيم":"Gym settings saved","تم حفظ المنتج":"Product saved","تم حفظ موقع الجيم":"Gym location saved","تم حفظ العضو":"Member saved","تم حفظ كشف راتب":"Payroll statement saved","تم تجديد الاشتراك":"Membership renewed","تم تحميل شيت الإيرادات":"Revenue sheet downloaded","تم تسجيل الخروج تلقائيًا لعدم النشاط.":"You were signed out automatically due to inactivity.","تم تفعيل الحساب":"Account activated","تم إيقاف الحساب":"Account suspended","تم إيقاف دخول العضو":"Member access disabled","تم تفعيل دخول العضو":"Member access enabled","تم حذف كلمات المرور القديمة":"Old passwords deleted","تمت التسوية":"Settled","تواصل مع الإدارة.":"Contact management.","تُسلَّم لك من الاستقبال":"Collect it from reception","جاري الإنشاء…":"Creating…","جاري التسجيل…":"Signing in…","جاري الحفظ…":"Saving…","جاري الدخول…":"Signing in…","جاري رفع الشعار…":"Uploading logo…","جاري رفع الصورة…":"Uploading image…","حذف هذا المصروف؟":"Delete this expense?","حذف هذا المنتج نهائيًا؟":"Permanently delete this product?","حذف هذه الباقة؟":"Delete this plan?","حفظ التعديل":"Save Changes","حفظ التغييرات":"Save Changes","رقم الموبايل":"Mobile Number","رقم الموبايل أو كلمة المرور غير صحيحة.":"Incorrect mobile number or password.","رقم الموبايل غير صالح. اكتب رقمًا صحيحًا ثم أعد المحاولة.":"Invalid mobile number. Enter a valid number and retry.","سجل التحصيل":"Collection History","سداد متبقي":"Pay Remaining Balance","شعار الجيم":"Gym Logo","صلاحية غير معروفة":"Unknown Permission","صورة العضو":"Member Photo","صورة المنتج":"Product Image","عامل بوفيه":"Cafeteria Worker","عامل مخازن":"Storekeeper","عامل نظافة":"Cleaner","عميل نقدي":"Cash Customer","غير محدد":"Not Specified","غير متوفر":"Unavailable","غير مفعّل":"Disabled","فعال":"Active","كابتن":"Coach","كلمة المرور الجديدة / إعادة إنشاء الدخول":"New Password / Recreate Login","كلمة المرور ضعيفة.":"Password is too weak.","كلمة المرور ضعيفة. استخدم 8 أحرف وأرقام على الأقل.":"Password is too weak. Use at least 8 letters and numbers.","كلمة المرور غير صحيحة.":"Incorrect password.","كلمة المرور لازم تحتوي على حروف إنجليزية وأرقام.":"Password must contain English letters and numbers.","كلمة المرور لازم تكون 8 أحرف أو أرقام على الأقل.":"Password must be at least 8 characters or numbers.","كلمتا المرور غير متطابقتين.":"Passwords do not match.","كود الجيم غير صحيح. افتح الرابط الذي أرسله لك الجيم.":"Invalid gym code. Open the link sent by your gym.","لأسباب أمنية سجّل الدخول من جديد ثم أعد المحاولة.":"For security, sign in again and retry.","لا توجد دفعات.":"No payments found.","لا يوجد أعضاء.":"No members found.","لا يوجد سجل.":"No records found.","لم يسجل أحد حضوره اليوم.":"No one has checked in today.","لم يضف الجيم بيانات إنستا باي بعد.":"The gym has not added InstaPay details yet.","لم يضف الجيم رقم أورانج كاش بعد.":"The gym has not added an Orange Cash number yet.","لم يضف الجيم رقم فودافون كاش بعد.":"The gym has not added a Vodafone Cash number yet.","مدفوع بالكامل.":"Paid in full.","محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.":"Too many attempts. Wait a moment and try again.","موظف":"Employee","موظف آخر":"Other Employee","هذا الإيميل غير مضاف في أي جيم. اطلب من مدير الجيم إضافتك بنفس الإيميل، أو سجّل الخروج.":"This email is not registered with a gym. Ask your gym manager to add you or sign out.","هذا الإيميل مستخدم بالفعل. استخدم إيميلًا آخر.":"This email is already in use. Use another email.","هذا الإيميل مسجل بطريقة دخول أخرى. ادخل بالإيميل وكلمة المرور.":"This email uses another sign-in method. Sign in with email and password.","هذا الرابط غير مضاف في Firebase. أضفه من Authentication ← Settings ← Authorized domains.":"This domain is not authorized in Firebase. Add it under Authentication → Settings → Authorized domains.","هذا الرقم مسجل لعضو آخر. هل تريد المتابعة؟":"This number is registered to another member. Continue?","وصلت للحد الأقصى المتاح بالمخزون.":"Maximum available stock reached.","ينتهي الاشتراك":"Subscription Ends","ينتهي اليوم":"Expires Today","ينتهي قريبًا":"Expiring Soon","تم النسخ":"Copied","تم الحفظ":"Saved","تم التسجيل":"Recorded","تم التفعيل":"Activated","تم إيقافه":"Disabled","تأكيد":"Confirm","إلغاء":"Cancel","عربي":"Arabic","المدير نشط":"Manager Active","المدير موقوف":"Manager Suspended","إجمالي الأعضاء":"Total Members"
+});
+
+Object.assign(GP_EN, {
+  "متابعة الإيرادات والمصروفات والرواتب في مكان واحد.":"Track revenue, expenses and payroll in one place.","كل مصادر الدخل":"All income sources","اشتراكات وتجديدات":"Memberships and renewals","المصروفات المسجلة":"Recorded expenses","من إجمالي":"Out of total","بعد المصروفات والرواتب المدفوعة":"After operating expenses and paid payroll","المبالغ التي تم صرفها":"Amounts paid","رصيد مستحق للموظفين":"Outstanding employee balances","خلال الفترة المحددة":"During the selected period","مقارنة يومية خلال الشهر المحدد":"Daily comparison for the selected month","توزيع مصادر الدخل":"Income source breakdown","من إجمالي":"Out of total","من إجمالي المستحق":"Of total payroll due","كل مصادر الدخل":"All income sources","مستحقات غير مسددة":"Unpaid balances","لم يسجل":"Not recorded","لا توجد كشوف رواتب مسجلة لحسابك حتى الآن.":"No payroll statements have been recorded for your account yet.","تم حفظ كشف راتب ":"Payroll statement saved for ","تم حفظ المصروف":"Expense saved","أكمل بيان المصروف والمبلغ والتاريخ.":"Complete the expense description, amount and date.","تحقق من القيم: المدفوع لا يمكن أن يتجاوز صافي الراتب.":"Check the values: the paid amount cannot exceed net salary.","خاص بالإدارة والمحاسب":"Management and accountant only","لا يوجد موظفون نشطون في هذا الجيم. أضف الموظفين أولًا من صفحة الموظفين.":"No active employees in this gym. Add employees from the Staff page first.","هذه البيانات خاصة بحسابك ولا يمكن للموظفين الآخرين الاطلاع عليها.":"This information is private to your account and cannot be viewed by other employees.","صافي الراتب":"Net Salary","المدفوع":"Paid","المتبقي":"Remaining","الإيرادات مقابل المصروفات":"Revenue vs. Expenses","إيراد الاشتراكات":"Membership Revenue","إيراد المتجر":"Store Revenue","مبيعات الستور":"Store Sales","مدير الجيم":"Gym Manager","عدد الجيمات":"Number of Gyms","جيمات نشطة":"Active Gyms","موقوفة / منتهية":"Suspended / Expired","الجيمات المشتركة ومديروها":"Subscribed Gyms & Managers","إضافة جيم ومدير":"Add Gym & Manager","إيقاف مؤقت":"Suspend","تفعيل الجيم":"Activate Gym","إلغاء الاشتراك":"Cancel Subscription","تمديد 30 يوم":"Extend 30 Days","دخول للجيم (وضع الدعم)":"Enter Gym (Support Mode)","تعديل بيانات الجيم والمدير":"Edit Gym & Manager","إيقاف المدير":"Suspend Manager","تنشيط المدير":"Activate Manager","رابط دخول الأعضاء":"Member Portal Link","المدير نشط":"Manager Active","المدير موقوف":"Manager Suspended","إجمالي الأعضاء":"Total Members","مدير الجيم":"Gym Manager","حالة الاشتراك":"Subscription Status","العملة":"Currency","موقع الجيم":"Gym Location","إعدادات الجيم":"Gym Settings","بصمة انصراف":"Clock Out","بصمة حضور":"Clock In","حاضر الآن":"Checked In Now","غير مسجل حضور":"Not Checked In","آخر بصمة":"Last Punch","آخر بصماتي":"My Recent Punches","متر من الجيم":"meters from gym","اسم الموظف":"Employee Name","اسم الوظيفة":"Job Title","إضافة موظف":"Add Employee","الموظفون":"Staff","إرشادات التغذية والترطيب اليومية":"Daily Nutrition & Hydration Tips","تنبيه قبل وبعد التمرين":"Pre- and Post-Workout Reminder","التمارين":"Workouts","الباقة":"Plan","تجميد":"Freeze","تجديد":"Renew","إضافة عضو":"Add Member","بيانات الدخول إلى حسابك":"Your Account Login Details","اسم الدخول (رقم الموبايل)":"Login ID (Mobile Number)","تسجيل الدخول":"Sign In","نسيت كلمة المرور":"Forgot Password","كلمة المرور":"Password","رقم الموبايل":"Mobile Number","الإيميل":"Email","خروج":"Sign Out","المزيد":"More","المالية":"Finance","الرواتب":"Payroll","مستحقاتي":"My Salary","الستور":"Store","الحضور":"Attendance","الأعضاء":"Members","الرئيسية":"Home","الإعدادات":"Settings","حسابي":"My Account"
+});
+
+const GP_ORIGINAL_TEXT = new WeakMap();
+function gpTranslateNode(node) {
+  if (node.nodeType === Node.TEXT_NODE) {
+    if (!GP_ORIGINAL_TEXT.has(node)) GP_ORIGINAL_TEXT.set(node,node.nodeValue);
+    const original=GP_ORIGINAL_TEXT.get(node), key=String(original||"").trim();
+    if (!key) return;
+    let translated=original;
+    if(GP_LANG==="en") {
+      if(GP_EN[key]) translated=GP_EN[key];
+      else for(const k of Object.keys(GP_EN).sort((a,b)=>b.length-a.length)) if(k && translated.includes(k)) translated=translated.split(k).join(GP_EN[k]);
+    }
+    if(node.nodeValue!==translated) node.nodeValue=translated;
+  } else if (node.nodeType===Node.ELEMENT_NODE) {
+    for(const attr of ["placeholder","title","aria-label"]) {
+      const v=node.getAttribute(attr); if(v && GP_LANG==="en" && GP_EN[v]) node.setAttribute(attr,GP_EN[v]);
+      else if(v && GP_LANG==="ar") { const back=Object.keys(GP_EN).find(k=>GP_EN[k]===v); if(back) node.setAttribute(attr,back); }
+    }
+    node.childNodes.forEach(gpTranslateNode);
+  }
+}
+function gpApplyLanguage() {
+  document.documentElement.lang=GP_LANG; document.documentElement.dir=GP_LANG==="ar"?"rtl":"ltr";
+  if(root) gpTranslateNode(root);
+  const b=document.getElementById("gpLangSwitch"); if(b) b.textContent=GP_LANG==="ar"?"EN":"عربي";
+}
+function gpToggleLanguage() {
+  GP_LANG=GP_LANG==="ar"?"en":"ar";
+  try{localStorage.setItem(GP_LANG_KEY,GP_LANG)}catch{}
+  gpApplyLanguage();
+}
+function gpInstallLanguageSwitch() {
+  if(document.getElementById("gpLangSwitch")) return;
+  const b=document.createElement("button"); b.type="button"; b.id="gpLangSwitch"; b.className="lang-switch"; b.addEventListener("click",gpToggleLanguage); document.body.appendChild(b); gpApplyLanguage();
+  const observer=new MutationObserver(records=>records.forEach(r=>{r.addedNodes.forEach(gpTranslateNode);if(r.type==="characterData")gpTranslateNode(r.target)}));
+  observer.observe(root,{childList:true,subtree:true,characterData:true});
+}
+
+gpInstallLanguageSwitch();
 const DAY = 86400000;
 const PLANS_LABEL = { basic: "أساسية", pro: "متقدمة", premium: "خاصة" };
 const MEMBER_EMAIL_DOMAIN = "gympro-86c9a.web.app";
@@ -549,8 +667,8 @@ const monthEnd = () => { const d = new Date(); return `${d.getFullYear()}-${pad(
 const parseYmd = s => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
 const endOfDay = s => { const d = parseYmd(s); d.setHours(23, 59, 59, 0); return d; };
 const plusDays = (s, n) => { const d = parseYmd(s); d.setDate(d.getDate() + n); return ymd(d); };
-const fmtDate = d => d ? d.toLocaleDateString("ar-EG-u-nu-latn", { year: "numeric", month: "long", day: "numeric" }) : "—";
-const fmtTime = d => d ? d.toLocaleTimeString("ar-EG-u-nu-latn", { hour: "2-digit", minute: "2-digit" }) : "";
+const fmtDate = d => d ? d.toLocaleDateString(GP_LANG === "en" ? "en-US" : "ar-EG-u-nu-latn", { year: "numeric", month: "long", day: "numeric" }) : "—";
+const fmtTime = d => d ? d.toLocaleTimeString(GP_LANG === "en" ? "en-US" : "ar-EG-u-nu-latn", { hour: "2-digit", minute: "2-digit" }) : "";
 const fmtDateTime = d => d ? `${fmtDate(d)} · ${fmtTime(d)}` : "لم يسجل بعد";
 const toDate = t => {
   if (!t) return null;
@@ -1522,7 +1640,7 @@ async function renderMemberPortal(ctx) {
 const S = {
   tab: "home", sub: null, filter: "all", q: "", editPlan: null, cred: null,
   storeTab: "pos", storeCat: "all", cart: [], editProd: null,
-  broadcastTarget: "all", broadcastMsg: "", broadcastIdx: 0
+  broadcastTarget: "all", broadcastMsg: "", broadcastIdx: 0, moneyMonth: new Date().toISOString().slice(0,7)
 };
 let G = null;
 let SUPER = null;
@@ -1570,12 +1688,12 @@ function nav(tab, sub = null) {
 
 function tabsForRole() {
   const r = role();
-  if (r === "accountant") return [["money", "المالية", "chart"], ["punch", "بصمتي", "mapPin"], ["settings", "حسابي", "settings"]];
-  if (r === "reception") return [["members", "الأعضاء", "users"], ["checkin", "الحضور", "qr"], ["store", "الستور", "store"], ["punch", "بصمتي", "mapPin"], ["settings", "حسابي", "settings"]];
+  if (r === "accountant") return [["money", "المالية", "chart"], ["payroll", "الرواتب", "wallet"], ["punch", "بصمتي", "mapPin"], ["myPayroll", "مستحقاتي", "wallet"], ["settings", "حسابي", "settings"]];
+  if (r === "reception") return [["members", "الأعضاء", "users"], ["checkin", "الحضور", "qr"], ["store", "الستور", "store"], ["punch", "بصمتي", "mapPin"], ["myPayroll", "مستحقاتي", "wallet"], ["settings", "حسابي", "settings"]];
   return [
     ["home", "الرئيسية", "home"], ["members", "الأعضاء", "users"], ["checkin", "الحضور", "qr"],
     ["staff", "الموظفون", "mapPin"], ["store", "الستور", "store"], ["broadcast", "التغذية", "whatsapp"],
-    ["money", "المالية", "chart"], ["settings", "الإعدادات", "settings"]
+    ["money", "المالية", "chart"], ["payroll", "الرواتب", "wallet"], ["settings", "الإعدادات", "settings"]
   ];
 }
 
@@ -3014,115 +3132,173 @@ function screenBroadcast(main) {
 
 /* ---------- Money (owner + accountant) ---------- */
 async function screenMoney(main, tok) {
-  main.innerHTML = `<p class="muted">جاري التحميل…</p>`;
-  let pay, exp;
+  const month = S.moneyMonth || new Date().toISOString().slice(0,7);
+  const [yy, mm] = month.split('-').map(Number);
+  const first = `${yy}-${pad(mm)}-01`;
+  const last = ymd(new Date(yy, mm, 0));
+  main.innerHTML = `<div class="loading-panel"><span class="spinner"></span> جاري تجهيز لوحة الماليات…</div>`;
+  let pay, exp, payrollSnap;
   try {
-    [pay, exp] = await Promise.all([
-      getDocs(query(col("payments"), where("date", ">=", monthStart()), where("date", "<=", monthEnd()))),
-      getDocs(query(col("expenses"), where("date", ">=", monthStart()), where("date", "<=", monthEnd())))
+    [pay, exp, payrollSnap] = await Promise.all([
+      getDocs(query(col("payments"), where("date", ">=", first), where("date", "<=", last))),
+      getDocs(query(col("expenses"), where("date", ">=", first), where("date", "<=", last))),
+      getDocs(query(col("payroll"), where("month", "==", month)))
     ]);
-  } catch (e) { if (tok !== RT) return; main.innerHTML = `<p class="msg err">${esc(errText(e))}</p>`; return; }
+  } catch (e) { if (tok !== RT) return; main.innerHTML = `<p class="msg err">${ico("alert", "sm")} ${esc(errText(e))}</p>`; return; }
   if (tok !== RT) return;
-
-  const byNewest = (a, b) => String(b.date).localeCompare(String(a.date)) || ((toDate(b.ts)?.getTime() || 0) - (toDate(a.ts)?.getTime() || 0));
+  const byNewest = (a, b) => String(b.date || b.month).localeCompare(String(a.date || a.month)) || ((toDate(b.ts || b.updatedAt)?.getTime() || 0) - (toDate(a.ts || a.updatedAt)?.getTime() || 0));
   const payments = pay.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
   const expenses = exp.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
-  const rev = sum(payments), ex = sum(expenses);
+  const payroll = payrollSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const rev = sum(payments), ex = sum(expenses), payrollPaid = sum(payroll, "paid"), payrollDue = sum(payroll, "balance");
   const subRev = sum(payments.filter(p => p.type !== "store"));
   const storeRev = sum(payments.filter(p => p.type === "store"));
-
+  const totalOut = ex + payrollPaid;
+  const net = rev - totalOut;
+  const moneyFmt = n => money(n);
   main.innerHTML = `
-  <div class="top" style="margin-bottom:12px">
-    <h2 style="margin:0">${ico("wallet")} ملخص الشهر</h2>
-    <button class="btn soft sm" type="button" id="exportExcelBtn">${ico("download", "sm")} تصدير Excel</button>
+  <div class="finance-head">
+    <div><div class="eyebrow">GYMPRO · FINANCIAL OVERVIEW</div><h1>${ico("wallet")} لوحة الماليات</h1><p class="muted">متابعة الإيرادات والمصروفات والرواتب في مكان واحد.</p></div>
+    <div class="finance-tools"><label class="month-picker"><span>الفترة</span><input id="financeMonth" type="month" value="${esc(month)}" dir="ltr"></label><button class="btn soft sm" type="button" id="exportExcelBtn">${ico("download", "sm")} تصدير الإيرادات</button></div>
   </div>
-  <div class="panel">
-    <div class="stat"><span>إجمالي الإيرادات</span><b>${money(rev)}</b></div>
-    <div class="stat"><span>إيراد الاشتراكات</span><b>${money(subRev)}</b></div>
-    <div class="stat"><span>إيراد الستور والكافتيريا</span><b>${money(storeRev)}</b></div>
-    <div class="stat"><span>المصروفات</span><b>${money(ex)}</b></div>
-    <div class="stat big"><span>الصافي</span><b>${money(rev - ex)}</b></div>
+  <div class="finance-kpis">
+    <article class="finance-kpi revenue"><span>إجمالي الإيرادات</span><b>${moneyFmt(rev)}</b><small>كل مصادر الدخل</small></article>
+    <article class="finance-kpi"><span>إيراد الاشتراكات</span><b>${moneyFmt(subRev)}</b><small>اشتراكات وتجديدات</small></article>
+    <article class="finance-kpi"><span>إيراد المتجر</span><b>${moneyFmt(storeRev)}</b><small>الستور والكافتيريا</small></article>
+    <article class="finance-kpi expense"><span>المصروفات التشغيلية</span><b>${moneyFmt(ex)}</b><small>المصروفات المسجلة</small></article>
+    <article class="finance-kpi"><span>الرواتب المدفوعة</span><b>${moneyFmt(payrollPaid)}</b><small>من إجمالي ${moneyFmt(sum(payroll,"net"))} مستحق</small></article>
+    <article class="finance-kpi ${net >= 0 ? "profit" : "loss"}"><span>صافي التدفق</span><b>${moneyFmt(net)}</b><small>بعد المصروفات والرواتب المدفوعة</small></article>
   </div>
-
-  <h2>${ico("chart")} التحليل المالي للشهر</h2>
-  <div class="panel" style="margin-bottom:14px">
-    <div style="font-weight:700;font-size:14px;margin-bottom:6px">الإيرادات مقابل المصروفات (يومي)</div>
-    <div class="chart-wrap"><canvas id="revExpChart"></canvas></div>
+  <div class="finance-secondary">
+    <div class="panel finance-mini"><span>رواتب لم تُصرف بعد</span><b>${moneyFmt(payrollDue)}</b><small>رصيد مستحق للموظفين</small></div>
+    <div class="panel finance-mini"><span>إجمالي المصروفات النقدية</span><b>${moneyFmt(totalOut)}</b><small>تشغيل + رواتب مدفوعة</small></div>
+    <div class="panel finance-mini"><span>عدد عمليات التحصيل</span><b>${payments.length}</b><small>خلال الفترة المحددة</small></div>
   </div>
-  <div class="panel">
-    <div style="font-weight:700;font-size:14px;margin-bottom:6px">توزيع مصادر الإيرادات</div>
-    <div class="chart-wrap sm"><canvas id="sourceChart"></canvas></div>
+  <div class="finance-grid">
+    <section class="panel finance-chart"><div class="section-title"><div><h2>${ico("chart")} حركة الإيرادات والمصروفات</h2><p>مقارنة يومية خلال الشهر المحدد</p></div></div><div class="chart-wrap"><canvas id="revExpChart"></canvas></div></section>
+    <section class="panel finance-chart"><div class="section-title"><div><h2>${ico("chart")} مصادر الإيرادات</h2><p>توزيع مصادر الدخل</p></div></div><div class="chart-wrap sm"><canvas id="sourceChart"></canvas></div></section>
   </div>
-
-  <h2>${ico("plus")} إضافة مصروف</h2>
-  <form class="panel" id="xform" novalidate>
-    <div class="field"><label for="xt">البند</label><input id="xt" maxlength="120" placeholder="مثال: كهرباء، رواتب، صيانة"></div>
-    <div class="two">
-      <div class="field"><label for="xa">المبلغ</label><input id="xa" type="number" inputmode="decimal" min="0" dir="ltr"></div>
-      <div class="field"><label for="xd">التاريخ</label><input id="xd" type="date" dir="ltr" value="${todayStr()}"></div>
-    </div>
+  <div class="finance-grid finance-lists">
+    <section><div class="section-title"><h2>${ico("trendingDown")} المصروفات</h2></div><div class="rows">${expenses.length ? expenses.slice(0,30).map(x => `<div class="row"><div class="name">${esc(x.title)} <b>${money(x.amount)}</b></div><div class="meta">${esc(x.date)}</div>${isOwner() ? `<div class="acts"><button class="btn danger sm" data-delx="${esc(x.id)}">${ico("trash","sm")} حذف</button></div>` : ""}</div>`).join("") : `<div class="empty">لا توجد مصروفات في هذه الفترة.</div>`}</div></section>
+    <section><div class="section-title"><h2>${ico("wallet")} سجل التحصيل</h2></div><div class="rows">${payments.length ? payments.slice(0,30).map(p => `<div class="row"><div class="name">${esc(p.memberName || "تحصيل") } <b>${money(p.amount)}</b></div><div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("") : `<div class="empty">لا توجد إيرادات في هذه الفترة.</div>`}</div></section>
+  </div>
+  <h2>${ico("plus")} تسجيل مصروف جديد</h2>
+  <form class="panel expense-form" id="xform" novalidate>
+    <div class="field"><label for="xt">بيان المصروف</label><input id="xt" maxlength="120" placeholder="مثال: كهرباء، إيجار، صيانة"></div>
+    <div class="two"><div class="field"><label for="xa">المبلغ</label><input id="xa" type="number" inputmode="decimal" min="0.01" step="0.01" dir="ltr"></div><div class="field"><label for="xd">التاريخ</label><input id="xd" type="date" dir="ltr" value="${todayStr()}"></div></div>
     <button class="btn" type="submit" id="xsave">${ico("check")} حفظ المصروف</button>
-  </form>
-
-  <h2>${ico("trendingDown")} مصروفات الشهر</h2>
-  <div class="rows">${expenses.length ? expenses.slice(0, 40).map(x => `
-    <div class="row"><div class="name">${esc(x.title)} — ${money(x.amount)}</div><div class="meta">${esc(x.date)}</div>
-    ${isOwner() ? `<div class="acts"><button class="btn danger sm" data-delx="${esc(x.id)}">${ico("trash", "sm")} حذف</button></div>` : ""}</div>`).join("")
-    : `<div class="empty">لا توجد مصروفات هذا الشهر.</div>`}</div>
-
-  <h2>${ico("trendingUp")} إيرادات الشهر</h2>
-  <div class="rows">${payments.length ? payments.slice(0, 40).map(p => `
-    <div class="row"><div class="name">${esc(p.memberName || "")} — ${money(p.amount)}</div><div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("")
-    : `<div class="empty">لا توجد إيرادات هذا الشهر.</div>`}</div>`;
-
-  $("#exportExcelBtn").addEventListener("click", () => { exportRevenueExcel(payments, `revenues_${monthStart()}.csv`); toast("تم تحميل شيت الإيرادات"); });
-
+  </form>`;
+  $("#financeMonth", main).addEventListener("change", e => { S.moneyMonth = e.target.value || month; renderOwner(); });
+  $("#exportExcelBtn").addEventListener("click", () => { exportRevenueExcel(payments, `revenues_${month}.csv`); toast("تم تحميل شيت الإيرادات"); });
   if (typeof Chart !== "undefined") {
     destroyCharts();
-    const now = new Date();
-    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-    const labels = [], revSeries = [], expSeries = [];
+    const daysInMonth = new Date(yy, mm, 0).getDate();
+    const labels = [], revSeries = [], expSeries = [], payrollSeries = [];
     for (let d = 1; d <= daysInMonth; d++) {
-      const ds = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(d)}`;
-      labels.push(String(d));
+      const ds = `${yy}-${pad(mm)}-${pad(d)}`; labels.push(String(d));
       revSeries.push(sum(payments.filter(p => p.date === ds)));
       expSeries.push(sum(expenses.filter(x => x.date === ds)));
+      payrollSeries.push(sum(payroll.filter(x => x.paidDate === ds), "paid"));
     }
     const isDark = document.documentElement.getAttribute("data-theme") === "dark";
     const gridColor = isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.06)";
     const textColor = isDark ? "#94A3B8" : "#64748B";
     const ctx1 = $("#revExpChart")?.getContext("2d");
-    if (ctx1) charts.push(new Chart(ctx1, {
-      type: "bar",
-      data: { labels, datasets: [
-        { label: "الإيرادات", data: revSeries, backgroundColor: "#EA580C", borderRadius: 4 },
-        { label: "المصروفات", data: expSeries, backgroundColor: "#94A3B8", borderRadius: 4 }
-      ] },
-      options: { responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } },
-        scales: { x: { grid: { display: false }, ticks: { color: textColor, maxTicksLimit: 10 } }, y: { grid: { color: gridColor }, ticks: { color: textColor } } } }
-    }));
+    if (ctx1) charts.push(new Chart(ctx1, { type: "bar", data: { labels, datasets: [
+      { label: GP_LANG === "en" ? "Revenue" : "الإيرادات", data: revSeries, backgroundColor: "#EA580C", borderRadius: 5 },
+      { label: GP_LANG === "en" ? "Expenses" : "المصروفات", data: expSeries, backgroundColor: "#94A3B8", borderRadius: 5 },
+      { label: GP_LANG === "en" ? "Payroll Paid" : "الرواتب المدفوعة", data: payrollSeries, backgroundColor: "#16A34A", borderRadius: 5 }
+    ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } }, scales: { x: { grid: { display: false }, ticks: { color: textColor, maxTicksLimit: 10 } }, y: { grid: { color: gridColor }, ticks: { color: textColor } } } } }));
     const ctx2 = $("#sourceChart")?.getContext("2d");
-    if (ctx2) charts.push(new Chart(ctx2, {
-      type: "doughnut",
-      data: { labels: ["اشتراكات الجيم", "الستور والكافتيريا"], datasets: [{ data: [subRev || 0, storeRev || 0], backgroundColor: ["#EA580C", "#FDBA74"], borderWidth: 0 }] },
-      options: { responsive: true, maintainAspectRatio: false, cutout: "65%",
-        plugins: { legend: { position: "bottom", labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } } }
-    }));
+    if (ctx2) charts.push(new Chart(ctx2, { type: "doughnut", data: { labels: GP_LANG === "en" ? ["Memberships", "Store & Cafe"] : ["اشتراكات الجيم", "الستور والكافتيريا"], datasets: [{ data: [subRev || 0, storeRev || 0], backgroundColor: ["#EA580C", "#FDBA74"], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: "68%", plugins: { legend: { position: "bottom", labels: { color: textColor, font: { family: "IBM Plex Sans Arabic" } } } } } }));
   }
-
   $("#xform").addEventListener("submit", async ev => {
-    ev.preventDefault();
-    const title = $("#xt").value.trim(), amount = num($("#xa").value), date = $("#xd").value;
-    if (!title || amount <= 0 || !date) return toast("أكمل البند والمبلغ والتاريخ.");
+    ev.preventDefault(); const title = $("#xt").value.trim(), amount = num($("#xa").value), date = $("#xd").value;
+    if (!title || amount <= 0 || !date) return toast("أكمل بيان المصروف والمبلغ والتاريخ.");
     const btn = $("#xsave"); btn.disabled = true;
     try { await addDoc(col("expenses"), { title, amount, date, ts: serverTimestamp(), by: G.uid }); toast("تم حفظ المصروف"); renderOwner(); }
     catch (e) { btn.disabled = false; toast(errText(e)); }
   });
-  $$("[data-delx]", main).forEach(b => b.addEventListener("click", async () => {
-    if (!confirm("حذف هذا المصروف؟")) return;
-    try { await deleteDoc(ref("expenses", b.dataset.delx)); renderOwner(); } catch (e) { toast(errText(e)); }
+  $$('[data-delx]', main).forEach(b => b.addEventListener('click', async () => {
+    if (!confirm('حذف هذا المصروف؟')) return;
+    try { await deleteDoc(ref('expenses', b.dataset.delx)); renderOwner(); } catch (e) { toast(errText(e)); }
   }));
+}
+
+/* ---------- Payroll management (owner + accountant) ---------- */
+async function screenPayroll(main, tok) {
+  if (!isOwner() && !isAccountant()) { main.innerHTML = `<div class="msg err">غير مصرح لك بعرض الرواتب.</div>`; return; }
+  const month = S.moneyMonth || new Date().toISOString().slice(0,7);
+  main.innerHTML = `<div class="loading-panel"><span class="spinner"></span> جاري تحميل كشوف الرواتب…</div>`;
+  let snap;
+  try {
+    if (!EMPLOYEES.length) await loadEmployees();
+    snap = await getDocs(query(col("payroll"), where("month", "==", month)));
+  } catch (e) { if (tok !== RT) return; main.innerHTML = `<p class="msg err">${ico("alert","sm")} ${esc(errText(e))}</p>`; return; }
+  if (tok !== RT) return;
+  const records = new Map(snap.docs.map(d => [d.data().employeeId, { id:d.id, ...d.data() }]));
+  const staff = EMPLOYEES.filter(e => e.active !== false && e.role !== "owner");
+  const totalNet = [...records.values()].reduce((a,x)=>a+(Number(x.net)||0),0);
+  const totalPaid = [...records.values()].reduce((a,x)=>a+(Number(x.paid)||0),0);
+  const totalDue = [...records.values()].reduce((a,x)=>a+(Number(x.balance)||0),0);
+  main.innerHTML = `
+    <div class="finance-head"><div><div class="eyebrow">GYMPRO · PAYROLL</div><h1>${ico("wallet")} إدارة الرواتب</h1><p class="muted">إعداد المستحقات الشهرية ومتابعة الصرف لكل موظف.</p></div><label class="month-picker"><span>شهر الراتب</span><input id="payrollMonth" type="month" value="${esc(month)}" dir="ltr"></label></div>
+    <div class="finance-kpis three"><article class="finance-kpi"><span>إجمالي المستحق</span><b>${money(totalNet)}</b><small>${records.size} كشف راتب مسجل</small></article><article class="finance-kpi profit"><span>إجمالي المدفوع</span><b>${money(totalPaid)}</b><small>المبالغ التي تم صرفها</small></article><article class="finance-kpi expense"><span>المتبقي للصرف</span><b>${money(totalDue)}</b><small>مستحقات غير مسددة</small></article></div>
+    <div class="payroll-intro panel"><div><b>كشوف الموظفين</b><p>أدخل الراتب والبدلات والمكافآت والخصومات والسلف، وسيتم حساب الصافي والمتبقي تلقائيًا.</p></div><span class="tag active">خاص بالإدارة والمحاسب</span></div>
+    <div class="payroll-list">${staff.length ? staff.map(emp => {
+      const r = records.get(emp.id) || {};
+      const base = Number(r.baseSalary ?? emp.baseSalary ?? 0), allowances = Number(r.allowances||0), bonus = Number(r.bonus||0), deductions = Number(r.deductions||0), advances = Number(r.advances||0), net = Number(r.net ?? (base+allowances+bonus-deductions-advances)), paid = Number(r.paid||0);
+      return `<form class="panel payroll-card" data-payroll-form="${esc(emp.id)}">
+        <div class="payroll-card-head"><div><b>${esc(emp.name||"موظف")}</b><small>${esc(emp.jobLabel||emp.jobTitle||"موظف")}${emp.email ? ` · ${esc(emp.email)}` : ""}</small></div><span class="tag ${r.id ? "active" : "soon"}">${r.id ? "مسجل" : "لم يسجل"}</span></div>
+        <div class="payroll-fields">
+          <label>الراتب الأساسي<input name="baseSalary" type="number" min="0" step="0.01" value="${base}" required></label>
+          <label>البدلات<input name="allowances" type="number" min="0" step="0.01" value="${allowances}"></label>
+          <label>المكافآت<input name="bonus" type="number" min="0" step="0.01" value="${bonus}"></label>
+          <label>الخصومات<input name="deductions" type="number" min="0" step="0.01" value="${deductions}"></label>
+          <label>السلف<input name="advances" type="number" min="0" step="0.01" value="${advances}"></label>
+          <label>المبلغ المدفوع<input name="paid" type="number" min="0" step="0.01" value="${paid}"></label>
+        </div>
+        <div class="payroll-totals"><div><span>صافي الراتب</span><b data-net>${money(net)}</b></div><div><span>المتبقي</span><b data-balance>${money(Math.max(0,net-paid))}</b></div></div>
+        <div class="acts"><button class="btn sm" type="submit">${ico("check","sm")} حفظ كشف الراتب</button><button class="btn ghost sm" type="button" data-print-payroll="${esc(emp.id)}">${ico("download","sm")} طباعة الكشف</button></div>
+      </form>`;
+    }).join("") : `<div class="empty panel">لا يوجد موظفون نشطون في هذا الجيم. أضف الموظفين أولًا من صفحة الموظفين.</div>`}</div>`;
+  $("#payrollMonth",main).addEventListener("change",e=>{ S.moneyMonth=e.target.value || month; renderOwner(); });
+  $$('[data-payroll-form]',main).forEach(form=>{
+    const fields=[...form.querySelectorAll('input')];
+    const calc=()=>{const v=Object.fromEntries(fields.map(x=>[x.name,num(x.value)]));const net=v.baseSalary+v.allowances+v.bonus-v.deductions-v.advances;form.querySelector('[data-net]').textContent=money(Math.max(0,net));form.querySelector('[data-balance]').textContent=money(Math.max(0,net-v.paid));};
+    fields.forEach(x=>x.addEventListener('input',calc));
+    form.addEventListener('submit',async ev=>{
+      ev.preventDefault();const v=Object.fromEntries(fields.map(x=>[x.name,num(x.value)]));
+      const net=v.baseSalary+v.allowances+v.bonus-v.deductions-v.advances;
+      if(net<0 || v.paid>net) return toast('تحقق من القيم: المدفوع لا يمكن أن يتجاوز صافي الراتب.');
+      const employeeId=form.dataset.payrollForm, emp=staff.find(x=>x.id===employeeId);const old=records.get(employeeId)||{};
+      const payload={employeeId,employeeName:emp.name||'',jobLabel:emp.jobLabel||emp.jobTitle||'',month,baseSalary:v.baseSalary,allowances:v.allowances,bonus:v.bonus,deductions:v.deductions,advances:v.advances,net,paid:v.paid,balance:net-v.paid,paidDate:v.paid>0?todayStr():(old.paidDate||null),updatedAt:serverTimestamp(),createdAt:old.createdAt||serverTimestamp(),createdBy:old.createdBy||G.uid};
+      const btn=form.querySelector('button[type="submit"]');btn.disabled=true;
+      try { await setDoc(ref('payroll',`${employeeId}_${month}`),payload,{merge:true}); await updateDoc(ref('employees',employeeId),{baseSalary:v.baseSalary}); toast('تم حفظ كشف راتب '+emp.name); renderOwner(); }
+      catch(e){btn.disabled=false;toast(errText(e));}
+    });
+    const print=form.querySelector('[data-print-payroll]');print.addEventListener('click',()=>{
+      const v=Object.fromEntries(fields.map(x=>[x.name,num(x.value)]));const net=v.baseSalary+v.allowances+v.bonus-v.deductions-v.advances;
+      const w=window.open('','_blank');if(!w)return toast('اسمح بفتح نافذة الطباعة.');
+      w.document.write(`<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>كشف راتب</title><style>body{font-family:Arial;padding:32px;color:#111}h1{color:#ea580c}.box{border:1px solid #ddd;border-radius:12px;padding:18px;margin:12px 0}.line{display:flex;justify-content:space-between;padding:9px;border-bottom:1px solid #eee}</style><h1>GymPro · كشف راتب</h1><h2>${esc(emp.name)}</h2><p>الشهر: ${esc(month)}</p><div class="box">${[['الراتب الأساسي',v.baseSalary],['البدلات',v.allowances],['المكافآت',v.bonus],['الخصومات',v.deductions],['السلف',v.advances],['صافي الراتب',net],['المدفوع',v.paid],['المتبقي',Math.max(0,net-v.paid)]].map(([k,n])=>`<div class="line"><span>${k}</span><b>${money(n)}</b></div>`).join('')}</div><script>window.onload=()=>window.print()<\/script></html>`);w.document.close();
+    });
+  });
+}
+
+function screenMyPayroll(main, tok) {
+  main.innerHTML = `<h2>${ico("wallet")} مستحقاتي المالية</h2>`;
+  renderEmployeeSalary(main, tok);
+}
+
+async function renderEmployeeSalary(box, tok) {
+  if (!box) return;
+  box.innerHTML = `<div class="loading-panel"><span class="spinner"></span> جاري تحميل مستحقاتك…</div>`;
+  try {
+    const snap = await getDocs(query(col('payroll'), where('employeeId','==',G.uid)));
+    if (tok !== RT) return;
+    const rows=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.month).localeCompare(String(a.month)));
+    box.innerHTML = `<h2>${ico('wallet')} مستحقاتي المالية</h2><div class="employee-salary-note panel"><b>${esc(G.profile.name||'')}</b><p>هذه البيانات خاصة بحسابك ولا يمكن للموظفين الآخرين الاطلاع عليها.</p></div>${rows.length?`<div class="rows">${rows.map(r=>`<div class="row salary-row"><div class="name">${esc(r.month||'')} <span class="tag ${Number(r.balance)>0?'soon':'active'}">${Number(r.balance)>0?'متبقي مستحق':'تمت التسوية'}</span></div><div class="salary-values"><span>صافي الراتب <b>${money(r.net)}</b></span><span>المدفوع <b>${money(r.paid)}</b></span><span>المتبقي <b>${money(r.balance)}</b></span></div></div>`).join('')}</div>`:`<div class="empty panel">لا توجد كشوف رواتب مسجلة لحسابك حتى الآن.</div>`}`;
+  } catch(e) { if(tok===RT) box.innerHTML=`<div class="msg err">${esc(errText(e))}</div>`; }
 }
 
 /* ---------- Settings ---------- */
@@ -3268,7 +3444,7 @@ function screenSettings(main, tok) {
 
 const SCREENS = {
   home: screenHome, members: screenMembers, checkin: screenCheckin, staff: screenStaff, punch: screenPunch,
-  store: screenStore, broadcast: screenBroadcast, money: screenMoney, settings: screenSettings
+  store: screenStore, broadcast: screenBroadcast, money: screenMoney, payroll: screenPayroll, myPayroll: screenMyPayroll, settings: screenSettings
 };
 const SUBS = { member: subMember, newMember: subNewMember, renew: subRenew, edit: subEdit, card: subCard };
 
@@ -3288,7 +3464,7 @@ async function startStaff(uid, profile, gym, gymId, support = false) {
   try {
     const jobs = [];
     if (r === "owner" || r === "reception") jobs.push(loadMembers(), loadPlans(), loadProducts());
-    if (r === "owner") jobs.push(loadEmployees());
+    if (r === "owner" || r === "accountant") jobs.push(loadEmployees());
     await withTimeout(Promise.all(jobs), 20000);
   } catch (e) {
     return viewBlocked("تعذر تحميل بيانات الجيم", errText(e), true);
@@ -3315,8 +3491,9 @@ async function startEmployee(uid, profile, gym) {
       <div class="hdr-actions">${supportBtnHtml(true)}<button class="btn ghost sm" id="eOut">${ico("logout", "sm")} خروج</button></div>
     </div></header>
     <main class="wrap">
-      <h2>${ico("mapPin")} بصمة الحضور والانصراف</h2>
-      <div id="myPunch"></div>
+      <div class="employee-tabs"><button type="button" class="active" data-emp-tab="punch">${ico("mapPin", "sm")} بصمتي</button><button type="button" data-emp-tab="salary">${ico("wallet", "sm")} مستحقاتي</button></div>
+      <section id="employeePunch"><h2>${ico("mapPin")} بصمة الحضور والانصراف</h2><div id="myPunch"></div></section>
+      <section id="employeeSalary" hidden></section>
       ${pwPanelHtml()}
       ${prefsHtml()}
     </main>
@@ -3325,6 +3502,12 @@ async function startEmployee(uid, profile, gym) {
   wirePwForm();
   wirePrefs();
   renderPunchPanel($("#myPunch"), tok);
+  $$('[data-emp-tab]').forEach(b => b.addEventListener('click', () => {
+    $$('[data-emp-tab]').forEach(x => x.classList.toggle('active', x === b));
+    $('#employeePunch').hidden = b.dataset.empTab !== 'punch';
+    $('#employeeSalary').hidden = b.dataset.empTab !== 'salary';
+    if (b.dataset.empTab === 'salary') renderEmployeeSalary($('#employeeSalary'), tok);
+  }));
 }
 
 /* =====================================================================
