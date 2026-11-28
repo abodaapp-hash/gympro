@@ -3464,10 +3464,8 @@ async function loadGyms() {
     const us = await getDocs(query(collection(db, "users"), where("role", "==", "owner")));
     us.docs.forEach(d => usersMap.set(d.id, d.data()));
   } catch {}
-  const counts = await Promise.all(gyms.map(async g => {
-    try { return (await getCountFromServer(collection(db, "gyms", g.id, "members"))).data().count; }
-    catch { return null; }
-  }));
+  // اعرض الجيمات فورًا؛ حساب الأعضاء يتم في الخلفية حتى لا تنتظر اللوحة كل العدادات.
+  const counts = gyms.map(() => null);
 
   const statusOf = g => {
     const end = toDate(g.subscriptionEnd);
@@ -3481,7 +3479,7 @@ async function loadGyms() {
     <div class="kpi accent"><div class="kl">${ico("building", "sm")} عدد الجيمات</div><div class="kv">${gyms.length}</div></div>
     <div class="kpi"><div class="kl">${ico("checkCircle", "sm")} جيمات نشطة</div><div class="kv">${activeN}</div></div>
     <div class="kpi"><div class="kl">${ico("xCircle", "sm")} موقوفة / منتهية</div><div class="kv">${gyms.length - activeN}</div></div>
-    <div class="kpi"><div class="kl">${ico("users", "sm")} إجمالي الأعضاء</div><div class="kv">${totalMembers}</div></div>`;
+    <div class="kpi"><div class="kl">${ico("users", "sm")} إجمالي الأعضاء</div><div class="kv" id="adminTotalMembers">جاري الحساب…</div></div>`;
 
   box.innerHTML = `<div class="gym-grid">${gyms.map((g, i) => {
     const end = toDate(g.subscriptionEnd);
@@ -3498,7 +3496,7 @@ async function loadGyms() {
         <span class="tag ${mgrActive ? "active" : "suspended"}">${mgrActive ? "المدير نشط" : "المدير موقوف"}</span></div>
       <div class="stat"><span>مدير الجيم</span><b>${esc(g.ownerName || mgr?.name || "—")}</b></div>
       <div class="stat"><span>إيميل المدير</span><b class="mono">${esc(g.ownerEmail || mgr?.email || "—")}</b></div>
-      <div class="stat"><span>عدد الأعضاء</span><b>${counts[i] ?? "—"}</b></div>
+      <div class="stat"><span>عدد الأعضاء</span><b data-member-count="${esc(g.id)}">جاري الحساب…</b></div>
       <div class="stat"><span>الباقة</span><b>${esc(PLANS_LABEL[g.plan] || g.plan || "—")}</b></div>
       <div class="stat"><span>ينتهي الاشتراك</span><b>${esc(fmtDate(end))}</b></div>
       <div class="acts">
@@ -3545,6 +3543,27 @@ async function loadGyms() {
       }
       loadGyms();
     } catch (e) { b.disabled = false; toast(errText(e)); }
+  }));
+
+  // لا نؤخر ظهور الجيمات بسبب طلبات العدّ. كل جيم يُحدّث رقمه فور وصول نتيجته.
+  let counted = 0;
+  let memberTotal = 0;
+  await Promise.all(gyms.map(async (g, i) => {
+    try {
+      const result = await getCountFromServer(collection(db, "gyms", g.id, "members"));
+      const n = result.data().count;
+      counts[i] = n;
+      memberTotal += n;
+      const cell = box.querySelector(`[data-member-count="${CSS.escape(g.id)}"]`);
+      if (cell) cell.textContent = n;
+    } catch {
+      const cell = box.querySelector(`[data-member-count="${CSS.escape(g.id)}"]`);
+      if (cell) cell.textContent = "—";
+    } finally {
+      counted++;
+      const totalBox = $("#adminTotalMembers");
+      if (totalBox) totalBox.textContent = counted === gyms.length ? memberTotal : `${counted}/${gyms.length} جيمات تم حسابها`;
+    }
   }));
 }
 
