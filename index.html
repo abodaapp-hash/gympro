@@ -3,12 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#EA580C">
+<meta name="theme-color" content="#EA580C">\n<meta name="description" content="Gym Prime — professional gym management, memberships, attendance, finance and payroll.">
 <script>try{if(localStorage.getItem("gp_theme")==="dark"){document.documentElement.setAttribute("data-theme","dark");}}catch(e){}</script>
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js">
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js">
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js">
-<title>GymPro</title>
+<title>Gym Prime | Gym Management</title>
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -410,7 +412,24 @@
   .fab { position: fixed; inset-inline-start: 16px; bottom: calc(80px + env(safe-area-inset-bottom)); width: 56px; height: 56px; border-radius: 50%; border: 0; background: var(--brand); color: #fff; display: grid; place-items: center; box-shadow: 0 8px 22px rgba(234, 88, 12, .4); z-index: 12; }
   .fab .ico { width: 26px; height: 26px; }
   @media (min-width: 1024px) { .fab { bottom: 28px; } }
-</style>
+
+  /* Gym Prime dashboard polish */
+  .app-mini-logo{width:36px;height:36px;display:grid;place-items:center;flex:none;border-radius:11px;
+    color:#fff;background:linear-gradient(135deg,#EA580C,#F97316);box-shadow:0 5px 14px rgba(234,88,12,.2)}
+  .app-mini-logo svg{width:25px;height:auto}
+  .kpi-grid.six{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi .kv{overflow-wrap:anywhere}
+  .finance-hero{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+  .finance-tile{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:var(--shadow);min-width:0}
+  .finance-tile .ft-label{font-size:12px;color:var(--muted);font-weight:600}
+  .finance-tile .ft-value{font-size:clamp(17px,3vw,23px);font-weight:800;margin-top:5px;overflow-wrap:anywhere}
+  .finance-tile.primary{background:linear-gradient(135deg,#EA580C,#F97316);color:#fff;border:0}
+  .finance-tile.primary .ft-label{color:rgba(255,255,255,.9)}
+  .dashboard-section{margin-top:18px}
+  .dashboard-section h2{margin-top:0}
+  @media(min-width:640px){.kpi-grid.six{grid-template-columns:repeat(3,minmax(0,1fr))}.finance-hero{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media(min-width:1024px){.kpi-grid.six{grid-template-columns:repeat(6,minmax(0,1fr))}}
+\n</style>
 </head>
 <body>
 <div id="app"><div class="loading" data-boot>جاري التحميل…</div></div>
@@ -431,7 +450,7 @@ import {
 import {
   initializeFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc, collection, getDocs,
   query, where, runTransaction, writeBatch, increment, serverTimestamp, Timestamp,
-  deleteField, getCountFromServer, getDocsFromCache, persistentLocalCache, persistentSingleTabManager,
+  deleteField, getCountFromServer, getDocsFromCache, persistentLocalCache, persistentSingleTabManager, persistentMultipleTabManager,
   terminate, clearIndexedDbPersistence
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -448,12 +467,12 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 let db = null;
 let PERSIST = false;
-// Local data cache is OFF by default (it can stall on some phones / private tabs). Turn it on from Settings.
-const WANT_CACHE = (() => { try { return localStorage.getItem("gp_cache") === "1"; } catch { return false; } })();
+// Local data cache is ON by default (instant loads); can be switched off from Settings.
+const WANT_CACHE = (() => { try { return localStorage.getItem("gp_cache") !== "0"; } catch { return false; } })();
 if (WANT_CACHE) {
   try {
     db = initializeFirestore(app, {
-      localCache: persistentLocalCache({ tabManager: persistentSingleTabManager() }),
+      localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
       experimentalAutoDetectLongPolling: true
     });
     PERSIST = true;
@@ -573,6 +592,9 @@ const appLink = () => `${location.origin}${location.pathname}`;
 const withTimeout = (p, ms = 25000) => Promise.race([
   p, new Promise((_, rej) => setTimeout(() => rej({ code: "timeout" }), ms))
 ]);
+
+// one automatic retry: a stalled request usually succeeds on the 2nd try (no manual "retry" needed)
+const fast = (fn, ms = 12000) => withTimeout(fn(), ms).catch(() => withTimeout(fn(), ms));
 
 function errText(e) {
   const code = e?.code || "";
@@ -740,11 +762,13 @@ function wirePrefs(scope = document) {
 const SUPPORT_WA = "201055573369";
 function supportHref() {
   const who = (typeof G !== "undefined" && G && G.gym && G.gym.name) ? ` الجيم: ${G.gym.name}` : "";
-  return `https://wa.me/${SUPPORT_WA}?text=${encodeURIComponent("مرحبًا، أحتاج مساعدة في نظام GymPro." + who)}`;
+  return `https://wa.me/${SUPPORT_WA}?text=${encodeURIComponent("مرحبًا، أحتاج مساعدة في نظام Gym Prime." + who)}`;
 }
-const supportBtnHtml = (mini = false) => mini
+const appIconHtml = () => `<span class="app-mini-logo" aria-label="Gym Prime" title="Gym Prime">${logoSvg}</span>`;
+const langBtn = mini => `<button type="button" data-lang-toggle class="${mini ? "sup-mini" : "btn soft"}" aria-label="Language"><span>EN / عربي</span></button>`;
+const supportBtnHtml = (mini = false) => langBtn(mini) + (mini
   ? `<a class="sup-mini" target="_blank" rel="noopener noreferrer" href="${esc(supportHref())}" aria-label="الدعم الفني">${ico("whatsapp")}<span>الدعم الفني</span></a>`
-  : `<a class="btn support-btn" target="_blank" rel="noopener noreferrer" href="${esc(supportHref())}">${ico("whatsapp")} الدعم الفني عبر واتساب</a>`;
+  : `<a class="btn support-btn" target="_blank" rel="noopener noreferrer" href="${esc(supportHref())}">${ico("whatsapp")} الدعم الفني عبر واتساب</a>`);
 
 /* ---------- Images: validate, compress, upload ---------- */
 const safeImg = u => {
@@ -897,7 +921,7 @@ async function loadCol(name, apply) {
       }
     } catch {}
   }
-  apply(await getDocs(c));
+  apply(await fast(() => getDocs(c)));
 }
 
 /* ---------- Passwords ---------- */
@@ -1141,7 +1165,7 @@ async function downloadMemberIdPdf(gym, member, gymId, password = "") {
       ctx.drawImage(logo, 4.6 + (9.8 - logo.width * k) / 2, 3.1 + (9.8 - logo.height * k) / 2, logo.width * k, logo.height * k);
       ctx.restore();
     }
-    T(ctx, gym?.name || "GymPro", W - 5, 9, { size: 5.2, color: "#FFFFFF", weight: 700, maxW: logo ? 62 : 72 });
+    T(ctx, gym?.name || "Gym Prime", W - 5, 9, { size: 5.2, color: "#FFFFFF", weight: 700, maxW: logo ? 62 : 72 });
     T(ctx, "بطاقة عضوية", W - 5, 13.6, { size: 2.9, color: "#FFEDD5" });
 
     ctx.fillStyle = "#FFFFFF"; rrect(ctx, 4.5, 19.5, 25, 25, 2); ctx.fill();
@@ -1229,7 +1253,7 @@ function viewLogin(message = "", okMessage = "") {
   <div class="wrap login">
     <div class="mark">
       <div class="logo-badge">${logoSvg}</div>
-      <b>Gym<span>Pro</span></b>
+      <b>Gym<span> Prime</span></b>
     </div>
 
     <div class="seg" style="margin-bottom:14px">
@@ -1345,7 +1369,7 @@ function viewLogin(message = "", okMessage = "") {
 function viewBlocked(title, text, retry = false) {
   root.innerHTML = `
   <div class="wrap login">
-    <div class="mark"><div class="logo-badge">${logoSvg}</div><b>Gym<span>Pro</span></b></div>
+    <div class="mark"><div class="logo-badge">${logoSvg}</div><b>Gym<span> Prime</span></b></div>
     <div class="panel">
       <h1 style="margin:0 0 8px;font-size:20px">${esc(title)}</h1>
       <p style="margin:0 0 20px;color:var(--muted)">${esc(text)}</p>
@@ -1421,10 +1445,17 @@ async function renderMemberPortal(ctx) {
           <div class="gsub">${esc(member.name)} · كود ${esc(member.code)}</div>
         </div>
       </div>
-      <div class="hdr-actions">${supportBtnHtml(true)}<button class="btn ghost sm" id="mOutBtn">${ico("logout", "sm")} خروج</button></div>
+      <div class="hdr-actions">${appIconHtml()}${supportBtnHtml(true)}<button class="btn ghost sm" id="mOutBtn">${ico("logout", "sm")} خروج</button></div>
     </div></header>
 
     <main class="wrap">
+      ${st.key === "soon" || st.key === "expired" ? `
+        <div class="msg ${st.key === "expired" ? "err" : "ok"}" role="status" style="margin:12px 0">
+          ${ico("alert", "sm")}
+          <span>${st.key === "expired"
+            ? L("تنبيه: انتهى اشتراكك. تواصل مع الاستقبال لتجديد العضوية واستعادة الدخول.", "Your membership has expired. Contact reception to renew and restore access.")
+            : L("تذكير: اشتراكك يقترب من الانتهاء. جدّد الآن لتجنب توقف العضوية.", "Reminder: your membership is nearing its end. Renew now to avoid interruption.")}</span>
+        </div>` : ""}
       <div class="seg">
         <button type="button" class="${tab === "card" ? "active" : ""}" data-mpt="card">${ico("user", "sm")} العضوية</button>
         <button type="button" class="${tab === "store" ? "active" : ""}" data-mpt="store">${ico("store", "sm")} الستور</button>
@@ -1603,7 +1634,7 @@ function renderOwner() {
           <div class="gsub">${esc(G.profile.name || "")} · ${esc(G.support ? "مسؤول النظام" : (ROLE_LABEL[role()] || ""))}</div>
         </div>
       </div>
-      <div class="hdr-actions">${end && isOwner() ? `<div class="sub-pill">حتى ${fmtDate(end)}</div>` : ""}${supportBtnHtml(true)}</div>
+      <div class="hdr-actions">${end && isOwner() ? `<div class="sub-pill">حتى ${fmtDate(end)}</div>` : ""}${appIconHtml()}${supportBtnHtml(true)}</div>
     </div></header>
     <div class="body">
       <nav class="tabs" aria-label="التنقل">
@@ -1653,6 +1684,118 @@ function wireOpen(scope) {
 }
 
 /* ---------- Home (owner) ---------- */
+/* ---------- PDF documents (payslips / invoices / sheets) + share ---------- */
+const L = (ar, en) => LANG === "en" ? en : ar;
+async function buildDocPdf({ title, sub = "", rows = [], total = null, note = "" }) {
+  const W = 794, rowH = 40, H = Math.max(1123, 330 + rows.length * rowH + 200), K = 2;
+  const cv = document.createElement("canvas"); cv.width = W * K; cv.height = H * K;
+  const c = cv.getContext("2d"); c.scale(K, K);
+  const rtl = LANG !== "en", F = '"IBM Plex Sans Arabic", system-ui, sans-serif';
+  const lx = rtl ? W - 48 : 48, vx = rtl ? 48 : W - 48, la = rtl ? "right" : "left", va = rtl ? "left" : "right";
+  const T = (t, x, y, size, color, weight, align, dir) => { c.font = `${weight || 500} ${size}px ${F}`; c.fillStyle = color; c.textAlign = align; c.direction = dir || (rtl ? "rtl" : "ltr"); c.fillText(String(t ?? ""), x, y); };
+  c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+  c.fillStyle = "#EA580C"; c.fillRect(0, 0, W, 96);
+  T(G.gym.name || "Gym Prime", lx, 58, 28, "#fff", 700, la);
+  T("Gym Prime", vx, 58, 18, "#FFEDD5", 600, va, "ltr");
+  T(title, lx, 160, 30, "#0F172A", 700, la);
+  if (sub) T(sub, lx, 192, 16, "#64748B", 500, la);
+  let y = 230;
+  c.strokeStyle = "#E2E8F0"; c.lineWidth = 1;
+  for (const [k, v] of rows) {
+    T(k, lx, y + 26, 16, "#64748B", 500, la);
+    T(v, vx, y + 26, 17, "#0F172A", 600, va);
+    c.beginPath(); c.moveTo(48, y + rowH); c.lineTo(W - 48, y + rowH); c.stroke(); y += rowH;
+  }
+  if (total) {
+    y += 18; c.fillStyle = "#FFF7ED"; c.fillRect(48, y, W - 96, 64);
+    c.strokeStyle = "#FDBA74"; c.strokeRect(48, y, W - 96, 64);
+    T(total[0], lx - (rtl ? 16 : -16), y + 40, 20, "#C2410C", 700, la);
+    T(total[1], vx + (rtl ? 16 : -16), y + 40, 24, "#C2410C", 700, va);
+    y += 64;
+  }
+  if (note) T(note, lx, y + 40, 14, "#64748B", 500, la);
+  T(`${G.gym.name || ""} · ${new Date().toLocaleDateString(rtl ? "ar-EG" : "en-GB")}`, W / 2, H - 36, 13, "#94A3B8", 500, "center");
+  const m = await import("https://esm.sh/jspdf@2.5.1");
+  const jsPDF = m.jsPDF || m.default?.jsPDF || m.default;
+  const pdf = new jsPDF({ unit: "mm", format: [210, 210 * H / W], compress: true });
+  pdf.addImage(cv.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 210, 210 * H / W);
+  return pdf.output("blob");
+}
+async function sharePdf(blob, filename, { text = "", phone = "", email = "", subject = "" } = {}) {
+  const file = new File([blob], filename, { type: "application/pdf" });
+  try {
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: subject, text }); return; }
+  } catch (e) { if (e && e.name === "AbortError") return; }
+  const url = URL.createObjectURL(blob), a = document.createElement("a");
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+  toast(L("تم تحميل الملف — أرفقه في واتساب أو الإيميل", "File downloaded — attach it in WhatsApp or email"));
+  if (phone) window.open(waRawLink(phone, text), "_blank", "noopener");
+  else if (email) location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+}
+function dlCsv(rows, filename) {
+  const body = rows.map(r => r.map(v => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
+  const url = URL.createObjectURL(new Blob(["\uFEFF" + body], { type: "text/csv;charset=utf-8;" })), a = document.createElement("a");
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+async function withBusy(btn, fn) {
+  const old = btn.innerHTML; btn.disabled = true; btn.textContent = "…";
+  try { await fn(); } catch (e) { toast(errText(e)); } finally { btn.disabled = false; btn.innerHTML = old; }
+}
+
+function notifyPanel(soon) {
+  const p = G.gym.notifyPhone || "", e = G.gym.notifyEmail || "";
+  return `<h2>${ico("clock")} تنبيهات التجديد للمدير</h2>
+  <div class="panel" id="notifyBox">
+    <p class="hint" style="margin:0 0 8px">${soon.length ? `يوجد ${soon.length} عضو ينتهي اشتراكهم خلال 7 أيام.` : "لا توجد اشتراكات قريبة الانتهاء الآن."} يمكنك إرسال ملخص التجديدات لنفسك من هنا. إشعارات الأعضاء التلقائية تحتاج تفعيل خدمة الإرسال السحابية.</p>
+    <div class="two">
+      <div class="field"><label for="nPhone">واتساب المدير</label><input id="nPhone" dir="ltr" inputmode="tel" value="${esc(p)}" placeholder="01xxxxxxxxx"></div>
+      <div class="field"><label for="nMail">إيميل المدير</label><input id="nMail" dir="ltr" type="email" value="${esc(e)}" placeholder="name@example.com"></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" type="button" id="nWa">${ico("whatsapp", "sm")} أرسل لي واتساب</button>
+      <button class="btn soft" type="button" id="nMailBtn">أرسل لي إيميل</button>
+      <button class="btn ghost" type="button" id="nSave">حفظ البيانات</button>
+      <button class="btn ghost" type="button" id="nNotif">تفعيل الإشعارات</button>
+    </div>
+  </div>`;
+}
+function wireNotify(main, soon) {
+  const box = $("#notifyBox", main); if (!box) return;
+  const gname = G.gym.name || "Gym Prime";
+  const text = () => `تنبيه تجديد - ${gname}\n` + (soon.length
+    ? soon.slice(0, 25).map(m => { const st = calcMemberState(m); return `• ${m.name} — ${fmtDate(st.end)}${m.phone ? " — " + m.phone : ""}`; }).join("\n")
+    : "لا توجد اشتراكات قريبة الانتهاء.");
+  const save = async () => {
+    const notifyPhone = $("#nPhone", box).value.trim(), notifyEmail = $("#nMail", box).value.trim();
+    try { await setDoc(ref("meta", "public"), { notifyPhone, notifyEmail }, { merge: true }); G.gym.notifyPhone = notifyPhone; G.gym.notifyEmail = notifyEmail; return true; }
+    catch (er) { toast(errText(er)); return false; }
+  };
+  const fire = () => {
+    try {
+      if (!soon.length || !("Notification" in window) || Notification.permission !== "granted") return;
+      if (localStorage.getItem("gp_nday") === todayStr()) return;
+      localStorage.setItem("gp_nday", todayStr());
+      new Notification(`${gname} — ${L("تجديدات قريبة", "Renewals due")}`, { body: L(`${soon.length} عضو ينتهي اشتراكهم خلال 7 أيام`, `${soon.length} memberships expire within 7 days`) });
+    } catch {}
+  };
+  fire();
+  $("#nNotif", box).addEventListener("click", async () => {
+    if (!("Notification" in window)) return toast(L("المتصفح لا يدعم الإشعارات", "Notifications not supported"));
+    const r = await Notification.requestPermission();
+    if (r === "granted") { try { localStorage.removeItem("gp_nday"); } catch {} fire(); toast(L("تم تفعيل الإشعارات", "Notifications enabled")); }
+    else toast(L("تم رفض الإذن من المتصفح", "Permission denied"));
+  });
+  $("#nSave", box).addEventListener("click", async () => { if (await save()) toast("تم الحفظ"); });
+  $("#nWa", box).addEventListener("click", async () => {
+    const ph = $("#nPhone", box).value.trim(); if (!ph) return toast("اكتب رقم واتساب المدير.");
+    if (await save()) window.open(waRawLink(ph, text()), "_blank", "noopener");
+  });
+  $("#nMailBtn", box).addEventListener("click", async () => {
+    const m = $("#nMail", box).value.trim(); if (!m) return toast("اكتب إيميل المدير.");
+    if (await save()) location.href = `mailto:${m}?subject=${encodeURIComponent("تنبيه تجديد اشتراكات - " + gname)}&body=${encodeURIComponent(text())}`;
+  });
+}
 async function screenHome(main, tok) {
   main.innerHTML = `<p class="muted">جاري التحميل…</p>`;
   let att, pay, exp;
@@ -1682,11 +1825,17 @@ async function screenHome(main, tok) {
 
   main.innerHTML = `
   <h2>${ico("trendingUp")} ملخص اليوم</h2>
-  <div class="kpi-grid four">
+  <div class="kpi-grid six">
     <div class="kpi accent"><div class="kl">${ico("wallet", "sm")} إيراد اليوم</div><div class="kv">${money(todayRev)}</div></div>
     <div class="kpi"><div class="kl">${ico("qr", "sm")} حضور اليوم</div><div class="kv">${att.size}</div></div>
-    <div class="kpi"><div class="kl">${ico("checkCircle", "sm")} اشتراك ساري</div><div class="kv">${active}</div></div>
-    <div class="kpi"><div class="kl">${ico("xCircle", "sm")} منتهي</div><div class="kv">${expired}</div></div>
+    <div class="kpi"><div class="kl">${ico("users", "sm")} إجمالي الأعضاء</div><div class="kv">${MEMBERS.length}</div></div>
+    <div class="kpi"><div class="kl">${ico("checkCircle", "sm")} اشتراكات سارية</div><div class="kv">${active}</div></div>
+    <div class="kpi"><div class="kl">${ico("clock", "sm")} قرب التجديد</div><div class="kv">${soon.length}</div></div>
+    <div class="kpi"><div class="kl">${ico("xCircle", "sm")} اشتراكات منتهية</div><div class="kv">${expired}</div></div>
+  </div>
+  <div class="panel" style="margin-top:10px">
+    <div class="stat"><span>${ico("creditCard","sm")} إجمالي المبالغ المستحقة على الأعضاء</span><b>${money(sum(owing, "balance"))}</b></div>
+    <div class="stat"><span>${ico("users","sm")} عدد الأعضاء عليهم مبالغ</span><b>${owing.length}</b></div>
   </div>
 
   <h2>${ico("chart")} هذا الشهر · إجمالي الأعضاء ${MEMBERS.length}</h2>
@@ -1696,6 +1845,7 @@ async function screenHome(main, tok) {
     <div class="stat big"><span>${ico("wallet", "sm")} الصافي</span><b>${money(monthRev - monthExp)}</b></div>
   </div>
 
+${notifyPanel(soon)}
   <div class="cols2">
     <div>
       <h2>${ico("clock")} ينتهي اشتراكهم خلال 7 أيام</h2>
@@ -1707,6 +1857,7 @@ async function screenHome(main, tok) {
     </div>
   </div>`;
   wireOpen(main);
+  wireNotify(main, soon);
 }
 
 /* ---------- Members list ---------- */
@@ -2054,7 +2205,8 @@ async function subMember(main, tok) {
     if (s2) {
       const pays = s2.docs.map(d => d.data()).sort((a, b) => String(b.date).localeCompare(String(a.date)));
       $("#payHist").innerHTML = pays.length ? pays.map(p => `
-        <div class="row"><div class="name">${money(p.amount)}</div><div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("")
+        <div class="row"><div class="name">${money(p.amount)}</div><div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div>
+    <div class="acts"><button class="btn soft sm" type="button" data-inv="${esc(p.id)}">فاتورة PDF</button></div></div>`).join("")
         : `<div class="empty">لا توجد دفعات.</div>`;
     }
   } catch (e) {
@@ -3022,17 +3174,32 @@ async function screenMoney(main, tok) {
   const subRev = sum(payments.filter(p => p.type !== "store"));
   const storeRev = sum(payments.filter(p => p.type === "store"));
 
+  const payrollTotal = sum(EMPLOYEES, "baseSalary");
+  const paidSalaryIds = new Set(expenses.filter(x => x.type === "salary" && x.month === monthStart().slice(0,7)).map(x => x.employeeId));
+  const payrollPaid = sum(EMPLOYEES.filter(e => paidSalaryIds.has(e.id)), "baseSalary");
+  const payrollDue = Math.max(0, payrollTotal - payrollPaid);
+  const memberDebt = sum(MEMBERS.filter(m => Number(m.balance) > 0), "balance");
+  const memberSoon = MEMBERS.filter(m => calcMemberState(m).key === "soon").length;
   main.innerHTML = `
   <div class="top" style="margin-bottom:12px">
-    <h2 style="margin:0">${ico("wallet")} ملخص الشهر</h2>
+    <div class="who"><h2 style="margin:0">${ico("wallet")} لوحة الحسابات والمالية</h2><div class="sub">${L("الأداء المالي والرواتب وحسابات الأعضاء", "Financial performance, payroll & member accounts")}</div></div>
     <button class="btn soft sm" type="button" id="exportExcelBtn">${ico("download", "sm")} تصدير Excel</button>
   </div>
+  <div class="finance-hero">
+    <div class="finance-tile primary"><div class="ft-label">${L("صافي الشهر", "Monthly net")}</div><div class="ft-value">${money(rev - ex)}</div></div>
+    <div class="finance-tile"><div class="ft-label">${L("إجمالي الإيرادات", "Total revenue")}</div><div class="ft-value">${money(rev)}</div></div>
+    <div class="finance-tile"><div class="ft-label">${L("إجمالي المصروفات", "Total expenses")}</div><div class="ft-value">${money(ex)}</div></div>
+    <div class="finance-tile"><div class="ft-label">${L("رواتب الشهر", "Monthly payroll")}</div><div class="ft-value">${money(payrollTotal)}</div></div>
+    <div class="finance-tile"><div class="ft-label">${L("رواتب تم صرفها", "Payroll paid")}</div><div class="ft-value">${money(payrollPaid)}</div></div>
+    <div class="finance-tile"><div class="ft-label">${L("رواتب متبقية", "Payroll remaining")}</div><div class="ft-value">${money(payrollDue)}</div></div>
+  </div>
   <div class="panel">
-    <div class="stat"><span>إجمالي الإيرادات</span><b>${money(rev)}</b></div>
-    <div class="stat"><span>إيراد الاشتراكات</span><b>${money(subRev)}</b></div>
-    <div class="stat"><span>إيراد الستور والكافتيريا</span><b>${money(storeRev)}</b></div>
-    <div class="stat"><span>المصروفات</span><b>${money(ex)}</b></div>
-    <div class="stat big"><span>الصافي</span><b>${money(rev - ex)}</b></div>
+    <h2 style="margin-top:0">${ico("users")} ${L("موقف حسابات الأعضاء", "Member account overview")}</h2>
+    <div class="stat"><span>${L("إجمالي الأعضاء", "Total members")}</span><b>${MEMBERS.length || "—"}</b></div>
+    <div class="stat"><span>${L("أعضاء يقترب تجديدهم", "Members nearing renewal")}</span><b>${memberSoon || 0}</b></div>
+    <div class="stat"><span>${L("إجمالي المبالغ المستحقة", "Outstanding member balances")}</span><b>${money(memberDebt)}</b></div>
+    <div class="stat"><span>${L("إيراد الاشتراكات", "Subscription revenue")}</span><b>${money(subRev)}</b></div>
+    <div class="stat"><span>${L("إيراد الستور والكافتيريا", "Store & cafeteria revenue")}</span><b>${money(storeRev)}</b></div>
   </div>
 
   <h2>${ico("chart")} التحليل المالي للشهر</h2>
@@ -3044,6 +3211,9 @@ async function screenMoney(main, tok) {
     <div style="font-weight:700;font-size:14px;margin-bottom:6px">توزيع مصادر الإيرادات</div>
     <div class="chart-wrap sm"><canvas id="sourceChart"></canvas></div>
   </div>
+
+  <h2>${ico("users")} رواتب المدربين والموظفين</h2>
+  <div class="panel" id="payroll"></div>
 
   <h2>${ico("plus")} إضافة مصروف</h2>
   <form class="panel" id="xform" novalidate>
@@ -3065,6 +3235,91 @@ async function screenMoney(main, tok) {
   <div class="rows">${payments.length ? payments.slice(0, 40).map(p => `
     <div class="row"><div class="name">${esc(p.memberName || "")} — ${money(p.amount)}</div><div class="meta">${esc(p.date)} · ${esc(p.note || "")}</div></div>`).join("")
     : `<div class="empty">لا توجد إيرادات هذا الشهر.</div>`}</div>`;
+
+  $$("[data-inv]", main).forEach(b => b.addEventListener("click", () => withBusy(b, async () => {
+    const p = payments.find(x => x.id === b.dataset.inv); if (!p) return;
+    const mem = MEMBERS.find(m => m.id === p.memberId) || {};
+    const typeL = p.type === "store" ? L("ستور وكافتيريا", "Store") : (p.type === "balance" ? L("سداد متبقي", "Balance payment") : L("اشتراك", "Subscription"));
+    const no = String(p.id).slice(0, 6).toUpperCase();
+    const blob = await buildDocPdf({
+      title: L("فاتورة", "Invoice") + " #" + no, sub: p.date,
+      rows: [[L("العضو", "Member"), p.memberName || ""], [L("التاريخ", "Date"), p.date], [L("النوع", "Type"), typeL], [L("البيان", "Details"), p.note || "-"]],
+      total: [L("المبلغ المدفوع", "Amount paid"), money(p.amount)], note: L("شكرًا لثقتكم", "Thank you for your trust")
+    });
+    await sharePdf(blob, `invoice_${no}.pdf`, { text: `${L("فاتورة", "Invoice")} #${no} - ${G.gym.name || ""}`, phone: mem.phone || "", subject: `${L("فاتورة", "Invoice")} #${no}` });
+  })));
+
+  (function payroll() {
+    const box = $("#payroll"), mk = monthStart().slice(0, 7);
+    const paid = new Set(expenses.filter(x => x.type === "salary" && x.month === mk).map(x => x.employeeId));
+    const jobName = e => (JOBS.find(j => j.key === e.jobKey) || {}).label || e.jobCustom || "";
+    if (!EMPLOYEES.length) { box.innerHTML = `<div class="empty">لا يوجد موظفون مضافون بعد. أضفهم من تبويب الموظفون.</div>`; return; }
+    const total = sum(EMPLOYEES, "baseSalary"), done = sum(EMPLOYEES.filter(e => paid.has(e.id)), "baseSalary");
+    box.innerHTML = `
+      <div class="stat"><span>إجمالي الرواتب الشهرية</span><b>${money(total)}</b></div>
+      <div class="stat"><span>تم صرفه هذا الشهر</span><b>${money(done)}</b></div>
+      <div class="stat big"><span>المتبقي للصرف</span><b>${money(total - done)}</b></div>
+      <div class="rows" style="margin-top:10px">${EMPLOYEES.map(e => `
+        <div class="row"><div class="name">${esc(e.name || "")} <span class="muted">· ${esc(jobName(e))}</span></div>
+          <div class="meta">${paid.has(e.id) ? "✔ تم صرف راتب هذا الشهر" : "لم يُصرف بعد"}</div>
+          <div class="acts" style="display:flex;gap:6px;align-items:center">
+            <input type="number" inputmode="decimal" min="0" dir="ltr" style="width:110px" data-sal="${esc(e.id)}" value="${esc(Number(e.baseSalary) || "")}" placeholder="الراتب">
+            <button class="btn soft sm" type="button" data-slip="${esc(e.id)}">قسيمة PDF</button>
+            <button class="btn sm" type="button" data-pay="${esc(e.id)}" ${paid.has(e.id) ? "disabled" : ""}>صرف الراتب</button>
+          </div></div>`).join("")}</div>
+      <button class="btn soft" type="button" id="payAll" style="margin-top:10px">صرف كل الرواتب المتبقية</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button class="btn soft" type="button" id="payPdf">كشف الرواتب PDF</button>
+        <button class="btn soft" type="button" id="payCsv">كشف الرواتب Excel</button>
+      </div>`;
+    const pay = async e => {
+      const amount = Number(e.baseSalary) || 0;
+      if (amount <= 0) return false;
+      await addDoc(col("expenses"), { title: `راتب: ${e.name || ""}`, amount, date: todayStr(), type: "salary", employeeId: e.id, month: mk, ts: serverTimestamp(), by: G.uid });
+      return true;
+    };
+    $$("[data-sal]", box).forEach(inp => inp.addEventListener("change", async () => {
+      const e = EMPLOYEES.find(x => x.id === inp.dataset.sal); if (!e) return;
+      try { await updateDoc(ref("employees", e.id), { baseSalary: num(inp.value) }); e.baseSalary = num(inp.value); toast("تم حفظ الراتب"); }
+      catch (er) { toast(errText(er)); }
+    }));
+    $$("[data-pay]", box).forEach(b => b.addEventListener("click", async () => {
+      const e = EMPLOYEES.find(x => x.id === b.dataset.pay); if (!e) return;
+      if (!(Number(e.baseSalary) > 0)) return toast("اكتب الراتب أولًا.");
+      if (!confirm(`صرف ${money(e.baseSalary)} لـ ${e.name}؟`)) return;
+      b.disabled = true;
+      try { await pay(e); toast("تم صرف الراتب وتسجيله في المصروفات"); renderOwner(); } catch (er) { b.disabled = false; toast(errText(er)); }
+    }));
+    const stLabel = e => paid.has(e.id) ? L("تم الصرف", "Paid") : L("لم يُصرف", "Unpaid");
+    $$("[data-slip]", box).forEach(b => b.addEventListener("click", () => withBusy(b, async () => {
+      const e = EMPLOYEES.find(x => x.id === b.dataset.slip); if (!e) return;
+      const blob = await buildDocPdf({
+        title: L("قسيمة راتب", "Payslip"), sub: mk,
+        rows: [[L("الموظف", "Employee"), e.name || ""], [L("الوظيفة", "Job"), jobName(e)], [L("الشهر", "Month"), mk], [L("الحالة", "Status"), stLabel(e)]],
+        total: [L("صافي الراتب", "Net salary"), money(e.baseSalary || 0)]
+      });
+      await sharePdf(blob, `payslip_${(e.name || "staff").replace(/\s+/g, "_")}_${mk}.pdf`, { text: `${L("قسيمة راتب", "Payslip")} ${mk} - ${e.name || ""}`, phone: e.phone || "", email: e.email || "", subject: `${L("قسيمة راتب", "Payslip")} ${mk}` });
+    })));
+    $("#payPdf").addEventListener("click", ev => withBusy(ev.currentTarget, async () => {
+      const blob = await buildDocPdf({
+        title: L("كشف رواتب الشهر", "Monthly payroll"), sub: mk,
+        rows: EMPLOYEES.map(e => [`${e.name || ""} · ${jobName(e)}`, `${money(e.baseSalary || 0)} — ${stLabel(e)}`]),
+        total: [L("الإجمالي", "Total"), money(total)]
+      });
+      await sharePdf(blob, `payroll_${mk}.pdf`, { text: `${L("كشف رواتب", "Payroll")} ${mk}`, subject: `${L("كشف رواتب", "Payroll")} ${mk}` });
+    }));
+    $("#payCsv").addEventListener("click", () => {
+      dlCsv([[L("الاسم", "Name"), L("الوظيفة", "Job"), L("الراتب", "Salary"), L("الحالة", "Status")],
+        ...EMPLOYEES.map(e => [e.name, jobName(e), Number(e.baseSalary) || 0, stLabel(e)]), ["", "", total, L("الإجمالي", "Total")]], `payroll_${mk}.csv`);
+      toast(L("تم تحميل ملف Excel", "Excel file downloaded"));
+    });
+    $("#payAll").addEventListener("click", async () => {
+      const todo = EMPLOYEES.filter(e => !paid.has(e.id) && Number(e.baseSalary) > 0);
+      if (!todo.length) return toast("لا توجد رواتب متبقية.");
+      if (!confirm(`صرف ${todo.length} راتب بإجمالي ${money(sum(todo, "baseSalary"))}؟`)) return;
+      try { for (const e of todo) await pay(e); toast("تم صرف الرواتب"); renderOwner(); } catch (er) { toast(errText(er)); }
+    });
+  })();
 
   $("#exportExcelBtn").addEventListener("click", () => { exportRevenueExcel(payments, `revenues_${monthStart()}.csv`); toast("تم تحميل شيت الإيرادات"); });
 
@@ -3264,26 +3519,23 @@ const SCREENS = {
 const SUBS = { member: subMember, newMember: subNewMember, renew: subRenew, edit: subEdit, card: subCard };
 
 async function startStaff(uid, profile, gym, gymId, support = false) {
-  let pub = {};
-  try {
-    const s = await withTimeout(getDoc(doc(db, "gyms", gymId, "meta", "public")));
-    if (s.exists()) pub = s.data();
-  } catch {}
-  G = { uid, profile, gym: { ...gym, ...pub }, gymId, support };
-  CUR = G.gym.currency || "EGP";
+  G = { uid, profile, gym, gymId, support };
+  CUR = gym.currency || "EGP";
   const r = profile.role;
   S.tab = r === "accountant" ? "money" : (r === "reception" ? "members" : "home");
   S.sub = null; S.filter = "all"; S.q = ""; S.editPlan = null; S.cred = null;
   S.storeTab = "pos"; S.storeCat = "all"; S.cart = []; S.editProd = null;
   root.innerHTML = `<div class="loading">جاري تحميل بيانات الجيم…</div>`;
-  try {
-    const jobs = [];
-    if (r === "owner" || r === "reception") jobs.push(loadMembers(), loadPlans(), loadProducts());
-    if (r === "owner") jobs.push(loadEmployees());
-    await withTimeout(Promise.all(jobs), 30000);
-  } catch (e) {
-    return viewBlocked("تعذر تحميل بيانات الجيم", errText(e), true);
-  }
+  // everything loads in parallel (before: meta first, then the rest)
+  const metaP = fast(() => getDoc(doc(db, "gyms", gymId, "meta", "public")))
+    .then(s => { if (s.exists()) { G.gym = { ...G.gym, ...s.data() }; CUR = G.gym.currency || "EGP"; } }).catch(() => {});
+  const jobs = [metaP];
+  if (r === "owner" || r === "reception") jobs.push(loadMembers(), loadPlans(), loadProducts());
+  if (r === "accountant") jobs.push(loadMembers().catch(() => { MEMBERS = []; }));
+  if (r === "owner") jobs.push(loadEmployees());
+  if (r === "accountant") jobs.push(loadEmployees().catch(() => {}));
+  try { await withTimeout(Promise.all(jobs), 30000); }
+  catch (e) { return viewBlocked("تعذر تحميل بيانات الجيم", errText(e), true); }
   renderOwner();
 }
 
@@ -3303,7 +3555,7 @@ async function startEmployee(uid, profile, gym) {
   <div class="shell notabs">
     <header class="oh"><div class="in">
       <div class="brand-box">${gymLogoHtml(G.gym)}<div><div class="gname">${esc(G.gym.name || "الجيم")}</div><div class="gsub">${esc(profile.name || "")}</div></div></div>
-      <div class="hdr-actions">${supportBtnHtml(true)}<button class="btn ghost sm" id="eOut">${ico("logout", "sm")} خروج</button></div>
+      <div class="hdr-actions">${appIconHtml()}${supportBtnHtml(true)}<button class="btn ghost sm" id="eOut">${ico("logout", "sm")} خروج</button></div>
     </div></header>
     <main class="wrap">
       <h2>${ico("mapPin")} بصمة الحضور والانصراف</h2>
@@ -3403,7 +3655,7 @@ async function onCreateGym(ev) {
     const c = {
       title: `بيانات دخول مدير «${gName}»`, phone: "",
       rows: [["الرابط", appLink()], ["الإيميل", oEmail], ["كلمة المرور", oPass]],
-      text: `أهلًا ${oName}، بيانات دخولك لنظام GymPro:\nالرابط: ${appLink()}\nالإيميل: ${oEmail}\nكلمة المرور: ${oPass}\nنوصيك بتغيير كلمة المرور بعد أول دخول.`
+      text: `أهلًا ${oName}، بيانات دخولك لنظام Gym Prime:\nالرابط: ${appLink()}\nالإيميل: ${oEmail}\nكلمة المرور: ${oPass}\nنوصيك بتغيير كلمة المرور بعد أول دخول.`
     };
     $("#gymForm").reset();
     $("#gMonths").value = 1; $("#oPass").value = genPassword();
@@ -3455,10 +3707,8 @@ async function loadGyms() {
     const us = await getDocs(query(collection(db, "users"), where("role", "==", "owner")));
     us.docs.forEach(d => usersMap.set(d.id, d.data()));
   } catch {}
-  const counts = await Promise.all(gyms.map(async g => {
-    try { return (await getCountFromServer(collection(db, "gyms", g.id, "members"))).data().count; }
-    catch { return null; }
-  }));
+  // Render the gym list immediately; member counts are hydrated in the background.
+  const counts = Array(gyms.length).fill(null);
 
   const statusOf = g => {
     const end = toDate(g.subscriptionEnd);
@@ -3467,12 +3717,12 @@ async function loadGyms() {
     return end && end.getTime() < Date.now() ? "expired" : "active";
   };
   const activeN = gyms.filter(g => statusOf(g) === "active").length;
-  const totalMembers = counts.reduce((a, c) => a + (c || 0), 0);
+  const totalMembers = 0;
   $("#adminKpis").innerHTML = `
     <div class="kpi accent"><div class="kl">${ico("building", "sm")} عدد الجيمات</div><div class="kv">${gyms.length}</div></div>
     <div class="kpi"><div class="kl">${ico("checkCircle", "sm")} جيمات نشطة</div><div class="kv">${activeN}</div></div>
     <div class="kpi"><div class="kl">${ico("xCircle", "sm")} موقوفة / منتهية</div><div class="kv">${gyms.length - activeN}</div></div>
-    <div class="kpi"><div class="kl">${ico("users", "sm")} إجمالي الأعضاء</div><div class="kv">${totalMembers}</div></div>`;
+    <div class="kpi"><div class="kl">${ico("users", "sm")} إجمالي الأعضاء</div><div class="kv" id="adminTotalMembers">…</div></div>`;
 
   box.innerHTML = `<div class="gym-grid">${gyms.map((g, i) => {
     const end = toDate(g.subscriptionEnd);
@@ -3489,7 +3739,7 @@ async function loadGyms() {
         <span class="tag ${mgrActive ? "active" : "suspended"}">${mgrActive ? "المدير نشط" : "المدير موقوف"}</span></div>
       <div class="stat"><span>مدير الجيم</span><b>${esc(g.ownerName || mgr?.name || "—")}</b></div>
       <div class="stat"><span>إيميل المدير</span><b class="mono">${esc(g.ownerEmail || mgr?.email || "—")}</b></div>
-      <div class="stat"><span>عدد الأعضاء</span><b>${counts[i] ?? "—"}</b></div>
+      <div class="stat"><span>عدد الأعضاء</span><b data-member-count="${i}">…</b></div>
       <div class="stat"><span>الباقة</span><b>${esc(PLANS_LABEL[g.plan] || g.plan || "—")}</b></div>
       <div class="stat"><span>ينتهي الاشتراك</span><b>${esc(fmtDate(end))}</b></div>
       <div class="acts">
@@ -3537,6 +3787,21 @@ async function loadGyms() {
       loadGyms();
     } catch (e) { b.disabled = false; toast(errText(e)); }
   }));
+
+  Promise.all(gyms.map(async g => {
+    try { return (await getCountFromServer(collection(db, "gyms", g.id, "members"))).data().count; }
+    catch { return null; }
+  })).then(values => {
+    if (!$("#gymList")) return;
+    let total = 0;
+    values.forEach((v, i) => {
+      const cell = $(`[data-member-count="${i}"]`, box);
+      if (cell) cell.textContent = v == null ? "—" : v.toLocaleString("en-US");
+      if (v != null) total += v;
+    });
+    const totalCell = $("#adminTotalMembers");
+    if (totalCell) totalCell.textContent = total.toLocaleString("en-US");
+  }).catch(() => {});
 }
 
 function openGymEditor(card, g, oldUid) {
@@ -3581,7 +3846,7 @@ function openGymEditor(card, g, oldUid) {
         showAdminCred({
           title: `بيانات دخول مدير «${gname}» الجديدة`, phone: "",
           rows: [["الرابط", appLink()], ["الإيميل", email], ["كلمة المرور", pass]],
-          text: `أهلًا ${oname}، بيانات دخولك الجديدة لنظام GymPro:\nالرابط: ${appLink()}\nالإيميل: ${email}\nكلمة المرور: ${pass}\nنوصيك بتغيير كلمة المرور بعد أول دخول.`
+          text: `أهلًا ${oname}، بيانات دخولك الجديدة لنظام Gym Prime:\nالرابط: ${appLink()}\nالإيميل: ${email}\nكلمة المرور: ${pass}\nنوصيك بتغيير كلمة المرور بعد أول دخول.`
         });
       } else toast("تم الحفظ");
       loadGyms();
@@ -3589,13 +3854,52 @@ function openGymEditor(card, g, oldUid) {
   });
 }
 
+/* ---------- Language: Arabic / English ---------- */
+const I18N = {"الرئيسية": "Home", "الأعضاء": "Members", "الحضور": "Check-in", "الموظفون": "Staff", "الستور": "Store", "التغذية": "Nutrition", "المالية": "Finance", "الإعدادات": "Settings", "المزيد": "More", "حسابي": "My account", "بصمتي": "My punch", "الدعم الفني عبر واتساب": "WhatsApp Support", "الدعم الفني": "Support", "خروج": "Log out", "تسجيل الدخول": "Log in", "جاري التحميل…": "Loading…", "جاري تحميل بيانات الجيم…": "Loading gym data…", "ملخص اليوم": "Today's summary", "إيراد اليوم": "Today's revenue", "حضور اليوم": "Today's attendance", "اشتراك ساري": "Active", "منتهي": "Expired", "هذا الشهر": "This month", "إجمالي الأعضاء": "Total members", "لوحة الحسابات والمالية": "Finance & Accounts Dashboard", "الأداء المالي والرواتب وحسابات الأعضاء": "Financial performance, payroll & member accounts", "صافي الشهر": "Monthly net", "إجمالي المصروفات": "Total expenses", "رواتب الشهر": "Monthly payroll", "رواتب تم صرفها": "Payroll paid", "رواتب متبقية": "Payroll remaining", "موقف حسابات الأعضاء": "Member account overview", "أعضاء يقترب تجديدهم": "Members nearing renewal", "إجمالي المبالغ المستحقة": "Total outstanding balances", "اشتراكات سارية": "Active memberships", "قرب التجديد": "Nearing renewal", "تنبيه: انتهى اشتراكك. تواصل مع الاستقبال لتجديد العضوية واستعادة الدخول.": "Your membership has expired. Contact reception to renew and restore access.", "تذكير: اشتراكك يقترب من الانتهاء. جدّد الآن لتجنب توقف العضوية.": "Reminder: your membership is nearing its end. Renew now to avoid interruption.", "الإيرادات": "Revenue", "المصروفات": "Expenses", "الصافي": "Net", "ينتهي اشتراكهم خلال 7 أيام": "Expiring within 7 days", "مبالغ متبقية على الأعضاء": "Outstanding balances", "لا يوجد أحد قريب الانتهاء.": "No one is close to expiry.", "لا توجد مبالغ متبقية.": "No outstanding balances.", "واتساب": "WhatsApp", "عليه": "owes", "كود": "Code", "آخر دخول": "Last visit", "تنبيهات التجديد للمدير": "Renewal alerts for manager", "واتساب المدير": "Manager WhatsApp", "إيميل المدير": "Manager email", "أرسل لي واتساب": "Send me WhatsApp", "أرسل لي إيميل": "Send me email", "حفظ البيانات": "Save", "يمكنك إرسال ملخص التجديدات لنفسك من هنا. إشعارات الأعضاء التلقائية تحتاج تفعيل خدمة الإرسال السحابية.": "Tap to send yourself the summary.", "عضو ينتهي اشتراكهم خلال 7 أيام.": "members expire within 7 days.", "يوجد": "There are", "لا توجد اشتراكات قريبة الانتهاء الآن.": "No subscriptions expiring soon.", "تم الحفظ": "Saved", "قسيمة PDF": "Payslip PDF", "كشف الرواتب PDF": "Payroll PDF", "كشف الرواتب Excel": "Payroll Excel", "فاتورة PDF": "Invoice PDF", "تفعيل الإشعارات": "Enable notifications", "يمكنك إرسال ملخص التجديدات لنفسك من هنا. إشعارات الأعضاء التلقائية تحتاج تفعيل خدمة الإرسال السحابية.": "Send the renewal summary to yourself here. Automatic member notifications require a cloud messaging service.", "ملخص الشهر": "Monthly summary", "تصدير Excel": "Export Excel", "إجمالي الإيرادات": "Total revenue", "إيراد الاشتراكات": "Subscription revenue", "إيراد الستور والكافتيريا": "Store & cafeteria revenue", "التحليل المالي للشهر": "Monthly financial analysis", "الإيرادات مقابل المصروفات (يومي)": "Revenue vs expenses (daily)", "توزيع مصادر الإيرادات": "Revenue sources", "رواتب المدربين والموظفين": "Trainer & staff payroll", "إجمالي الرواتب الشهرية": "Total monthly salaries", "تم صرفه هذا الشهر": "Paid this month", "المتبقي للصرف": "Remaining to pay", "✔ تم صرف راتب هذا الشهر": "✔ Salary paid this month", "لم يُصرف بعد": "Not paid yet", "صرف الراتب": "Pay salary", "صرف كل الرواتب المتبقية": "Pay all remaining salaries", "الراتب": "Salary", "لا يوجد موظفون مضافون بعد. أضفهم من تبويب الموظفون.": "No staff yet. Add them from the Staff tab.", "تم حفظ الراتب": "Salary saved", "اكتب الراتب أولًا.": "Enter the salary first.", "تم صرف الراتب وتسجيله في المصروفات": "Salary paid and logged in expenses", "تم صرف الرواتب": "Salaries paid", "لا توجد رواتب متبقية.": "No remaining salaries.", "إضافة مصروف": "Add expense", "البند": "Item", "المبلغ": "Amount", "التاريخ": "Date", "حفظ المصروف": "Save expense", "مصروفات الشهر": "This month's expenses", "إيرادات الشهر": "This month's revenue", "لا توجد مصروفات هذا الشهر.": "No expenses this month.", "لا توجد إيرادات هذا الشهر.": "No revenue this month.", "حذف": "Delete", "تعديل": "Edit", "إلغاء": "Cancel", "حفظ": "Save", "إغلاق": "Close", "رجوع": "Back", "بحث": "Search", "إضافة": "Add", "تجديد": "Renew", "الموظفون وبصمة الحضور (GPS)": "Staff & GPS attendance", "موقع الجيم الجغرافي": "Gym location", "خط العرض": "Latitude", "خط الطول": "Longitude", "النطاق المسموح (متر)": "Allowed range (m)", "موقعي الحالي": "My location", "حفظ موقع الجيم": "Save gym location", "إضافة موظف (له حساب خاص)": "Add staff (own login)", "كلمة المرور": "Password", "الإيميل": "Email", "الاسم": "Name", "رقم الموبايل": "Mobile number", "الوظيفة": "Job", "كابتن": "Coach", "استقبال": "Reception", "محاسب": "Accountant", "عامل نظافة": "Cleaner", "عامل بوفيه": "Buffet worker", "أمن وحراسة": "Security", "صيانة": "Maintenance", "عامل مخازن": "Storekeeper", "مدير الجيم": "Gym manager", "عضو": "Member", "موظف": "Employee", "مسؤول النظام": "System admin", "المظهر والصوت": "Appearance & sound", "الوضع الليلي (Dark Mode)": "Dark mode", "صوت تأكيد قراءة الكود": "Scan confirmation sound", "تسريع التحميل (حفظ البيانات على الجهاز)": "Faster loading (cache data on device)", "سيُعاد تحميل الصفحة لتطبيق الإعداد…": "Page will reload to apply…", "الجيم": "Gym", "حتى": "until", "جاري التحميل": "Loading", "أعد التحميل": "Reload", "أعد المحاولة": "Retry", "بيانات الدخول غير صحيحة.": "Invalid login details.", "لا يوجد اتصال بالإنترنت.": "No internet connection.", "الاتصال بطيء أو منقطع. تأكد من الإنترنت ثم أعد المحاولة.": "Slow or no connection. Check your internet and retry.", "اشتراك جديد": "New subscription", "عضو جديد": "New member", "الخطة": "Plan", "الأيام": "Days", "السعر": "Price", "المدفوع": "Paid", "المتبقي": "Remaining", "ملاحظات": "Notes", "الكل": "All", "قريب الانتهاء": "Expiring soon", "ساري": "Active", "إجمالي": "Total", "المنتجات": "Products", "المنتج": "Product", "الكمية": "Quantity", "المخزون": "Stock", "بيع": "Sell", "سلة": "Cart", "نقدًا": "Cash", "اليوم": "Today", "أمس": "Yesterday"};
+const I18N_KEYS = Object.keys(I18N).sort((a, b) => b.length - a.length);
+let LANG = (() => { try { return localStorage.getItem("gp_lang") === "en" ? "en" : "ar"; } catch { return "ar"; } })();
+const _orig = new WeakMap();
+const trText = t => { let o = t; for (const k of I18N_KEYS) if (o.includes(k)) o = o.split(k).join(I18N[k]); return o; };
+function trNode(n) {
+  if (n.nodeType === 3) {
+    if (!n.nodeValue.trim() || !/[\u0600-\u06FF]/.test(n.nodeValue)) return;
+    if (!_orig.has(n)) _orig.set(n, n.nodeValue);
+    const v = trText(_orig.get(n)); if (v !== n.nodeValue) { _langBusy = true; n.nodeValue = v; _langBusy = false; }
+  } else if (n.nodeType === 1 && !/^(SCRIPT|STYLE|CANVAS)$/.test(n.tagName)) {
+    for (const a of ["placeholder", "aria-label", "title"]) {
+      const v = n.getAttribute(a); if (v && /[\u0600-\u06FF]/.test(v)) n.setAttribute(a, trText(v));
+    }
+    n.childNodes.forEach(trNode);
+  }
+}
+let _langBusy = false;
+const langObs = new MutationObserver(ms => {
+  if (LANG !== "en" || _langBusy) return;
+  ms.forEach(m => { m.addedNodes.forEach(trNode); if (m.type === "characterData") { _orig.delete(m.target); trNode(m.target); } });
+});
+function applyLang() {
+  const en = LANG === "en";
+  document.documentElement.lang = en ? "en" : "ar";
+  document.documentElement.dir = en ? "ltr" : "rtl";
+  langObs.disconnect();
+  if (en) { trNode(document.body); langObs.observe(document.body, { childList: true, subtree: true, characterData: true }); }
+  else { /* back to Arabic: re-render the current screen from source */ if (typeof G !== "undefined" && G) renderOwner(); else if (!auth.currentUser) viewLogin(); }
+}
+document.addEventListener("click", ev => {
+  if (!ev.target.closest("[data-lang-toggle]")) return;
+  LANG = LANG === "en" ? "ar" : "en";
+  try { localStorage.setItem("gp_lang", LANG); } catch {}
+  if (LANG === "ar") location.reload(); else applyLang();
+});
+if (LANG === "en") applyLang();
+
 /* ---------- Session routing ---------- */
 onAuthStateChanged(auth, async user => {
   stopScanner(); destroyCharts(); stopIdle();
   if (!user) { G = null; SUPER = null; return viewLogin(); }
   root.innerHTML = `<div class="loading">جاري التحميل…</div>`;
   try {
-    const uSnap = await withTimeout(getDoc(doc(db, "users", user.uid)));
+    const uSnap = await fast(() => getDoc(doc(db, "users", user.uid)));
     if (!uSnap.exists()) return viewBlocked("الحساب غير مضاف", "هذا الإيميل غير مضاف في أي جيم. اطلب من مدير الجيم إضافتك بنفس الإيميل، أو سجّل الخروج.");
     const profile = uSnap.data();
     if (profile.active !== true) return viewBlocked("الحساب موقوف", "تم إيقاف هذا الحساب. تواصل مع إدارة الجيم.");
@@ -3606,12 +3910,12 @@ onAuthStateChanged(auth, async user => {
       return viewBlocked("صلاحية غير معروفة", "تواصل مع الإدارة.");
     }
 
-    const gSnap = await withTimeout(getDoc(doc(db, "gyms", profile.gymId)));
+    const gSnap = await fast(() => getDoc(doc(db, "gyms", profile.gymId)));
     if (!gSnap.exists()) return viewBlocked("الجيم غير موجود", "لم نجد بيانات الجيم المرتبط بحسابك.");
     const gym = gSnap.data();
     const end = toDate(gym.subscriptionEnd);
-    if (gym.status === "cancelled") return viewBlocked("تم إلغاء الاشتراك", "تم إلغاء اشتراك هذا الجيم في GymPro. تواصل مع الإدارة لإعادة التفعيل.");
-    if (gym.status === "suspended") return viewBlocked("الجيم موقوف", "تم إيقاف اشتراك هذا الجيم مؤقتًا. تواصل مع إدارة GymPro.");
+    if (gym.status === "cancelled") return viewBlocked("تم إلغاء الاشتراك", "تم إلغاء اشتراك هذا الجيم في Gym Prime. تواصل مع الإدارة لإعادة التفعيل.");
+    if (gym.status === "suspended") return viewBlocked("الجيم موقوف", "تم إيقاف اشتراك هذا الجيم مؤقتًا. تواصل مع إدارة Gym Prime.");
     if (end && end.getTime() < Date.now()) return viewBlocked("انتهى اشتراك الجيم", "انتهى اشتراك الجيم. جدّد الاشتراك للاستمرار.");
     if (profile.role === "captain" || profile.role === "employee") return await startEmployee(user.uid, profile, gym);
     await startStaff(user.uid, profile, gym, profile.gymId);
