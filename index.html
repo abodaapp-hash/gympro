@@ -878,14 +878,25 @@ async function loadCol(name, apply) {
   if (PERSIST) {
     try {
       const cached = await getDocsFromCache(c);
-      if (!cached.empty) {
-        apply(cached);
-        getDocs(c).then(fresh => { apply(fresh); softRefresh(); }).catch(() => {});
-        return;
-      }
+      apply(cached);
+      // اعرض البيانات المحفوظة فورًا، ثم حدّثها من الخادم دون تعطيل فتح النظام.
+      getDocs(c).then(fresh => { apply(fresh); softRefresh(); }).catch(() => {});
+      return;
     } catch {}
   }
   apply(await getDocs(c));
+}
+
+async function getDocsFast(q, onFresh) {
+  if (PERSIST) {
+    try {
+      const cached = await getDocsFromCache(q);
+      // قد تكون النتيجة المخزنة فارغة فعلًا؛ لا نعتبرها دليلًا على غياب الكاش.
+      getDocs(q).then(fresh => onFresh?.(fresh)).catch(() => {});
+      return cached;
+    } catch {}
+  }
+  return await getDocs(q);
 }
 
 /* ---------- Passwords ---------- */
@@ -1642,13 +1653,23 @@ function wireOpen(scope) {
 
 /* ---------- Home (owner) ---------- */
 async function screenHome(main, tok) {
-  main.innerHTML = `<p class="muted">جاري التحميل…</p>`;
+  main.innerHTML = `<p class="muted">جاري تحميل الملخص…</p>`;
   let att, pay, exp;
+  const qAtt = query(col("attendance"), where("date", "==", todayStr()));
+  const qPay = query(col("payments"), where("date", ">=", monthStart()), where("date", "<=", monthEnd()));
+  const qExp = query(col("expenses"), where("date", ">=", monthStart()), where("date", "<=", monthEnd()));
+  const updateIfCurrent = (key, snap) => {
+    if (tok !== RT) return;
+    if (key === "att") att = snap;
+    if (key === "pay") pay = snap;
+    if (key === "exp") exp = snap;
+    softRefresh();
+  };
   try {
     [att, pay, exp] = await Promise.all([
-      getDocs(query(col("attendance"), where("date", "==", todayStr()))),
-      getDocs(query(col("payments"), where("date", ">=", monthStart()), where("date", "<=", monthEnd()))),
-      getDocs(query(col("expenses"), where("date", ">=", monthStart()), where("date", "<=", monthEnd())))
+      getDocsFast(qAtt, fresh => updateIfCurrent("att", fresh)),
+      getDocsFast(qPay, fresh => updateIfCurrent("pay", fresh)),
+      getDocsFast(qExp, fresh => updateIfCurrent("exp", fresh))
     ]);
   } catch (e) {
     if (tok !== RT) return;
